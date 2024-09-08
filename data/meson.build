@@ -52,12 +52,24 @@ if compile_schemas.found()
        args: ['--strict', '--dry-run', meson.current_source_dir()])
 endif
 
+blueprints = custom_target('blueprints',
+  input: files(
+    'ui/games.blp',
+    'ui/help-overlay.blp',
+    'ui/sidebar-item.blp',
+    'ui/window.blp',
+  ),
+  output: '.',
+  command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@']
+)
+
 data_res = gnome.compile_resources(
   'org.jogos.Jogos.data',
   'org.jogos.Jogos.data.gresource.xml',
   gresource_bundle: true,
   install: true,
   install_dir: pkgdatadir,
+  dependencies: blueprints,
 )
 
 subdir('icons')

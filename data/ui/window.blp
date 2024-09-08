@@ -1,0 +1,104 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $JogosWindow : Adw.ApplicationWindow {
+  default-width: 800;
+  default-height: 600;
+  width-request: 360;
+  height-request: 294;
+  title: _("Jogos");
+
+  styles ["devel"]
+
+  Adw.Breakpoint {
+    condition("max-width: 500sp")
+
+    setters {
+      splitView.collapsed: true;
+    }
+  }
+
+  content: Adw.NavigationSplitView splitView {
+    max-sidebar-width: 230;
+
+    sidebar: Adw.NavigationPage {
+      title: _("Jogos");
+
+      child: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {
+          [end]
+          MenuButton {
+            icon-name: "lucide-menu-symbolic";
+            menu-model: primary_menu;
+            primary: true;
+            tooltip-text: _("Main Menu");
+          }
+        }
+
+        content: ScrolledWindow {
+          ListBox sidebarList {
+            styles ["navigation-sidebar"]
+          }
+        };
+      };
+    };
+
+    content: Adw.NavigationPage content {
+      title: _("Games");
+
+      child: Adw.ToolbarView {
+        [top]
+        Box {
+          orientation: vertical;
+
+          Adw.HeaderBar {
+            [start]
+            ToggleButton searchButton {
+              icon-name: 'lucide-search-symbolic';
+              tooltip-text: _("Search the collection...");
+            }
+          }
+
+          SearchBar searchBar {
+            key-capture-widget: splitView;
+            search-mode-enabled: bind searchButton.active bidirectional;
+
+            SearchEntry searchEntry {
+              search-delay: 100;
+              placeholder-text: _("Search the collection...");
+              width-request: 400;
+            }
+          }
+        }
+
+        content: $GamesWidget gamesWidget {};
+
+        styles [
+          "view"
+        ]
+      };
+    };
+  };
+}
+
+menu primary_menu {
+  item {
+    custom: "themeswitcher";
+  }
+
+  item {
+    label: _("_Preferences");
+    action: "app.preferences";
+  }
+
+  item {
+    label: _("_Keyboard Shortcuts");
+    action: "win.show-help-overlay";
+  }
+
+  item {
+    label: _("_About Jogos");
+    action: "app.about";
+  }
+}

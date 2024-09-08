@@ -2,6 +2,13 @@
 <gresources>
   <gresource prefix="/org/jogos/Jogos/js">
     <file>main.js</file>
+    <file>application.js</file>
     <file>window.js</file>
+    <file>settings.js</file>
+    <file>widgets/games.js</file>
+    <file>widgets/sidebarItem.js</file>
+    <file>lib/fetch.js</file>
+    <file>utils/createFolder.js</file>
+    <file>model/game.js</file>
   </gresource>
 </gresources>

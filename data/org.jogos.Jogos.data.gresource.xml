@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/jogos/Jogos">
-    <file preprocess="xml-stripblanks">window.ui</file>
-    <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
+    <file>style.css</file>
+    <file>style-hc.css</file>
+    <file>ui/games.ui</file>
+    <file>ui/window.ui</file>
+    <file>ui/sidebar-item.ui</file>
+    <file alias="gtk/help-overlay.ui">ui/help-overlay.ui</file>
+  </gresource>
+  <gresource prefix="/org/jogos/Jogos/icons/16x16/actions/">
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-search-symbolic.svg">icons/lucide-search-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-gamepad-2-symbolic.svg">icons/lucide-gamepad-2-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-plus-symbolic.svg">icons/lucide-plus-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-menu-symbolic.svg">icons/lucide-menu-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-panel-left-symbolic.svg">icons/lucide-panel-left-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-star-symbolic.svg">icons/lucide-star-symbolic.svg</file>
+
+    <file compressed="true" preprocess="xml-stripblanks" alias="playstation-symbolic.svg">icons/playstation-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-switch-symbolic.svg">icons/nintendo-switch-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="xbox-symbolic.svg">icons/xbox-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="wii-u-symbolic.svg">icons/wii-u-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="wii-symbolic.svg">icons/wii-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="gamecube-symbolic.svg">icons/gamecube-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="dreamcast-symbolic.svg">icons/dreamcast-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-3ds-symbolic.svg">icons/nintendo-3ds-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-ds-symbolic.svg">icons/nintendo-ds-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="sega-saturn-symbolic.svg">icons/sega-saturn-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="sega-symbolic.svg">icons/sega-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-64-symbolic.svg">icons/nintendo-64-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-game-boy-symbolic.svg">icons/nintendo-game-boy-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="snes-symbolic.svg">icons/snes-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nes-symbolic.svg">icons/nes-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="atari-symbolic.svg">icons/atari-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="pc-symbolic.svg">icons/pc-symbolic.svg</file>
   </gresource>
 </gresources>

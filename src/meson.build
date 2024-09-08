@@ -2,7 +2,14 @@ gnome = import('gnome')
 
 sources = files(
   'main.ts',
+  'application.ts',
   'window.ts',
+  'settings.ts',
+  'model/game.ts',
+  'widgets/games.ts',
+  'widgets/sidebarItem.ts',
+  'lib/fetch.ts',
+  'utils/createFolder.ts'
 )
 
 tsc_out = meson.project_build_root() / 'tsc-out'

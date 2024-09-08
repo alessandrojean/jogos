@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="jogos">
 	<schema id="org.jogos.Jogos" path="/org/jogos/Jogos/">
+    <key name="window-size" type="ai">
+      <default>[]</default>
+      <summary>Window size</summary>
+      <description>Window size (width and height).</description>
+    </key>
+    <key name="window-position" type="ai">
+      <default>[]</default>
+      <summary>Window position</summary>
+      <description>Window position (X and Y).</description>
+    </key>
+    <key name="window-maximized" type="b">
+      <default>false</default>
+      <summary>Window maximized</summary>
+      <description>Window maximization state</description>
+    </key>
+    <key name="last-sidebar-item" type="s">
+      <default>'ALL_GAMES'</default>
+      <summary>Last sidebar item open</summary>
+      <description>The last sidebar item opened by the user</description>
+    </key>
 	</schema>
 </schemalist>

@@ -1,0 +1,35 @@
+columnview {
+  background: none;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+columnview > listview {
+  padding-top: 16px;
+  padding-bottom: 24px;
+  border-spacing: 8px;
+}
+
+columnview > listview {
+  margin-left: -24px;
+  margin-right: -24px;
+}
+
+columnview > listview > row {
+  margin-left: 24px;
+  margin-right: 24px;
+  border-radius: 6px;
+}
+
+columnview > listview > row > cell {
+  padding: 6px;
+}
+
+columnview > listview > row > cell:drop(active) {
+  box-shadow: none;
+}
+
+columnview > listview > row picture {
+  border-radius: 5px;
+}
+
