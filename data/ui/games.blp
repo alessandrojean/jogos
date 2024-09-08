@@ -5,7 +5,7 @@ template $GamesWidget : Stack {
   transition-type: crossfade;
 
   ScrolledWindow items {
-    child: ColumnView columnView {
+    ColumnView columnView {
       reorderable: false;
 
       ColumnViewColumn titleColumn {
@@ -31,7 +31,26 @@ template $GamesWidget : Stack {
         resizable: true;
         factory: SignalListItemFactory {};
       }
-    };
+    }
+  }
+
+  ScrolledWindow grid {
+    hscrollbar-policy: never;
+    valign: start;
+    propagate-natural-height: true;
+
+    Adw.Clamp {
+      maximum-size: 1600;
+      tightening-threshold: 200;
+
+      GridView gridView {
+        vscroll-policy: natural;
+        orientation: vertical;
+        min-columns: 1;
+        max-columns: 6;
+        factory: SignalListItemFactory {};
+      }
+    }
   }
 
   Adw.StatusPage noResultsFound {

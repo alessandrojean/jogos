@@ -21,6 +21,8 @@ export class Window extends Adw.ApplicationWindow {
   private _gamesWidget!: GamesWidget
   private _searchBar!: Gtk.SearchBar
   private _searchEntry!: Gtk.SearchEntry
+  private _showList!: Gtk.Button
+  private _showGrid!: Gtk.Button
 
   private sidebarItems: SidebarItem[] = [
     { id: 'ALL_GAMES', label: _('All games'), iconName: 'lucide-gamepad-2-symbolic', section: 'top-pinned' },
@@ -71,7 +73,7 @@ export class Window extends Adw.ApplicationWindow {
       Template: 'resource:///org/jogos/Jogos/ui/window.ui',
       InternalChildren: [
         'splitView', 'sidebarList', 'content', 'gamesWidget',
-        'searchBar', 'searchEntry',
+        'searchBar', 'searchEntry', 'showList', 'showGrid',
       ],
     }, this)
 
@@ -91,6 +93,7 @@ export class Window extends Adw.ApplicationWindow {
     this.initSignals()
     this.initSearchBar()
     this.initSidebar()
+    this.initButtons()
   }
 
   private initSignals() {
@@ -146,6 +149,20 @@ export class Window extends Adw.ApplicationWindow {
 
     this.add_action(showSearchAction)
     this.application.set_accels_for_action('win.show-search', ['<Control>f'])
+  }
+
+  private initButtons() {
+    this._showGrid.connect('clicked', () => {
+      this._gamesWidget.showGrid()
+      this._showGrid.visible = false
+      this._showList.visible = true
+    })
+
+    this._showList.connect('clicked', () => {
+      this._gamesWidget.showList()
+      this._showList.visible = false
+      this._showGrid.visible = true
+    })
   }
 
   private quit() {

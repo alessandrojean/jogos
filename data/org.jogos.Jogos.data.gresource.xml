@@ -15,6 +15,8 @@
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-menu-symbolic.svg">icons/lucide-menu-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-panel-left-symbolic.svg">icons/lucide-panel-left-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-star-symbolic.svg">icons/lucide-star-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-grid-2x2-symbolic.svg">icons/lucide-grid-2x2-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-layout-list-symbolic.svg">icons/lucide-layout-list-symbolic.svg</file>
 
     <file compressed="true" preprocess="xml-stripblanks" alias="playstation-symbolic.svg">icons/playstation-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-switch-symbolic.svg">icons/nintendo-switch-symbolic.svg</file>

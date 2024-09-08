@@ -1,5 +1,19 @@
+/* Some styles are inspired by Nautilus. */
+
+/* Grid view */
+gridview {
+  padding: 18px;
+  border-spacing: 6px;
+}
+
+gridview > child {
+  padding: 6px;
+  border-radius: 12px;
+}
+
+/* Column view */
+
 columnview {
-  background: none;
   padding-left: 24px;
   padding-right: 24px;
 }
@@ -25,11 +39,19 @@ columnview > listview > row > cell {
   padding: 6px;
 }
 
-columnview > listview > row > cell:drop(active) {
+/* Both views */
+
+columnview > listview > row > cell:drop(active),
+gridview child:drop(active) {
   box-shadow: none;
 }
 
-columnview > listview > row picture {
-  border-radius: 5px;
+columnview,
+gridview {
+  background: none;
 }
 
+.thumbnail {
+  border-radius: 5px;
+  filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.3));
+}

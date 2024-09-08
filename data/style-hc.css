@@ -1,7 +1,9 @@
-columnview > listview > row.activatable:hover {
+columnview > listview > row.activatable:hover,
+gridview > child.activatable:hover {
   box-shadow: inset 0 0 0 1px var(--border-color);
 }
 
-columnview > listview > row:selected {
+columnview > listview > row:selected,
+gridview > child:selected {
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-color) 60%, transparent);
 }

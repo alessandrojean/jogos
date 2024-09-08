@@ -58,6 +58,19 @@ template $JogosWindow : Adw.ApplicationWindow {
               icon-name: 'lucide-search-symbolic';
               tooltip-text: _("Search the collection...");
             }
+
+            [end]
+            Button showList {
+              icon-name: 'lucide-layout-list-symbolic';
+              tooltip-text: _("View in list");
+            }
+
+            [end]
+            Button showGrid {
+              icon-name: 'lucide-grid-2x2-symbolic';
+              tooltip-text: _("View in grid");
+              visible: false;
+            }
           }
 
           SearchBar searchBar {
