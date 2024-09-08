@@ -21,5 +21,10 @@
       <summary>Last sidebar item open</summary>
       <description>The last sidebar item opened by the user</description>
     </key>
+    <key name="show-grid" type="b">
+      <default>true</default>
+      <summary>Show grid view</summary>
+      <description>Grid view state</description>
+    </key>
 	</schema>
 </schemalist>

@@ -156,13 +156,23 @@ export class Window extends Adw.ApplicationWindow {
       this._gamesWidget.showGrid()
       this._showGrid.visible = false
       this._showList.visible = true
+      Application.settings.setValue('show-grid', true)
     })
 
     this._showList.connect('clicked', () => {
       this._gamesWidget.showList()
       this._showList.visible = false
       this._showGrid.visible = true
+      Application.settings.setValue('show-grid', false)
     })
+
+    const saved = Application.settings.get<boolean>('show-grid')
+
+    if (!saved) {
+      this._gamesWidget.showList()
+      this._showGrid.visible = true
+      this._showList.visible = false
+    }
   }
 
   private quit() {
