@@ -37,7 +37,7 @@ template $EditDialogWidget : Adw.Dialog {
           margin-bottom: 12;
 
           Adw.Clamp {
-            maximum-size: 150;
+            maximum-size: 170;
 
             Overlay {
               halign: center;
@@ -75,6 +75,8 @@ template $EditDialogWidget : Adw.Dialog {
               Picture cover {
                 width-request: 150;
                 height-request: 225;
+                can-shrink: true;
+                content-fit: cover;
 
                 styles ["card"]
               }
