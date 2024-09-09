@@ -1,0 +1,156 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $EditDialogWidget : Adw.Dialog {
+  content-width: 500;
+  content-height: 700;
+
+  Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {
+      show-start-title-buttons: false;
+      show-end-title-buttons: false;
+
+      [start]
+      Button cancelButton {
+        label: _("Cancel");
+        action-name: "window.close";
+      }
+
+      [end]
+      Button saveButton {
+        label: _("Save");
+        styles ["suggested-action"]
+      }
+    }
+
+    ScrolledWindow {
+      Box {
+        orientation: vertical;
+        margin-start: 20;
+        margin-end: 20;
+        margin-top: 24;
+        margin-bottom: 20;
+        spacing: 12;
+
+        Adw.PreferencesGroup {
+          margin-bottom: 12;
+
+          Adw.Clamp {
+            maximum-size: 150;
+
+            Overlay {
+              halign: center;
+              valign: center;
+
+              [overlay]
+              Button coverButtonEdit {
+                icon-name: "lucide-pencil-symbolic";
+                tooltip-text: _("New cover");
+                halign: end;
+                valign: end;
+                margin-bottom: 6;
+                margin-end: 6;
+
+                styles ["circular", "osd"]
+              }
+
+              [overlay]
+              Revealer deleteRevealer {
+                transition-type: crossfade;
+                margin-end: 40;
+
+                Button coverButtonDelete {
+                  icon-name: "lucide-trash-2-symbolic";
+                  tooltip-text: _("Delete cover");
+                  halign: end;
+                  valign: end;
+                  margin-bottom: 6;
+                  margin-end: 6;
+
+                  styles ["circular", "osd"]
+                }
+              }
+
+              Picture cover {
+                width-request: 150;
+                height-request: 225;
+
+                styles ["card"]
+              }
+            }
+          }
+        }
+
+        Adw.PreferencesGroup {
+          Adw.EntryRow title {
+            title: _("Title");
+          }
+
+          Adw.ComboRow platform {
+            title: _("Platform");
+            model: StringList {
+              strings ["PLAYSTATION_5", "XBOX_SERIES"]
+            };
+          }
+        }
+
+        Adw.PreferencesGroup {
+          Adw.EntryRow developer {
+            title: _("Developer");
+          }
+
+          Adw.EntryRow publisher {
+            title: _("Publisher");
+          }
+
+          Adw.SpinRow releaseYear {
+            title: _("Release year");
+            numeric: true;
+            adjustment: Adjustment {
+              lower: 1900;
+              upper: 2024;
+              page-increment: 10;
+              step-increment: 1;
+            };
+          }
+        }
+
+        Adw.PreferencesGroup {
+          Adw.EntryRow story {
+            title: _("Story");
+          }
+        }
+
+        Adw.PreferencesGroup {
+          Adw.EntryRow barcode {
+            title: _("Barcode");
+
+            styles ["monospace"]
+          }
+
+          Adw.ComboRow storageMedia {
+            title: _("Storage media");
+            model: StringList {
+              strings ["BLURAY", "DVD", "CD", "CARTRIDGE"]
+            };
+          }
+
+          Adw.ComboRow condition {
+            title: _("Condition");
+            model: StringList {
+              strings ["CIB", "LOOSE", "SEALED"]
+            };
+          }
+
+          Adw.ComboRow certification {
+            title: _("Certification");
+            model: StringList {
+              strings ["Everyone", "Everyone 10+", "Teen", "Mature 17+", "Adults Only"]
+            };
+          }
+        }
+      }
+    }
+  }
+}

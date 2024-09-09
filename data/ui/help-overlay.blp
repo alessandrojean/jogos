@@ -5,7 +5,25 @@ ShortcutsWindow help_overlay {
 
   ShortcutsSection {
     section-name: "shortcuts";
-    max-height: 10;
+
+    ShortcutsGroup {
+      title: _("Games");
+
+      ShortcutsShortcut {
+        title: _("New");
+        accelerator: "<ctrl>n";
+      }
+
+      ShortcutsShortcut {
+        title: _("Edit");
+        accelerator: "<ctrl>e";
+      }
+
+      ShortcutsShortcut {
+        title: _("Delete");
+        accelerator: "Delete";
+      }
+    }
 
     ShortcutsGroup {
       title: _("General");

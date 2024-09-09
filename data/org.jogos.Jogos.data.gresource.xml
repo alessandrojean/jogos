@@ -3,10 +3,11 @@
   <gresource prefix="/org/jogos/Jogos">
     <file>style.css</file>
     <file>style-hc.css</file>
-    <file>ui/games.ui</file>
-    <file>ui/window.ui</file>
-    <file>ui/sidebar-item.ui</file>
     <file>ui/details-dialog.ui</file>
+    <file>ui/edit-dialog.ui</file>
+    <file>ui/games.ui</file>
+    <file>ui/sidebar-item.ui</file>
+    <file>ui/window.ui</file>
     <file alias="gtk/help-overlay.ui">ui/help-overlay.ui</file>
   </gresource>
   <gresource prefix="/org/jogos/Jogos/icons/16x16/actions/">

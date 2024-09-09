@@ -7,6 +7,7 @@ sources = files(
   'settings.ts',
   'model/game.ts',
   'widgets/detailsDialog.ts',
+  'widgets/editDialog.ts',
   'widgets/games.ts',
   'widgets/sidebarItem.ts',
   'lib/fetch.ts',

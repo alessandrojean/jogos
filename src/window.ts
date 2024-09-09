@@ -6,7 +6,8 @@ import Gtk from 'gi://Gtk?version=4.0'
 
 import { Application } from './application.js'
 import Game, { GamePlatform } from './model/game.js'
-import { DetailsDialog } from './widgets/detailsDialog.js'
+import { DetailsDialogWidget } from './widgets/detailsDialog.js'
+import { EditDialogWidget } from './widgets/editDialog.js'
 import { GamesWidget } from './widgets/games.js'
 import type { SidebarItem } from './widgets/sidebarItem.js'
 import { SidebarItemWidget } from './widgets/sidebarItem.js'
@@ -105,8 +106,13 @@ export class Window extends Adw.ApplicationWindow {
     this.connect('notify::maximized', () => this.onMaximizedChanged())
 
     this._gamesWidget.connect('game-activate', (_self, game: Game) => {
-      const detailsDialog = new DetailsDialog(game)
+      const detailsDialog = new DetailsDialogWidget(game)
       detailsDialog.present(this)
+    })
+
+    this._gamesWidget.connect('game-edit', (_self, game: Game) => {
+      const editDialog = new EditDialogWidget(game)
+      editDialog.present(this)
     })
   }
 

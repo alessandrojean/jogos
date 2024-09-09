@@ -5,7 +5,7 @@ import Gtk from 'gi://Gtk?version=4.0'
 
 import Game, { platformName } from '../model/game.js'
 
-export class DetailsDialog extends Adw.Dialog {
+export class DetailsDialogWidget extends Adw.Dialog {
   private _cover!: Gtk.Picture
   private _title!: Gtk.Label
   private _platform!: Gtk.Label
@@ -42,7 +42,7 @@ export class DetailsDialog extends Adw.Dialog {
     }, this)
   }
 
-  constructor(game: Game, params: Partial<DetailsDialog> = {}) {
+  constructor(game: Game, params: Partial<DetailsDialogWidget> = {}) {
     super(params)
 
     this.game = game
