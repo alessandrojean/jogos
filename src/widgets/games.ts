@@ -371,11 +371,15 @@ export class GamesWidget extends Gtk.Stack {
       const listBox = new Gtk.Box({
         spacing: 8,
         orientation: Gtk.Orientation.VERTICAL,
-        widthRequest: 104,
+        // widthRequest: 104,
+        hexpand: true,
+        vexpand: true,
       })
       const image = new Gtk.Picture({
         widthRequest: 96,
         // heightRequest: 144,
+        hexpand: true,
+        vexpand: true,
         canShrink: true,
         cssClasses: ['thumbnail'],
       })
@@ -422,8 +426,9 @@ export class GamesWidget extends Gtk.Stack {
 
     this._gridView.model = this.selectionModel
 
-    this._gridView.connect('activate', (_self, position) => {
-      this.emit('game-activate', _self.model.get_item(position))
+    this._gridView.connect('activate', (self, position) => {
+      const item = self.model.get_item(position) as GameItem
+      this.emit('game-activate', item.game)
     })
   }
 
