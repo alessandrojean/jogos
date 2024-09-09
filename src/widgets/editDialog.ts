@@ -57,5 +57,7 @@ export class EditDialogWidget extends Adw.Dialog {
       this._cover.set_pixbuf(GdkPixbuf.Pixbuf.new_from_file(cover))
       // this._deleteRevealer.revealChild = true
     }
+
+    this._releaseYear.adjustment.upper = new Date().getFullYear()
   }
 }
