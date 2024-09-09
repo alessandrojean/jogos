@@ -54,6 +54,7 @@ endif
 
 blueprints = custom_target('blueprints',
   input: files(
+    'ui/details-dialog.blp',
     'ui/games.blp',
     'ui/help-overlay.blp',
     'ui/sidebar-item.blp',

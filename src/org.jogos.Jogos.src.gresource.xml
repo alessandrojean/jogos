@@ -5,6 +5,7 @@
     <file>application.js</file>
     <file>window.js</file>
     <file>settings.js</file>
+    <file>widgets/detailsDialog.js</file>
     <file>widgets/games.js</file>
     <file>widgets/sidebarItem.js</file>
     <file>lib/fetch.js</file>

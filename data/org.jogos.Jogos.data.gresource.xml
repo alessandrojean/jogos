@@ -6,6 +6,7 @@
     <file>ui/games.ui</file>
     <file>ui/window.ui</file>
     <file>ui/sidebar-item.ui</file>
+    <file>ui/details-dialog.ui</file>
     <file alias="gtk/help-overlay.ui">ui/help-overlay.ui</file>
   </gresource>
   <gresource prefix="/org/jogos/Jogos/icons/16x16/actions/">
@@ -17,6 +18,10 @@
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-star-symbolic.svg">icons/lucide-star-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-grid-2x2-symbolic.svg">icons/lucide-grid-2x2-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-layout-list-symbolic.svg">icons/lucide-layout-list-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-chevron-right-symbolic.svg">icons/lucide-chevron-right-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-pencil-symbolic.svg">icons/lucide-pencil-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-trash-2-symbolic.svg">icons/lucide-trash-2-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-folder-heart-symbolic.svg">icons/lucide-folder-heart-symbolic.svg</file>
 
     <file compressed="true" preprocess="xml-stripblanks" alias="playstation-symbolic.svg">icons/playstation-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-switch-symbolic.svg">icons/nintendo-switch-symbolic.svg</file>

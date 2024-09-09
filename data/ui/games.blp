@@ -5,31 +5,40 @@ template $GamesWidget : Stack {
   transition-type: crossfade;
 
   ScrolledWindow items {
-    ColumnView columnView {
-      reorderable: false;
+    Box {
+      ColumnView columnView {
+        hexpand: true;
+        reorderable: false;
 
-      ColumnViewColumn titleColumn {
-        title: _("Title");
-        expand: true;
-        factory: SignalListItemFactory {};
+        ColumnViewColumn titleColumn {
+          title: _("Title");
+          expand: true;
+          factory: SignalListItemFactory {};
+        }
+
+        ColumnViewColumn platformColumn {
+          title: _("Platform");
+          resizable: true;
+          factory: SignalListItemFactory {};
+        }
+
+        ColumnViewColumn developerColumn {
+          title: _("Developer");
+          resizable: true;
+          factory: SignalListItemFactory {};
+        }
+
+        ColumnViewColumn yearColumn {
+          title: _("Release year");
+          resizable: true;
+          factory: SignalListItemFactory {};
+        }
       }
 
-      ColumnViewColumn platformColumn {
-        title: _("Platform");
-        resizable: true;
-        factory: SignalListItemFactory {};
-      }
-
-      ColumnViewColumn developerColumn {
-        title: _("Developer");
-        resizable: true;
-        factory: SignalListItemFactory {};
-      }
-
-      ColumnViewColumn yearColumn {
-        title: _("Release year");
-        resizable: true;
-        factory: SignalListItemFactory {};
+      PopoverMenu popoverMenu {
+        menu-model: contextMenu;
+        has-arrow: false;
+        halign: start;
       }
     }
   }
@@ -107,6 +116,27 @@ template $GamesWidget : Stack {
           "pill"
         ]
       }
+    }
+  }
+}
+
+menu contextMenu {
+  section {
+    item {
+      label: _("Details");
+      action: "games.details";
+    }
+  }
+
+  section {
+    item {
+      label: _("Edit");
+      action: "games.edit";
+    }
+
+    item {
+      label: _("Delete");
+      action: "games.delete";
     }
   }
 }

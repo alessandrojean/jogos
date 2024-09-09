@@ -71,6 +71,16 @@ template $JogosWindow : Adw.ApplicationWindow {
               tooltip-text: _("View in grid");
               visible: false;
             }
+
+            [end]
+            Button {
+              styles ["suggested-action"]
+
+              Adw.ButtonContent {
+                icon-name: "lucide-plus-symbolic";
+                label: _("New");
+              }
+            }
           }
 
           SearchBar searchBar {

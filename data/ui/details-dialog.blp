@@ -1,0 +1,117 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $DetailsDialogWidget : Adw.Dialog {
+  content-width: 500;
+  content-height: 700;
+
+  Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {}
+
+    ScrolledWindow {
+      Box {
+        orientation: vertical;
+        margin-start: 20;
+        margin-end: 20;
+        margin-top: 24;
+        margin-bottom: 20;
+        spacing: 12;
+
+        Adw.PreferencesGroup {
+          margin-bottom: 6;
+
+          Picture cover {
+            width-request: 150;
+            height-request: 225;
+            can-shrink: true;
+            margin-bottom: 18;
+            halign: center;
+
+            styles ["cover"]
+          }
+
+          Label title {
+            styles ["title-3"]
+          }
+
+          Label platform {
+            margin-top: 6;
+          }
+
+          Label year {
+            margin-top: 6;
+
+            styles ["caption"]
+          }
+        }
+
+        Adw.PreferencesGroup {
+          Adw.ActionRow barcode {
+            title: _("Barcode");
+            subtitle-selectable: true;
+
+            styles ["property", "monospace"]
+          }
+        }
+
+        Adw.PreferencesGroup {
+          Adw.ActionRow story {
+            title: _("Story");
+            subtitle-lines: 1;
+            activatable: true;
+
+            styles ["property"]
+
+            [suffix]
+            Image {
+              icon-name: "go-next-symbolic";
+              styles ["dim-label"]
+            }
+          }
+
+          Adw.ActionRow certification {
+            title: _("Certification");
+
+            styles ["property"]
+          }
+        }
+
+        Adw.PreferencesGroup {
+          Adw.ActionRow developer {
+            title: _("Developer");
+
+            styles ["property"]
+          }
+
+          Adw.ActionRow publisher {
+            title: _("Publisher");
+
+            styles ["property"]
+          }
+
+          Adw.ActionRow storageMedia {
+            title: _("Storage Media");
+
+            styles ["property"]
+          }
+        }
+
+        Adw.PreferencesGroup {
+          Adw.ActionRow creationDate {
+            title: _("Creation date");
+
+            styles ["property"]
+          }
+
+          Adw.ActionRow modificationDate {
+            title: _("Modification date");
+
+            styles ["property"]
+          }
+        }
+      }
+    }
+
+  }
+}

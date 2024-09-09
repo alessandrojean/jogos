@@ -5,7 +5,8 @@ import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
 import { Application } from './application.js'
-import { GamePlatform } from './model/game.js'
+import Game, { GamePlatform } from './model/game.js'
+import { DetailsDialog } from './widgets/detailsDialog.js'
 import { GamesWidget } from './widgets/games.js'
 import type { SidebarItem } from './widgets/sidebarItem.js'
 import { SidebarItemWidget } from './widgets/sidebarItem.js'
@@ -25,8 +26,9 @@ export class Window extends Adw.ApplicationWindow {
   private _showGrid!: Gtk.Button
 
   private sidebarItems: SidebarItem[] = [
-    { id: 'ALL_GAMES', label: _('All games'), iconName: 'lucide-gamepad-2-symbolic', section: 'top-pinned' },
-    { id: 'FAVORITES', label: _('Favorites'), iconName: 'lucide-star-symbolic', section: 'top-pinned' },
+    { id: 'ALL_GAMES', label: _('All games'), iconName: 'lucide-gamepad-2', section: 'top-pinned' },
+    { id: 'FAVORITES', label: _('Favorites'), iconName: 'lucide-star', section: 'top-pinned' },
+    { id: 'WISHLIST', label: _('Wishlist'), iconName: 'lucide-folder-heart', section: 'top-pinned' },
 
     { id: 'PC', label: 'PC', iconName: 'pc', section: 'pc' },
 
@@ -73,7 +75,7 @@ export class Window extends Adw.ApplicationWindow {
       Template: 'resource:///org/jogos/Jogos/ui/window.ui',
       InternalChildren: [
         'splitView', 'sidebarList', 'content', 'gamesWidget',
-        'searchBar', 'searchEntry', 'showList', 'showGrid',
+        'searchBar', 'searchEntry', 'showList', 'showGrid'
       ],
     }, this)
 
@@ -101,6 +103,11 @@ export class Window extends Adw.ApplicationWindow {
     this.connect('notify::default-width', () => this.onSizeChanged())
     this.connect('notify::default-height', () => this.onSizeChanged())
     this.connect('notify::maximized', () => this.onMaximizedChanged())
+
+    this._gamesWidget.connect('game-activate', (_self, game: Game) => {
+      const detailsDialog = new DetailsDialog(game)
+      detailsDialog.present(this)
+    })
   }
 
   private initSidebar() {
@@ -236,6 +243,10 @@ export class Window extends Adw.ApplicationWindow {
 
     if (itemId === 'FAVORITES') {
       this._gamesWidget.showFavorites()
+      return
+    }
+
+    if (itemId === 'WISHLIST') {
       return
     }
 

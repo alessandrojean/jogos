@@ -1,7 +1,9 @@
 import Adw from 'gi://Adw'
+import Gdk from 'gi://Gdk?version=4.0'
 import GdkPixbuf from 'gi://GdkPixbuf'
 import Gio from 'gi://Gio'
 import GObject from 'gi://GObject'
+import Graphene from 'gi://Graphene'
 import Gtk from 'gi://Gtk?version=4.0'
 import Pango from 'gi://Pango'
 
@@ -23,11 +25,14 @@ export class GamesWidget extends Gtk.Stack {
   private _gridView!: Gtk.GridView
 
   private dataModel!: Gio.ListStore
+  private selectionModel!: Gtk.SelectionModel
   private filter!: Gtk.EveryFilter
   private platformFilter!: Gtk.StringFilter
   private titleFilter!: Gtk.StringFilter
   private favoriteFilter!: Gtk.BoolFilter
   private filterModel!: Gtk.FilterListModel
+
+  private _popoverMenu!: Gtk.PopoverMenu
 
   private viewGrid = true
 
@@ -38,8 +43,13 @@ export class GamesWidget extends Gtk.Stack {
       InternalChildren: [
         'items', 'noResultsFound', 'noGamesForPlatform', 'columnView',
         'titleColumn', 'platformColumn', 'developerColumn', 'yearColumn',
-        'noGames', 'grid', 'gridView',
-      ]
+        'noGames', 'grid', 'gridView', 'popoverMenu'
+      ],
+      Signals: {
+        'game-activate': {
+          param_types: [Game.$gtype]
+        }
+      }
     }, this)
   }
 
@@ -83,7 +93,9 @@ export class GamesWidget extends Gtk.Stack {
         barcode: '',
         platform: 'PLAYSTATION_4',
         story: '',
-        certification: ''
+        certification: '',
+        storageMedia: 'BLURAY',
+        condition: 'CIB',
       }),
       new Game({
         id: 2,
@@ -96,6 +108,7 @@ export class GamesWidget extends Gtk.Stack {
         story: '',
         certification: '',
         storageMedia: 'BLURAY',
+        condition: 'CIB',
         favorite: true,
       }),
       new Game({
@@ -109,6 +122,7 @@ export class GamesWidget extends Gtk.Stack {
         story: '',
         certification: '',
         storageMedia: 'BLURAY',
+        condition: 'CIB',
       }),
       new Game({
         id: 4,
@@ -121,6 +135,7 @@ export class GamesWidget extends Gtk.Stack {
         story: '',
         certification: '',
         storageMedia: 'BLURAY',
+        condition: 'CIB',
       }),
       new Game({
         id: 5,
@@ -134,6 +149,7 @@ export class GamesWidget extends Gtk.Stack {
         certification: '',
         storageMedia: 'BLURAY',
         favorite: true,
+        condition: 'CIB',
       }),
     ])
   }
@@ -175,6 +191,8 @@ export class GamesWidget extends Gtk.Stack {
       box.append(picture)
       box.append(label)
 
+      this.setupCell(box, listItem)
+
       listItem.set_child(box)
     })
 
@@ -200,6 +218,7 @@ export class GamesWidget extends Gtk.Stack {
         xalign: 0.0,
         cssClasses: ['dim-label']
       })
+      this.setupCell(label, listItem)
       listItem.set_child(label)
     })
 
@@ -217,6 +236,7 @@ export class GamesWidget extends Gtk.Stack {
         xalign: 0.0,
         cssClasses: ['dim-label']
       })
+      this.setupCell(label, listItem)
       listItem.set_child(label)
     })
 
@@ -234,6 +254,7 @@ export class GamesWidget extends Gtk.Stack {
         xalign: 0.0,
         cssClasses: ['dim-label']
       })
+      this.setupCell(label, listItem)
       listItem.set_child(label)
     })
 
@@ -253,8 +274,14 @@ export class GamesWidget extends Gtk.Stack {
       filter: this.filter,
     })
 
-    this._columnView.model = new Gtk.SingleSelection({
+    this.selectionModel = new Gtk.SingleSelection({
       model: this.filterModel,
+    })
+
+    this._columnView.model = this.selectionModel
+
+    this._columnView.connect('activate', (_self, position) => {
+      this.emit('game-activate', _self.model.get_item(position))
     })
   }
 
@@ -282,6 +309,8 @@ export class GamesWidget extends Gtk.Stack {
       listBox.append(image)
       listBox.append(label)
 
+      this.setupCell(listBox, listItem)
+
       listItem.set_child(listBox)
     })
 
@@ -303,7 +332,11 @@ export class GamesWidget extends Gtk.Stack {
 
     })
 
-    this._gridView.model = new Gtk.SingleSelection({ model: this.filterModel })
+    this._gridView.model = this.selectionModel
+
+    this._gridView.connect('activate', (_self, position) => {
+      this.emit('game-activate', _self.model.get_item(position))
+    })
   }
 
   showFavorites() {
@@ -361,5 +394,22 @@ export class GamesWidget extends Gtk.Stack {
     if (this.visibleChild === this._grid) {
       this.visibleChild = this._items
     }
+  }
+
+  private setupCell(widget: Gtk.Widget, item: Gtk.ListItem) {
+    const rightClickEvent = new Gtk.GestureClick({ button: Gdk.BUTTON_SECONDARY })
+    rightClickEvent.connect('pressed', (_source, _nPress, x, y) => {
+      this.selectionModel.select_item(item.get_position(), true)
+
+      const game = item.get_item<Game>()
+      print(game.title)
+
+      const point = new Graphene.Point({ x, y })
+      const [, targetPoint] = widget.compute_point(this._items, point)
+      const position = new Gdk.Rectangle({ x: targetPoint.x, y: targetPoint.y })
+      this._popoverMenu.pointingTo = position
+      this._popoverMenu.popup()
+    })
+    widget.add_controller(rightClickEvent)
   }
 }

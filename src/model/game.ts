@@ -12,6 +12,8 @@ export type GamePlatform = 'PLAYSTATION_4' | 'PLAYSTATION_5' | 'XBOX_SERIES'
 
 export type StorageMedia = 'CARTRIDGE' | 'CD' | 'DVD' | 'BLURAY'
 
+export type Condition = 'LOOSE' | 'CIB' | 'SEALED'
+
 export default class Game extends GObject.Object {
   id!: number
   title!: string
@@ -23,7 +25,12 @@ export default class Game extends GObject.Object {
   story!: string
   certification!: string
   storageMedia!: StorageMedia
+  condition!: Condition
   favorite: boolean = false
+  wishlist: boolean = false
+
+  creationDate: number = 0
+  modificationDate: number = 0
 
   static {
     GObject.registerClass({
@@ -95,12 +102,51 @@ export default class Game extends GObject.Object {
           GObject.ParamFlags.READWRITE,
           ''
         ),
+        storageMedia: GObject.ParamSpec.string(
+          'storage-media',
+          '',
+          '',
+          GObject.ParamFlags.READWRITE,
+          ''
+        ),
+        condition: GObject.ParamSpec.string(
+          'condition',
+          '',
+          '',
+          GObject.ParamFlags.READWRITE,
+          ''
+        ),
         favorite: GObject.ParamSpec.boolean(
           'favorite',
           '',
           '',
           GObject.ParamFlags.READWRITE,
           false,
+        ),
+        wishlist: GObject.ParamSpec.boolean(
+          'wishlist',
+          '',
+          '',
+          GObject.ParamFlags.READWRITE,
+          false,
+        ),
+        creationDate: GObject.ParamSpec.long(
+          'creation-date',
+          '',
+          '',
+          GObject.ParamFlags.READWRITE,
+          Number.MIN_SAFE_INTEGER,
+          Number.MAX_SAFE_INTEGER,
+          0,
+        ),
+        modificationDate: GObject.ParamSpec.long(
+          'modification-date',
+          '',
+          '',
+          GObject.ParamFlags.READWRITE,
+          Number.MIN_SAFE_INTEGER,
+          Number.MAX_SAFE_INTEGER,
+          0,
         )
       }
     }, this)
@@ -120,6 +166,14 @@ export default class Game extends GObject.Object {
     const isFile = file.query_file_type(Gio.FileQueryInfoFlags.NONE, null) === Gio.FileType.REGULAR
 
     return (exists && isFile) ? fileUri : null
+  }
+
+  get createdAt(): Date {
+    return new Date(this.creationDate * 1_000)
+  }
+
+  get modifiedAt(): Date {
+    return new Date(this.modificationDate * 1_000)
   }
 }
 
