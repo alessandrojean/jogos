@@ -62,8 +62,15 @@ export class GamesWidget extends Gtk.Stack {
 
     Gtk.Widget.add_shortcut(
       new Gtk.Shortcut({
+        action: new Gtk.NamedAction({ actionName: 'games.details' }),
+        trigger: Gtk.ShortcutTrigger.parse_string('Return'),
+      })
+    )
+
+    Gtk.Widget.add_shortcut(
+      new Gtk.Shortcut({
         action: new Gtk.NamedAction({ actionName: 'games.edit' }),
-        trigger: Gtk.ShortcutTrigger.parse_string('<Control>e'),
+        trigger: Gtk.ShortcutTrigger.parse_string('<Ctrl>e'),
       })
     )
 
@@ -538,15 +545,6 @@ export class GamesWidget extends Gtk.Stack {
   }
 
   private onPopupMenuAction() {
-    /**
-     * this.selectionModel.select_item(item.get_position(), true)
-
-      const point = new Graphene.Point({ x, y })
-      const [, targetPoint] = widget.compute_point(this._items, point)
-      const position = new Gdk.Rectangle({ x: targetPoint.x, y: targetPoint.y })
-      this._popoverMenu.pointingTo = position
-      this._popoverMenu.popup()
-     */
     const selectedItem = this.selectionModel.get_selected_item<GameItem>()
     const row = this.viewGrid ? selectedItem.gridUi : selectedItem.listUi
 
@@ -554,17 +552,8 @@ export class GamesWidget extends Gtk.Stack {
       return
     }
 
-    // const rectangle = row.get_allocation()
-    // const [, viewPoint] = row.compute_point(this._items, new Graphene.Point({
-    //   x: rectangle.x,
-    //   y: rectangle.y + rectangle.height
-    // }))
-    // print(`rectangle x: ${rectangle.x}, y:${rectangle.y}`)
-    // print(`viewPoint x: ${viewPoint.x}, y:${viewPoint.y}`)
-    // const position = new Gdk.Rectangle({ x: viewPoint.x, y: viewPoint.y })
     const [, bounds] = row.compute_bounds(this._items)
     const bottomLeft = bounds.get_bottom_left()
-    // const [, viewPoint] = row.compute_point(this._items, new Graphene.Point({ x: 0, y: row.get_height() }))
     const position = new Gdk.Rectangle({
       x: bottomLeft.x,
       y: bottomLeft.y + 12
