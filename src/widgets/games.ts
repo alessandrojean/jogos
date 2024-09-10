@@ -366,8 +366,9 @@ export class GamesWidget extends Gtk.Stack {
 
     this._columnView.model = this.selectionModel
 
-    this._columnView.connect('activate', (_self, position) => {
-      this.emit('game-activate', _self.model.get_item(position))
+    this._columnView.connect('activate', (self, position) => {
+      const item = self.model.get_item(position) as GameItem
+      this.emit('game-activate', item.game)
     })
   }
 
