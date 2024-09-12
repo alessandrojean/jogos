@@ -4,6 +4,28 @@ using Adw 1;
 template $GamesWidget : Stack {
   transition-type: crossfade;
 
+  ShortcutController {
+    Shortcut {
+      trigger: "Return";
+      action: "action(games.details)";
+    }
+
+    Shortcut {
+      trigger: "<Ctrl>e";
+      action: "action(games.edit)";
+    }
+
+    Shortcut {
+      trigger: "Delete";
+      action: "action(games.delete)";
+    }
+
+    Shortcut {
+      trigger: "Menu|<Shift>F10";
+      action: "action(games.popup-menu)";
+    }
+  }
+
   ScrolledWindow items {
     Box {
       ColumnView columnView {
@@ -80,6 +102,8 @@ template $GamesWidget : Stack {
       halign: center;
 
       Button {
+        action-name: "win.create-new-game";
+
         Adw.ButtonContent {
           icon-name: "lucide-plus-symbolic";
           label: _("New game");
@@ -105,6 +129,8 @@ template $GamesWidget : Stack {
       halign: center;
 
       Button {
+        action-name: "win.create-new-game";
+
         Adw.ButtonContent {
           icon-name: "lucide-plus-symbolic";
           label: _("New game");

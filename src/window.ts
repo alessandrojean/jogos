@@ -5,7 +5,9 @@ import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
 import { Application } from './application.js'
-import Game, { GamePlatform } from './model/game.js'
+import Game from './model/game.js'
+import { PlatformId, platforms } from './model/platform.js'
+import { CreateDialogWidget } from './widgets/createDialog.js'
 import { DetailsDialogWidget } from './widgets/detailsDialog.js'
 import { EditDialogWidget } from './widgets/editDialog.js'
 import { GamesWidget } from './widgets/games.js'
@@ -28,46 +30,16 @@ export class Window extends Adw.ApplicationWindow {
 
   private sidebarItems: SidebarItem[] = [
     { id: 'ALL_GAMES', label: _('All games'), iconName: 'lucide-gamepad-2', section: 'top-pinned' },
+    { id: 'RECENTS', label: _('Recents'), iconName: 'lucide-history', section: 'top-pinned' },
     { id: 'FAVORITES', label: _('Favorites'), iconName: 'lucide-star', section: 'top-pinned' },
     { id: 'WISHLIST', label: _('Wishlist'), iconName: 'lucide-folder-heart', section: 'top-pinned' },
 
-    { id: 'PC', label: 'PC', iconName: 'pc', section: 'pc' },
-
-    { id: 'PLAYSTATION_5', label: 'PlayStation 5', iconName: 'playstation', section: 'generation-9' },
-    { id: 'XBOX_SERIES', label: 'Xbox Series', iconName: 'xbox', section: 'generation-9' },
-
-    { id: 'NINTENDO_3DS', label: 'Nintendo 3DS', iconName: 'nintendo-3ds', section: 'generation-8' },
-    { id: 'NINTENDO_SWITCH', label: 'Nintendo Switch', iconName: 'nintendo-switch', section: 'generation-8' },
-    { id: 'PLAYSTATION_4', label: 'PlayStation 4', iconName: 'playstation', section: 'generation-8' },
-    { id: 'PLAYSTATION_VITA', label: 'PlayStation Vita', iconName: 'playstation', section: 'generation-8' },
-    { id: 'NINTENDO_WII_U', label: 'Nintendo Wii U', iconName: 'wii-u', section: 'generation-8' },
-    { id: 'XBOX_ONE', label: 'Xbox One', iconName: 'xbox', section: 'generation-8' },
-
-    { id: 'NINTENDO_DS', label: 'Nintendo DS', iconName: 'nintendo-ds', section: 'generation-7' },
-    { id: 'PSP', label: 'PSP', iconName: 'playstation', section: 'generation-7' },
-    { id: 'PLAYSTATION_3', label: 'PlayStation 3', iconName: 'playstation', section: 'generation-7' },
-    { id: 'NINTENDO_WII', label: 'Nintendo Wii', iconName: 'wii', section: 'generation-7' },
-    { id: 'XBOX_360', label: 'Xbox 360', iconName: 'xbox', section: 'generation-7' },
-
-    { id: 'DREAMCAST', label: 'Dreamcast', iconName: 'dreamcast', section: 'generation-6' },
-    { id: 'GAME_BOY_ADVANCE', label: 'Game Boy Advance', iconName: 'nintendo-game-boy', section: 'generation-6' },
-    { id: 'GAMECUBE', label: 'GameCube', iconName: 'gamecube', section: 'generation-6' },
-    { id: 'PLAYSTATION_2', label: 'PlayStation 2', iconName: 'playstation', section: 'generation-6' },
-    { id: 'XBOX', label: 'Xbox', iconName: 'xbox', section: 'generation-6' },
-
-    { id: 'GAME_BOY_COLOR', label: 'Game Boy Color', iconName: 'nintendo-game-boy', section: 'generation-5' },
-    { id: 'NINTENDO_64', label: 'Nintendo 64', iconName: 'nintendo-64', section: 'generation-5' },
-    { id: 'PLAYSTATION', label: 'PlayStation', iconName: 'playstation', section: 'generation-5' },
-    { id: 'SATURN', label: 'Saturn', iconName: 'sega-saturn', section: 'generation-5' },
-
-    { id: 'GAME_BOY', label: 'Game Boy', iconName: 'nintendo-game-boy', section: 'generation-4' },
-    { id: 'MEGA_DRIVE', label: 'Mega Drive', iconName: 'sega', section: 'generation-4' },
-    { id: 'SUPER_NINTENDO', label: 'Super Nintendo', iconName: 'snes', section: 'generation-4' },
-
-    { id: 'MASTER_SYSTEM', label: 'Master System', iconName: 'sega', section: 'generation-3' },
-    { id: 'NES', label: 'NES', iconName: 'nes', section: 'generation-3' },
-
-    { id: 'ATARI_2600', label: 'Atari 2600', iconName: 'atari', section: 'generation-2' },
+    ...platforms.map(platform => ({
+      id: platform.id,
+      label: platform.name,
+      iconName: platform.iconName,
+      section: `generation-${platform.generation}`
+    }))
   ]
 
   static {
@@ -93,10 +65,17 @@ export class Window extends Adw.ApplicationWindow {
     super(params)
 
     this.restoreWindowGeometry()
+    this.initActions()
     this.initSignals()
     this.initSearchBar()
     this.initSidebar()
     this.initButtons()
+  }
+
+  private initActions() {
+    const createNewGame = new Gio.SimpleAction({ name: 'create-new-game' })
+    createNewGame.connect('activate', () => this.onCreateNewGameAction())
+    this.add_action(createNewGame)
   }
 
   private initSignals() {
@@ -256,13 +235,35 @@ export class Window extends Adw.ApplicationWindow {
       return
     }
 
+    if (itemId === 'RECENTS') {
+      return
+    }
+
     // It's a platform
 
-    this._gamesWidget.selectPlatform(itemId as GamePlatform)
+    this._gamesWidget.selectPlatform(itemId as PlatformId)
 
     if (this._splitView.get_collapsed()) {
       this._splitView.set_show_content(true)
     }
 
+  }
+
+  private onCreateNewGameAction() {
+    const selected = this._sidebarList.get_selected_row()?.get_index() ?? 0
+    const platform = selected >= 4
+      ? this.sidebarItems[selected].id as PlatformId
+      : null
+
+    const createDialog = new CreateDialogWidget({ defaultPlatform: platform })
+
+    createDialog.connect('game-created', (_self, game) => {
+      this._gamesWidget.search('')
+      this._gamesWidget.selectPlatform(game.platform)
+      this._gamesWidget.loadItems()
+      this._gamesWidget.selectGame(game)
+    })
+
+    createDialog.present(this)
   }
 }

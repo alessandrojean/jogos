@@ -7,6 +7,7 @@
   "author": "Alessandro Jean <14254807+alessandrojean@users.noreply.github.com>",
   "license": "MIT",
   "dependencies": {
+    "@girs/gda-6.0": "6.0.0-4.0.0-beta.15",
     "typescript": "^5.1.0"
   },
   "devDependencies": {

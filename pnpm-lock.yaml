@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@girs/gda-6.0':
+        specifier: 6.0.0-4.0.0-beta.15
+        version: 6.0.0-4.0.0-beta.15
       typescript:
         specifier: ^5.1.0
         version: 5.5.4
@@ -50,6 +53,27 @@ packages:
   '@eslint/js@8.57.0':
     resolution: {integrity: sha512-Ys+3g2TaW7gADOJzPt83SJtCDhMjndcDMFVQ/Tj9iA1BfJzFKD9mAUXT3OenpuPHbI6P/myECxRJrofUsDx/5g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+
+  '@girs/cairo-1.0@1.0.0-4.0.0-beta.15':
+    resolution: {integrity: sha512-5AAKPp4REjlvE0YMgZrs7rJudBKoM/jzbUyym3amnhkb1Th2L/S/iANX7X0/dYhtVoajZlo7edDHzUXxSJNe/Q==}
+
+  '@girs/gda-6.0@6.0.0-4.0.0-beta.15':
+    resolution: {integrity: sha512-2OXdyTcAgfu3QwyS/fNZYlWbXJSpVdEVnuCdjB+7iGGaC7GFdtKfK82MCcVeQN55qZVDWAF4VSvv6Fgsvki5ig==}
+
+  '@girs/gio-2.0@2.80.3-4.0.0-beta.15':
+    resolution: {integrity: sha512-KxfB+pkmXeFzA/5MBCy+U2/lOLDrA4ct/oVf9mt3iwzJ+xthUNQq/GyN6krIzM+mWwD/itTDUa+f2nEvRHskrg==}
+
+  '@girs/gjs@4.0.0-beta.15':
+    resolution: {integrity: sha512-Oa95oCD8PV0AVbOgVSon3qQ2v0kFuVgLz2t6OoJLiHW5JspXx4Juc8c+11rEZ7O/0RVi3/DqYmM0OUCBEe1RSg==}
+
+  '@girs/glib-2.0@2.80.3-4.0.0-beta.15':
+    resolution: {integrity: sha512-v9UJ83i+zFnicPsjYhw54Q55DVQ6oqfmef4EKXvsfjKYZF7WiaUWVp/dGAIUzanR0FGbdme6myZRJvYZp9EHcA==}
+
+  '@girs/gobject-2.0@2.80.3-4.0.0-beta.15':
+    resolution: {integrity: sha512-/t1B/aaEMEa/MCIeBc69RQBI+b0kdUyY27FWIPNoG8QOXB4DNe07O9N3p1w7+QDmqw8dkLJMFexfFwdQ+5LC9w==}
+
+  '@girs/libxml2-2.0@2.0.0-4.0.0-beta.15':
+    resolution: {integrity: sha512-7utH24wNZriZ2qQ9UuBSYfFw1l+yCpCrnTSZOJUjXQz5bEU7BGbzNPe82eQG4GTufYp4kCgZwM+OeATHOtJuCQ==}
 
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -614,6 +638,48 @@ snapshots:
       - supports-color
 
   '@eslint/js@8.57.0': {}
+
+  '@girs/cairo-1.0@1.0.0-4.0.0-beta.15':
+    dependencies:
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+
+  '@girs/gda-6.0@6.0.0-4.0.0-beta.15':
+    dependencies:
+      '@girs/gio-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/libxml2-2.0': 2.0.0-4.0.0-beta.15
+
+  '@girs/gio-2.0@2.80.3-4.0.0-beta.15':
+    dependencies:
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+
+  '@girs/gjs@4.0.0-beta.15':
+    dependencies:
+      '@girs/cairo-1.0': 1.0.0-4.0.0-beta.15
+      '@girs/gio-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+
+  '@girs/glib-2.0@2.80.3-4.0.0-beta.15':
+    dependencies:
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+
+  '@girs/gobject-2.0@2.80.3-4.0.0-beta.15':
+    dependencies:
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+
+  '@girs/libxml2-2.0@2.0.0-4.0.0-beta.15':
+    dependencies:
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
 
   '@humanwhocodes/config-array@0.11.14':
     dependencies:

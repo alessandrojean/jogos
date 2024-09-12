@@ -5,12 +5,18 @@
     <file>application.js</file>
     <file>window.js</file>
     <file>settings.js</file>
+    <file>widgets/createDialog.js</file>
     <file>widgets/detailsDialog.js</file>
     <file>widgets/editDialog.js</file>
     <file>widgets/games.js</file>
     <file>widgets/sidebarItem.js</file>
     <file>lib/fetch.js</file>
     <file>utils/createFolder.js</file>
+    <file>model/certification.js</file>
     <file>model/game.js</file>
+    <file>model/gameCondition.js</file>
+    <file>model/platform.js</file>
+    <file>model/storageMedia.js</file>
+    <file>repositories/games.js</file>
   </gresource>
 </gresources>

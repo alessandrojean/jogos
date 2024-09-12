@@ -4,7 +4,17 @@
  * This file is the entry point of our application. When executed,
  * it runs in the GJS interpreter.
  */
-import { exit, programArgs } from "system";
+import GIRepository from 'gi://GIRepository?version=2.0'
+import { exit, programArgs } from "system"
+
+/**
+ * It should be loading automatically, but for some reason it is not.
+ * Had to add so it does the correctly lookup for the typelib files
+ * needed to libgda-6.0 to work. Usually libdir points to /app/lib or
+ * /app/lib64 depending on the system.
+ */
+GIRepository.Repository.prepend_search_path('@libdir@/girepository-1.0')
+GIRepository.Repository.prepend_library_path('@libdir@')
 
 /**
  * This block sets up important package information. GJS uses this to load

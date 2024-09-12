@@ -16,20 +16,37 @@ template $DetailsDialogWidget : Adw.Dialog {
         margin-end: 20;
         margin-top: 24;
         margin-bottom: 20;
-        spacing: 12;
+        spacing: 20;
 
         Adw.PreferencesGroup {
           margin-bottom: 6;
 
-          Picture cover {
-            width-request: 150;
-            height-request: 225;
-            can-shrink: true;
+          Stack coverStack {
             margin-bottom: 18;
-            halign: center;
-            content-fit: cover;
 
-            styles ["card"]
+            Box coverPlaceholder {
+              width-request: 150;
+              height-request: 225;
+              halign: center;
+              styles ["card"]
+
+              Image {
+                icon-name: "lucide-gamepad-2-symbolic";
+                icon-size: large;
+                hexpand: true;
+                styles ["dim-label"]
+              }
+            }
+
+            Picture cover {
+              width-request: 150;
+              height-request: 225;
+              can-shrink: true;
+              halign: center;
+              content-fit: cover;
+
+              styles ["card"]
+            }
           }
 
           Label title {
@@ -48,37 +65,8 @@ template $DetailsDialogWidget : Adw.Dialog {
         }
 
         Adw.PreferencesGroup {
-          Adw.ActionRow barcode {
-            title: _("Barcode");
-            subtitle-selectable: true;
+          title: _("Details");
 
-            styles ["property", "monospace"]
-          }
-        }
-
-        Adw.PreferencesGroup {
-          Adw.ActionRow story {
-            title: _("Story");
-            subtitle-lines: 1;
-            activatable: true;
-
-            styles ["property"]
-
-            [suffix]
-            Image {
-              icon-name: "go-next-symbolic";
-              styles ["dim-label"]
-            }
-          }
-
-          Adw.ActionRow certification {
-            title: _("Certification");
-
-            styles ["property"]
-          }
-        }
-
-        Adw.PreferencesGroup {
           Adw.ActionRow developer {
             title: _("Developer");
 
@@ -91,14 +79,73 @@ template $DetailsDialogWidget : Adw.Dialog {
             styles ["property"]
           }
 
+          Adw.ActionRow certification {
+            title: _("Certification");
+            styles ["property"]
+
+            [suffix]
+            Image certificationImage {
+              icon-size: large;
+            }
+          }
+        }
+
+        Adw.PreferencesGroup {
+          title: _("Story");
+
+          Adw.ActionRow story {
+            styles ["property", "story"]
+          }
+        }
+
+        Adw.PreferencesGroup {
+          title: _("Storage");
+
+          Adw.ActionRow barcode {
+            title: _("Barcode");
+            subtitle-selectable: true;
+
+            styles ["property", "monospace"]
+          }
+
           Adw.ActionRow storageMedia {
-            title: _("Storage Media");
+            title: _("Media");
+
+            styles ["property"]
+          }
+
+          Adw.ActionRow condition {
+            title: _("Condition");
 
             styles ["property"]
           }
         }
 
         Adw.PreferencesGroup {
+          title: _("Store");
+
+          Adw.ActionRow boughtDate {
+            title: _("Bought date");
+
+            styles ["property"]
+          }
+
+          Adw.ActionRow store {
+            title: _("Location");
+
+            styles ["property"]
+          }
+
+          Adw.ActionRow paidPrice {
+            title: _("Paid price");
+
+            styles ["property"]
+          }
+        }
+
+        Adw.PreferencesGroup {
+          title: _("Database");
+
           Adw.ActionRow creationDate {
             title: _("Creation date");
 

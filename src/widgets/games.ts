@@ -7,7 +7,9 @@ import Graphene from 'gi://Graphene'
 import Gtk from 'gi://Gtk?version=4.0'
 import Pango from 'gi://Pango'
 
-import Game, { platformName } from '../model/game.js'
+import Game from '../model/game.js'
+import { platformName } from '../model/platform.js'
+import GamesRepository from '../repositories/games.js'
 
 Gio._promisify(Adw.AlertDialog.prototype, 'choose', 'choose_finish')
 
@@ -26,7 +28,7 @@ export class GamesWidget extends Gtk.Stack {
 
   private _gridView!: Gtk.GridView
 
-  private dataModel!: Gio.ListStore
+  private dataModel!: Gio.ListStore<GameItem>
   private selectionModel!: Gtk.SingleSelection
   private filter!: Gtk.EveryFilter
   private platformFilter!: Gtk.StringFilter
@@ -59,34 +61,6 @@ export class GamesWidget extends Gtk.Stack {
         }
       }
     }, this)
-
-    Gtk.Widget.add_shortcut(
-      new Gtk.Shortcut({
-        action: new Gtk.NamedAction({ actionName: 'games.details' }),
-        trigger: Gtk.ShortcutTrigger.parse_string('Return'),
-      })
-    )
-
-    Gtk.Widget.add_shortcut(
-      new Gtk.Shortcut({
-        action: new Gtk.NamedAction({ actionName: 'games.edit' }),
-        trigger: Gtk.ShortcutTrigger.parse_string('<Ctrl>e'),
-      })
-    )
-
-    Gtk.Widget.add_shortcut(
-      new Gtk.Shortcut({
-        action: new Gtk.NamedAction({ actionName: 'games.delete' }),
-        trigger: Gtk.ShortcutTrigger.parse_string('Delete'),
-      })
-    )
-
-    Gtk.Widget.add_shortcut(
-      new Gtk.Shortcut({
-        action: new Gtk.NamedAction({ actionName: 'games.popup-menu' }),
-        trigger: Gtk.ShortcutTrigger.parse_string('Menu|<Shift>F10')
-      })
-    )
   }
 
   constructor() {
@@ -96,6 +70,7 @@ export class GamesWidget extends Gtk.Stack {
     this.initCommon()
     this.initColumnView()
     this.initGridView()
+    this.loadItems()
   }
 
   private initActions() {
@@ -143,90 +118,6 @@ export class GamesWidget extends Gtk.Stack {
     this.filter.append(this.favoriteFilter)
 
     this.dataModel = new Gio.ListStore({ itemType: GameItem.$gtype })
-    this.dataModel.splice(0, 0, [
-      new GameItem({
-        game: new Game({
-          id: 1,
-          title: 'Detroit Become Human',
-          developer: 'Quanticdream',
-          publisher: '',
-          releaseYear: 2018,
-          barcode: '',
-          platform: 'PLAYSTATION_4',
-          story: '',
-          certification: '',
-          storageMedia: 'BLURAY',
-          condition: 'CIB',
-        }),
-        listUi: null,
-      }),
-      new GameItem({
-        game: new Game({
-          id: 2,
-          title: 'Ghost of Tsushima - Director\'s Cut',
-          developer: 'Sucker Punch',
-          publisher: '',
-          releaseYear: 2020,
-          barcode: '',
-          platform: 'PLAYSTATION_4',
-          story: '',
-          certification: '',
-          storageMedia: 'BLURAY',
-          condition: 'CIB',
-          favorite: true,
-        }),
-        listUi: null,
-      }),
-      new GameItem({
-        game: new Game({
-          id: 3,
-          title: 'Grand Theft Auto V - Premium Edition',
-          developer: 'Rockstar Games',
-          publisher: '',
-          releaseYear: 2013,
-          barcode: '',
-          platform: 'PLAYSTATION_4',
-          story: '',
-          certification: '',
-          storageMedia: 'BLURAY',
-          condition: 'CIB',
-        }),
-        listUi: null,
-      }),
-      new GameItem({
-        game: new Game({
-          id: 4,
-          title: 'Hades',
-          developer: 'Supergiant Games',
-          publisher: '',
-          releaseYear: 2020,
-          barcode: '',
-          platform: 'PLAYSTATION_4',
-          story: '',
-          certification: '',
-          storageMedia: 'BLURAY',
-          condition: 'CIB',
-        }),
-        listUi: null,
-      }),
-      new GameItem({
-        game: new Game({
-          id: 5,
-          title: 'Life is Strange: Double Exposure',
-          developer: 'Deck Nine',
-          publisher: '',
-          releaseYear: 2024,
-          barcode: '',
-          platform: 'PLAYSTATION_5',
-          story: '',
-          certification: '',
-          storageMedia: 'BLURAY',
-          favorite: true,
-          condition: 'CIB',
-        }),
-        listUi: null,
-      }),
-    ])
   }
 
   private initColumnView() {
@@ -385,11 +276,11 @@ export class GamesWidget extends Gtk.Stack {
       })
       const image = new Gtk.Picture({
         widthRequest: 96,
-        // heightRequest: 144,
+        heightRequest: 144,
         hexpand: true,
         vexpand: true,
         canShrink: true,
-        cssClasses: ['thumbnail'],
+        cssClasses: ['thumbnail', 'grid'],
       })
       const label = new Gtk.Label({
         halign: Gtk.Align.CENTER,
@@ -438,6 +329,12 @@ export class GamesWidget extends Gtk.Stack {
       const item = self.model.get_item(position) as GameItem
       this.emit('game-activate', item.game)
     })
+  }
+
+  loadItems() {
+    const allGames = GamesRepository.instance.list()
+
+    this.dataModel.splice(0, this.dataModel.nItems, allGames.map(game => new GameItem({ game })))
   }
 
   showFavorites() {
@@ -498,6 +395,21 @@ export class GamesWidget extends Gtk.Stack {
 
     if (this.visibleChild === this._grid) {
       this.visibleChild = this._items
+    }
+  }
+
+  selectGame(game: Game) {
+    const item = new GameItem({ game })
+    const [contains, position] = this.dataModel.find_with_equal_func(item, (a: GameItem, b: GameItem) => {
+      return a.game.id === b.game.id
+    })
+
+    if (contains) {
+      if (this.viewGrid) {
+        this._gridView.scroll_to(position, Gtk.ListScrollFlags.SELECT, null)
+      } else {
+        this._columnView.scroll_to(position, null, Gtk.ListScrollFlags.SELECT, null)
+      }
     }
   }
 

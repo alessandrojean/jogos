@@ -1,18 +1,12 @@
+import Gda from 'gi://Gda?version=6.0'
+import Gio from 'gi://Gio'
 import GLib from 'gi://GLib'
 import GObject from 'gi://GObject'
-import Gio from 'gi://Gio'
 
-export type GamePlatform = 'PLAYSTATION_4' | 'PLAYSTATION_5' | 'XBOX_SERIES'
-  | 'NINTENDO_3DS' | 'NINTENDO_SWITCH' | 'PLAYSTATION_VITA' | 'NINTENDO_WII_U'
-  | 'XBOX_ONE' | 'NINTENDO_DS' | 'PSP' | 'PLAYSTATION_3' | 'NINTENDO_WII'
-  | 'XBOX_360' | 'DREAMCAST' | 'GAME_BOY_ADVANCE' | 'GAMECUBE' | 'PLAYSTATION_2'
-  | 'XBOX' | 'GAME_BOY_COLOR' | 'NINTENDO_64' | 'PLAYSTATION' | 'SATURN'
-  | 'GAME_BOY' | 'MEGA_DRIVE' | 'SUPER_NINTENDO' | 'MASTER_SYSTEM' | 'NES'
-  | 'ATARI_2600' | 'PC'
-
-export type StorageMedia = 'CARTRIDGE' | 'CD' | 'DVD' | 'BLURAY'
-
-export type Condition = 'LOOSE' | 'CIB' | 'SEALED'
+import { CertificationId } from './certification.js'
+import { GameConditionId } from './gameCondition.js'
+import { PlatformId } from './platform.js'
+import { StorageMediaId } from './storageMedia.js'
 
 export default class Game extends GObject.Object {
   id!: number
@@ -20,17 +14,21 @@ export default class Game extends GObject.Object {
   developer!: string
   publisher!: string
   releaseYear!: number
-  barcode?: string
-  platform!: GamePlatform
+  barcode: string | null = null
+  platform!: PlatformId
   story!: string
-  certification!: string
-  storageMedia!: StorageMedia
-  condition!: Condition
+  certification!: CertificationId
+  storageMedia!: StorageMediaId
+  condition!: GameConditionId
   favorite: boolean = false
   wishlist: boolean = false
+  boughtDate: number | null = null
+  store: string | null = null
+  paidPriceCurrency: string = 'USD'
+  paidPriceAmount: number = 0.0
 
-  creationDate: number = 0
-  modificationDate: number = 0
+  creationDate: number = GLib.DateTime.new_now_local().to_unix()
+  modificationDate: number = GLib.DateTime.new_now_local().to_unix()
 
   static {
     GObject.registerClass({
@@ -130,6 +128,38 @@ export default class Game extends GObject.Object {
           GObject.ParamFlags.READWRITE,
           false,
         ),
+        boughtDate: GObject.ParamSpec.long(
+          'bought-date',
+          '',
+          '',
+          GObject.ParamFlags.READWRITE,
+          Number.MIN_SAFE_INTEGER,
+          Number.MAX_SAFE_INTEGER,
+          0,
+        ),
+        store: GObject.ParamSpec.string(
+          'store',
+          '',
+          '',
+          GObject.ParamFlags.READWRITE,
+          ''
+        ),
+        paidPriceCurrency: GObject.ParamSpec.string(
+          'paid-price-currency',
+          '',
+          '',
+          GObject.ParamFlags.READWRITE,
+          'USD'
+        ),
+        paidPriceAmount: GObject.ParamSpec.double(
+          'paid-price-amount',
+          '',
+          '',
+          GObject.ParamFlags.READWRITE,
+          Number.MIN_SAFE_INTEGER,
+          Number.MAX_SAFE_INTEGER,
+          0.0
+        ),
         creationDate: GObject.ParamSpec.long(
           'creation-date',
           '',
@@ -157,6 +187,34 @@ export default class Game extends GObject.Object {
     Object.assign(this, params)
   }
 
+  static fromIterator(iterator: Gda.DataModelIter): Game {
+    const getValueForField = <T>(iterator: Gda.DataModelIter, field: string): T => {
+      return iterator.get_value_for_field(field) as unknown as T
+    }
+
+    return new Game({
+      id: getValueForField(iterator, 'id'),
+      title: getValueForField(iterator, 'title'),
+      developer: getValueForField(iterator, 'developer'),
+      publisher: getValueForField(iterator, 'publisher'),
+      releaseYear: getValueForField(iterator, 'release_year'),
+      barcode: getValueForField(iterator, 'barcode'),
+      platform: getValueForField(iterator, 'platform'),
+      story: getValueForField(iterator, 'story'),
+      certification: getValueForField(iterator, 'certification'),
+      storageMedia: getValueForField(iterator, 'storage_media'),
+      condition: getValueForField(iterator, 'condition'),
+      favorite: Boolean(getValueForField<number>(iterator, 'favorite')),
+      wishlist: Boolean(getValueForField<number>(iterator, 'wishlist')),
+      boughtDate: getValueForField(iterator, 'bought_at'),
+      store: getValueForField(iterator, 'store'),
+      paidPriceCurrency: getValueForField(iterator, 'paid_price_currency'),
+      paidPriceAmount: getValueForField(iterator, 'paid_price_amount'),
+      creationDate: getValueForField(iterator, 'created_at'),
+      modificationDate: getValueForField(iterator, 'updated_at'),
+    })
+  }
+
   get coverFile(): string | null {
     const fileUri = GLib.build_filenamev([
       GLib.get_home_dir(), '.jogos', 'covers', `${this.id}.jpg`
@@ -175,40 +233,21 @@ export default class Game extends GObject.Object {
   get modifiedAt(): Date {
     return new Date(this.modificationDate * 1_000)
   }
+
+  get boughtAt() {
+    return this.boughtDate ? new Date(this.boughtDate * 1_000) : null
+  }
+
+  get createdAtDateTime() {
+    return GLib.DateTime.new_from_unix_local(this.creationDate)
+  }
+
+  get modifiedAtDateTime() {
+    return GLib.DateTime.new_from_unix_local(this.modificationDate)
+  }
+
+  get boughtAtDateTime() {
+    return this.boughtDate ? GLib.DateTime.new_from_unix_local(this.boughtDate) : null
+  }
 }
 
-const platformNames: Record<GamePlatform, string> = {
-  'PLAYSTATION_4': 'PlayStation 4',
-  'PLAYSTATION_5': 'PlayStation 5',
-  'XBOX_SERIES': 'Xbox Series',
-  'NINTENDO_3DS': 'Nintendo 3DS',
-  'NINTENDO_SWITCH': 'Nintendo Switch',
-  'PLAYSTATION_VITA': 'PlayStation Vita',
-  'NINTENDO_WII_U': 'Nintendo Wii U',
-  'XBOX_ONE': 'Xbox One',
-  'NINTENDO_DS': 'Nintendo DS',
-  'PSP': 'PSP',
-  'PLAYSTATION_3': 'PlayStation 3',
-  'NINTENDO_WII': 'Nintendo Wii',
-  'XBOX_360': 'Xbox 360',
-  'DREAMCAST': 'Dreamcast',
-  'GAME_BOY_ADVANCE': 'Game Boy Advance',
-  'GAMECUBE': 'GameCube',
-  'PLAYSTATION_2': 'PlayStation 2',
-  'XBOX': 'Xbox',
-  'GAME_BOY_COLOR': 'Game Boy Color',
-  'NINTENDO_64': 'Nintendo 64',
-  'PLAYSTATION': 'PlayStation',
-  'SATURN': 'Saturn',
-  'GAME_BOY': 'Game Boy',
-  'MEGA_DRIVE': 'Mega Drive',
-  'SUPER_NINTENDO': 'Super Nintendo',
-  'MASTER_SYSTEM': 'Master System',
-  'NES': 'NES',
-  'ATARI_2600': 'Atari 2600',
-  'PC': 'PC',
-}
-
-export function platformName(id: GamePlatform): string {
-  return platformNames[id]
-}

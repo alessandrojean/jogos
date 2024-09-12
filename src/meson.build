@@ -5,13 +5,19 @@ sources = files(
   'application.ts',
   'window.ts',
   'settings.ts',
+  'model/certification.ts',
   'model/game.ts',
+  'model/gameCondition.ts',
+  'model/platform.ts',
+  'model/storageMedia.ts',
+  'widgets/createDialog.ts',
   'widgets/detailsDialog.ts',
   'widgets/editDialog.ts',
   'widgets/games.ts',
   'widgets/sidebarItem.ts',
   'lib/fetch.ts',
-  'utils/createFolder.ts'
+  'utils/createFolder.ts',
+  'repositories/games.ts',
 )
 
 tsc_out = meson.project_build_root() / 'tsc-out'

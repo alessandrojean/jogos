@@ -3,6 +3,7 @@
   <gresource prefix="/org/jogos/Jogos">
     <file>style.css</file>
     <file>style-hc.css</file>
+    <file>ui/create-dialog.ui</file>
     <file>ui/details-dialog.ui</file>
     <file>ui/edit-dialog.ui</file>
     <file>ui/games.ui</file>
@@ -10,7 +11,7 @@
     <file>ui/window.ui</file>
     <file alias="gtk/help-overlay.ui">ui/help-overlay.ui</file>
   </gresource>
-  <gresource prefix="/org/jogos/Jogos/icons/16x16/actions/">
+  <gresource prefix="/org/jogos/Jogos/icons/scalable/actions/">
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-search-symbolic.svg">icons/lucide-search-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-gamepad-2-symbolic.svg">icons/lucide-gamepad-2-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-plus-symbolic.svg">icons/lucide-plus-symbolic.svg</file>
@@ -23,6 +24,31 @@
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-pencil-symbolic.svg">icons/lucide-pencil-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-trash-2-symbolic.svg">icons/lucide-trash-2-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-folder-heart-symbolic.svg">icons/lucide-folder-heart-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-history-symbolic.svg">icons/lucide-history-symbolic.svg</file>
+
+    <file compressed="true" preprocess="xml-stripblanks" alias="classind-livre.svg">certifications/classind-livre.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="classind-10-anos.svg">certifications/classind-10-anos.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="classind-12-anos.svg">certifications/classind-12-anos.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="classind-14-anos.svg">certifications/classind-14-anos.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="classind-16-anos.svg">certifications/classind-16-anos.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="classind-18-anos.svg">certifications/classind-18-anos.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="esrb-everyone.svg">certifications/esrb-everyone.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="esrb-everyone-10-plus.svg">certifications/esrb-everyone-10-plus.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="esrb-teen.svg">certifications/esrb-teen.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="esrb-mature.svg">certifications/esrb-mature.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="esrb-adults-only.svg">certifications/esrb-adults-only.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="pegi-3-years.svg">certifications/pegi-3-years.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="pegi-7-years.svg">certifications/pegi-7-years.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="pegi-12-years.svg">certifications/pegi-12-years.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="pegi-16-years.svg">certifications/pegi-16-years.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="pegi-18-years.svg">certifications/pegi-18-years.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="cero-a.svg">certifications/cero-a.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="cero-b.svg">certifications/cero-b.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="cero-c.svg">certifications/cero-c.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="cero-d.svg">certifications/cero-d.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="cero-z.svg">certifications/cero-z.svg</file>
+
+    <file compressed="true" preprocess="xml-stripblanks" alias="document-edit-symbolic.svg">icons/lucide-pencil-symbolic.svg</file>
 
     <file compressed="true" preprocess="xml-stripblanks" alias="playstation-symbolic.svg">icons/playstation-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-switch-symbolic.svg">icons/nintendo-switch-symbolic.svg</file>

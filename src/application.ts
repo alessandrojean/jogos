@@ -4,6 +4,7 @@ import GLib from 'gi://GLib'
 import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
+import GamesRepository from './repositories/games.js'
 import { Settings } from './settings.js'
 import { createFolder } from './utils/createFolder.js'
 import { GamesWidget } from './widgets/games.js'
@@ -31,6 +32,8 @@ export class Application extends Adw.Application {
     Gio._promisify(Gtk.UriLauncher.prototype, 'launch', 'launch_finish')
 
     Application.settings = new Settings({ schema: pkg.name })
+
+    GamesRepository.instance.connect()
   }
 
   public vfunc_startup(): void {
@@ -49,6 +52,15 @@ export class Application extends Adw.Application {
     }
 
     this.window.present()
+  }
+
+  public vfunc_shutdown(): void {
+    GamesRepository.instance.disconnect()
+
+    this.window?.run_dispose()
+    this.window = undefined
+
+    super.vfunc_shutdown()
   }
 
   private initActions() {

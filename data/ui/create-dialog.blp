@@ -1,0 +1,232 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $CreateDialogWidget : Adw.Dialog {
+  content-width: 500;
+  content-height: 700;
+
+  Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {
+      show-start-title-buttons: false;
+      show-end-title-buttons: false;
+
+      [start]
+      Button cancelButton {
+        label: _("Cancel");
+        action-name: "window.close";
+      }
+
+      [end]
+      Button createButton {
+        label: _("Create");
+        action-name: "create-dialog.create";
+        styles ["suggested-action"]
+      }
+    }
+
+    ScrolledWindow {
+      Box {
+        orientation: vertical;
+        margin-start: 20;
+        margin-end: 20;
+        margin-top: 24;
+        margin-bottom: 20;
+        spacing: 24;
+
+        Adw.PreferencesGroup {
+          margin-bottom: 12;
+
+          Adw.Clamp {
+            maximum-size: 150;
+
+            Overlay {
+              halign: center;
+              valign: center;
+
+              [overlay]
+              Button coverButtonEdit {
+                icon-name: "lucide-pencil-symbolic";
+                tooltip-text: _("New cover");
+                halign: end;
+                valign: end;
+                margin-bottom: 6;
+                margin-end: 6;
+                action-name: "create-dialog.new-cover";
+
+                styles ["circular", "osd"]
+              }
+
+              [overlay]
+              Revealer deleteRevealer {
+                transition-type: crossfade;
+                margin-end: 40;
+
+                Button coverButtonDelete {
+                  icon-name: "lucide-trash-2-symbolic";
+                  tooltip-text: _("Delete cover");
+                  halign: end;
+                  valign: end;
+                  margin-bottom: 6;
+                  margin-end: 6;
+                  action-name: "create-dialog.remove-cover";
+
+                  styles ["circular", "osd"]
+                }
+              }
+
+              Picture cover {
+                width-request: 150;
+                height-request: 225;
+                can-shrink: true;
+                content-fit: cover;
+
+                styles ["card"]
+              }
+            }
+          }
+        }
+
+        Adw.PreferencesGroup {
+          Adw.EntryRow title {
+            title: _("Title");
+          }
+
+          Adw.ComboRow platform {
+            title: _("Platform");
+            factory: SignalListItemFactory {};
+            enable-search: true;
+          }
+        }
+
+        Adw.PreferencesGroup {
+          title: _("Details");
+
+          Adw.EntryRow developer {
+            title: _("Developer");
+          }
+
+          Adw.EntryRow publisher {
+            title: _("Publisher");
+          }
+
+          Adw.SpinRow releaseYear {
+            title: _("Release year");
+            numeric: true;
+            adjustment: Adjustment {
+              lower: 1900;
+              upper: 2024;
+              page-increment: 10;
+              step-increment: 1;
+            };
+          }
+
+          Adw.ComboRow certification {
+            title: _("Certification");
+            factory: SignalListItemFactory {};
+            enable-search: true;
+          }
+        }
+
+        Adw.PreferencesGroup {
+          title: _("Story");
+
+          Gtk.TextView story {
+            wrap-mode: word;
+            styles ["card"]
+          }
+        }
+
+        Adw.PreferencesGroup {
+          title: _("Storage");
+
+          Adw.EntryRow barcode {
+            title: _("Barcode");
+
+            styles ["monospace"]
+          }
+
+          Adw.ComboRow storageMedia {
+            title: _("Media");
+          }
+
+          Adw.ComboRow condition {
+            title: _("Condition");
+          }
+        }
+
+        Adw.PreferencesGroup {
+          title: _("Store");
+
+          Adw.ExpanderRow {
+            title: _("Bought date");
+
+            [suffix]
+            Label boughtDateLabel {}
+
+            Adw.Clamp {
+              margin-top: 16;
+              margin-bottom: 16;
+              maximum-size: 250;
+
+              Box {
+                orientation: vertical;
+                spacing: 16;
+
+                Calendar boughtDate {
+                  show-week-numbers: true;
+                  styles ["card"]
+                }
+
+                Box {
+                  spacing: 10;
+                  halign: center;
+
+                  Button {
+                    label: _("Today");
+                    halign: center;
+                    styles ["raised"]
+                  }
+
+                  Button {
+                    label: _("Unknown");
+                    halign: center;
+                    styles ["raised"]
+                  }
+                }
+
+              }
+
+            }
+          }
+
+          Adw.EntryRow store {
+            title: _("Location");
+          }
+
+          Adw.ExpanderRow {
+            title: _("Paid price");
+            expanded: true;
+
+            [suffix]
+            Label paidPriceLabel {
+              label: "USD 0.00";
+            }
+
+            Adw.ComboRow currency {
+              title: _("Currency");
+              enable-search: true;
+              model: StringList {
+                strings ["USD", "EUR", "BRL"]
+              };
+            }
+
+            Adw.EntryRow amount {
+              title: _("Amount");
+            }
+          }
+        }
+      }
+    }
+  }
+}
