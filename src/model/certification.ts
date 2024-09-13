@@ -101,7 +101,7 @@ const systemMap: Record<CertificationSystem, string> = {
   'ESRB': 'ESRB',
   'PEGI': 'PEGI',
   'CERO': 'CERO',
-  'CLASSIND': 'ClassInd',
+  'CLASSIND': 'Class. Ind.',
 }
 
 export const certificationSystems = Object.keys(systemMap) as CertificationSystem[]
