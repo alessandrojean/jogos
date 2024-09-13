@@ -1,12 +1,11 @@
 import Adw from 'gi://Adw'
-import GdkPixbuf from 'gi://GdkPixbuf'
 import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
 import { getCertification } from '../model/certification.js'
 import Game from '../model/game.js'
 import { getGameCondition } from '../model/gameCondition.js'
-import { platformName } from '../model/platform.js'
+import { getPlatform, platformName } from '../model/platform.js'
 import { getStorageMedia } from '../model/storageMedia.js'
 
 export class DetailsDialogWidget extends Adw.Dialog {
@@ -28,6 +27,7 @@ export class DetailsDialogWidget extends Adw.Dialog {
   private _boughtDate!: Adw.ActionRow
   private _store!: Adw.ActionRow
   private _paidPrice!: Adw.ActionRow
+  private _placeholderImage!: Gtk.Image
 
   game!: Game
 
@@ -48,7 +48,8 @@ export class DetailsDialogWidget extends Adw.Dialog {
         'title', 'cover', 'platform', 'year', 'barcode', 'story',
         'certification', 'developer', 'publisher', 'storageMedia',
         'creationDate', 'modificationDate', 'certificationImage',
-        'condition', 'boughtDate', 'store', 'paidPrice', 'coverStack'
+        'condition', 'boughtDate', 'store', 'paidPrice', 'coverStack',
+        'placeholderImage'
       ]
     }, this)
   }
@@ -88,10 +89,11 @@ export class DetailsDialogWidget extends Adw.Dialog {
     const condition = getGameCondition(this.game.condition)
     this._condition.subtitle = condition?.name ?? _('Unknown')
 
-    const coverFile = this.game.coverFile
+    const cover = this.game.cover
+    this._cover.file = cover
+    this._placeholderImage.iconName = getPlatform(this.game.platform).iconName
 
-    if (coverFile) {
-      this._cover.set_pixbuf(GdkPixbuf.Pixbuf.new_from_file(coverFile))
+    if (cover.query_exists(null)) {
       this._coverStack.visibleChild = this._cover
     }
 

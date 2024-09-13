@@ -30,8 +30,7 @@ template $DetailsDialogWidget : Adw.Dialog {
               halign: center;
               styles ["card"]
 
-              Image {
-                icon-name: "lucide-gamepad-2-symbolic";
+              Image placeholderImage {
                 icon-size: large;
                 hexpand: true;
                 styles ["dim-label"]
@@ -50,6 +49,11 @@ template $DetailsDialogWidget : Adw.Dialog {
           }
 
           Label title {
+            margin-start: 20;
+            margin-end: 20;
+            wrap: true;
+            wrap-mode: word;
+            justify: center;
             styles ["title-3"]
           }
 

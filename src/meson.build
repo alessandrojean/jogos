@@ -14,6 +14,8 @@ sources = files(
   'widgets/detailsDialog.ts',
   'widgets/editDialog.ts',
   'widgets/games.ts',
+  'widgets/gameGridItem.ts',
+  'widgets/gameTitleColumn.ts',
   'widgets/sidebarItem.ts',
   'lib/fetch.ts',
   'utils/convertCover.ts',

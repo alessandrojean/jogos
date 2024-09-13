@@ -6,6 +6,8 @@
     <file>ui/create-dialog.ui</file>
     <file>ui/details-dialog.ui</file>
     <file>ui/edit-dialog.ui</file>
+    <file>ui/game-grid-item.ui</file>
+    <file>ui/game-title-column.ui</file>
     <file>ui/games.ui</file>
     <file>ui/sidebar-item.ui</file>
     <file>ui/window.ui</file>

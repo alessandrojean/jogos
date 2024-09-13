@@ -1,15 +1,15 @@
 import Adw from 'gi://Adw'
 import Gdk from 'gi://Gdk?version=4.0'
-import GdkPixbuf from 'gi://GdkPixbuf'
 import Gio from 'gi://Gio'
 import GObject from 'gi://GObject'
 import Graphene from 'gi://Graphene'
 import Gtk from 'gi://Gtk?version=4.0'
-import Pango from 'gi://Pango'
 
 import Game from '../model/game.js'
-import { platformName } from '../model/platform.js'
+import { getPlatform, platformName } from '../model/platform.js'
 import GamesRepository from '../repositories/games.js'
+import GameGridItemWidget from './gameGridItem.js'
+import GameTitleColumnWidget from './gameTitleColumn.js'
 
 Gio._promisify(Adw.AlertDialog.prototype, 'choose', 'choose_finish')
 
@@ -145,40 +145,21 @@ export class GamesWidget extends Gtk.Stack {
     const factoryTitle = this._titleColumn.factory as Gtk.SignalListItemFactory
 
     factoryTitle.connect('setup', (_self, listItem: Gtk.ColumnViewCell) => {
-      const box = new Gtk.Box({
-        orientation: Gtk.Orientation.HORIZONTAL,
-        spacing: 12
-      })
-      const picture = new Gtk.Picture({
-        widthRequest: 36,
-        heightRequest: 36,
-        contentFit: Gtk.ContentFit.COVER,
-        cssClasses: ['thumbnail'],
-      })
-      const label = new Gtk.Label({ label: '', xalign: 0.0 })
+      const title = new GameTitleColumnWidget({ title: '', cover: null })
 
-      box.append(picture)
-      box.append(label)
-
-      this.setupCell(box, listItem)
-
-      listItem.set_child(box)
+      listItem.child = title
     })
 
     factoryTitle.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
-      const box = listItem.get_child() as Gtk.Box
-      const picture = box.get_first_child() as Gtk.Picture
-      const label = box.get_last_child() as Gtk.Label
+      const title = listItem.get_child() as GameTitleColumnWidget
       const modelItem = listItem.get_item<GameItem>()
-      label.label = modelItem.game.title
 
-      const cover = modelItem.game.coverFile
+      title.title = modelItem.game.title
+      title.cover = modelItem.game.cover
+      title.platformIconName = getPlatform(modelItem.game.platform).iconName
 
-      if (cover) {
-        picture.set_pixbuf(GdkPixbuf.Pixbuf.new_from_file(cover))
-      }
-
-      modelItem.listUi = box
+      this.setupCell(title, listItem)
+      modelItem.listUi = title
     })
 
     factoryTitle.connect('unbind', (_self, listItem: Gtk.ColumnViewCell) => {
@@ -270,52 +251,21 @@ export class GamesWidget extends Gtk.Stack {
     const factory = this._gridView.factory as Gtk.SignalListItemFactory
 
     factory.connect('setup', (_self, listItem: Gtk.ListItem) => {
-      const listBox = new Gtk.Box({
-        spacing: 8,
-        orientation: Gtk.Orientation.VERTICAL,
-        // widthRequest: 104,
-        hexpand: true,
-        vexpand: true,
-      })
-      const image = new Gtk.Picture({
-        widthRequest: 96,
-        heightRequest: 144,
-        hexpand: true,
-        vexpand: true,
-        canShrink: true,
-        cssClasses: ['thumbnail', 'grid'],
-      })
-      const label = new Gtk.Label({
-        halign: Gtk.Align.CENTER,
-        ellipsize: Pango.EllipsizeMode.END,
-        singleLineMode: true,
-      })
+      const gridItem = new GameGridItemWidget({ title: '', cover: null })
 
-      listBox.append(image)
-      listBox.append(label)
-
-      this.setupCell(listBox, listItem)
-
-      listItem.set_child(listBox)
+      this.setupCell(gridItem, listItem)
+      listItem.child = gridItem
     })
 
     factory.connect('bind', (_self, listItem: Gtk.ListItem) => {
-      const listBox = listItem.get_child() as Gtk.Box
+      const gridItem = listItem.get_child() as GameGridItemWidget
       const modelItem = listItem.get_item<GameItem>()
 
-      const image = listBox.get_first_child() as Gtk.Picture
-      const label = listBox.get_last_child() as Gtk.Label
+      gridItem.title = modelItem.game.title
+      gridItem.cover = modelItem.game.cover
+      gridItem.platformIconName = getPlatform(modelItem.game.platform).iconName
 
-      label.label = modelItem.game.title
-
-      const cover = modelItem.game.coverFile
-
-      if (cover) {
-        // image.set_from_file(cover)
-        image.set_pixbuf(GdkPixbuf.Pixbuf.new_from_file(cover))
-      }
-
-      modelItem.gridUi = listBox
+      modelItem.gridUi = gridItem
     })
 
     factory.connect('unbind', (_self, listItem: Gtk.ListItem) => {

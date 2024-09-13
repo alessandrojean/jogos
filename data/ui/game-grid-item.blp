@@ -1,0 +1,38 @@
+using Gtk 4.0;
+
+template $GameGridItemWidget : Gtk.Box {
+  orientation: vertical;
+  spacing: 8;
+  hexpand: true;
+  vexpand: true;
+
+  Overlay {
+    [overlay]
+    Image {
+      visible: bind template.show-placeholder;
+      icon-name: bind template.platform-icon-name;
+      icon-size: large;
+      halign: center;
+      valign: center;
+      styles ["dim-label"]
+    }
+
+    Picture {
+      file: bind template.cover;
+      width-request: 96;
+      height-request: 144;
+      hexpand: true;
+      vexpand: true;
+      can-shrink: true;
+      styles ["thumbnail", "grid"]
+    }
+  }
+
+
+  Label {
+    label: bind template.title;
+    halign: center;
+    ellipsize: end;
+    single-line-mode: true;
+  }
+}
