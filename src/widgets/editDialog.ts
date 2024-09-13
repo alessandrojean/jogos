@@ -280,7 +280,7 @@ export class EditDialogWidget extends Adw.Dialog {
     imageFilters.append(filter)
 
     const fileDialog = new Gtk.FileDialog({
-      title: 'Select a cover',
+      title: _('Select a cover'),
       filters: imageFilters,
       defaultFilter: filter,
       modal: true,
