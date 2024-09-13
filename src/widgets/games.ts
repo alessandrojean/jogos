@@ -6,7 +6,7 @@ import Graphene from 'gi://Graphene'
 import Gtk from 'gi://Gtk?version=4.0'
 
 import Game from '../model/game.js'
-import { getPlatform, platformName } from '../model/platform.js'
+import { getPlatform, PlatformId, platformName } from '../model/platform.js'
 import GamesRepository from '../repositories/games.js'
 import GameGridItemWidget from './gameGridItem.js'
 import GameTitleColumnWidget from './gameTitleColumn.js'
@@ -298,16 +298,7 @@ export class GamesWidget extends Gtk.Stack {
       'favorite'
     )
 
-    const nItems = this.filterModel.get_n_items()
-    const search = this.titleFilter.search ?? ''
-
-    if (nItems === 0 && search.length === 0) {
-      this.visibleChild = this._noFavorites
-    } else if (nItems === 0 && search.length > 0) {
-      this.visibleChild = this._noResultsFound
-    } else {
-      this.visibleChild = this.viewGrid ? this._grid : this._items
-    }
+    this.changeVisibleChild()
   }
 
   selectPlatform(platform: Game['platform'] | null) {
@@ -315,38 +306,12 @@ export class GamesWidget extends Gtk.Stack {
     this.platformFilter.search = platform ?? ''
     this._platformColumn.visible = platform === null
 
-    const nItems = this.filterModel.get_n_items()
-    const search = this.titleFilter.search ?? ''
-
-    if (nItems === 0 && search.length === 0 && !platform) {
-      this.visibleChild = this._noGames
-    } else if (nItems === 0 && search.length === 0) {
-      this.visibleChild = this._noGamesForPlatform
-    } else if (nItems === 0 && search.length > 0) {
-      this.visibleChild = this._noResultsFound
-    } else {
-      this.visibleChild = this.viewGrid ? this._grid : this._items
-    }
+    this.changeVisibleChild()
   }
 
   search(query: string) {
     this.titleFilter.search = query ?? ''
-
-    const nItems = this.filterModel.get_n_items()
-    const platform = this.platformFilter.search ?? ''
-    const favorite = this.favoriteFilter.expression instanceof Gtk.PropertyExpression
-
-    if (nItems === 0 && favorite && query.length === 0) {
-      this.visibleChild = this._noFavorites
-    } else if (nItems === 0 && platform.length === 0 && query.length === 0) {
-      this.visibleChild = this._noGames
-    } else if (nItems === 0 && query.length === 0) {
-      this.visibleChild = this._noGamesForPlatform
-    } else if (nItems === 0) {
-      this.visibleChild = this._noResultsFound
-    } else {
-      this.visibleChild = this.viewGrid ? this._grid : this._items
-    }
+    this.changeVisibleChild()
   }
 
   showGrid() {
@@ -392,6 +357,26 @@ export class GamesWidget extends Gtk.Stack {
       this._popoverMenu.popup()
     })
     widget.add_controller(rightClickEvent)
+  }
+
+  private changeVisibleChild() {
+    const query = this.titleFilter.search
+    const nItems = this.filterModel.get_n_items()
+    const platform = this.platformFilter.search ?? ''
+    const favorite = this.favoriteFilter.expression instanceof Gtk.PropertyExpression
+
+    if (nItems === 0 && favorite && query.length === 0) {
+      this.visibleChild = this._noFavorites
+    } else if (nItems === 0 && platform.length === 0 && query.length === 0) {
+      this.visibleChild = this._noGames
+    } else if (nItems === 0 && platform.length > 0 && query.length === 0) {
+      this.visibleChild = this._noGamesForPlatform
+      this._noGamesForPlatform.iconName = getPlatform(platform as PlatformId).iconName
+    } else if (nItems === 0) {
+      this.visibleChild = this._noResultsFound
+    } else {
+      this.visibleChild = this.viewGrid ? this._grid : this._items
+    }
   }
 
   private onDetailsAction() {
