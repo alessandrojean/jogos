@@ -10,7 +10,7 @@ import { GameCondition, gameConditions } from '../model/gameCondition.js'
 import { getPlatform, Platform, PlatformId, platforms } from '../model/platform.js'
 import { StorageMedia, storageMedias } from '../model/storageMedia.js'
 import GamesRepository from '../repositories/games.js'
-
+import convertCover from '../utils/convertCover.js'
 
 export class CreateDialogWidget extends Adw.Dialog {
   private _cover!: Gtk.Picture
@@ -34,6 +34,7 @@ export class CreateDialogWidget extends Adw.Dialog {
   private _deleteRevealer!: Gtk.Revealer
 
   private window?: Gtk.Widget | null = null
+  private coverFile: Gio.File | null = null
 
   game!: Game
   defaultPlatform: PlatformId | null = null
@@ -274,9 +275,10 @@ export class CreateDialogWidget extends Adw.Dialog {
   private onRemoveCoverAction() {
     this._deleteRevealer.revealChild = false
     this._cover.set_file(null)
+    this.coverFile = null
   }
 
-  private onCreateAction() {
+  private async onCreateAction() {
     const amount = Number.parseFloat(this._amount.text.replace(',', '.'))
 
     const game = new Game({
@@ -300,7 +302,12 @@ export class CreateDialogWidget extends Adw.Dialog {
       paidPriceCurrency: (this._currency.selectedItem as Gtk.StringObject).string
     })
 
-    GamesRepository.instance.create(game)
+    const id = GamesRepository.instance.create(game)
+
+    if (this.coverFile) {
+      await convertCover(this.coverFile, id)
+    }
+
     this.emit('game-created', game)
     this.close()
   }
@@ -308,6 +315,7 @@ export class CreateDialogWidget extends Adw.Dialog {
   private onCoverOpen(image: Gio.File) {
     this._deleteRevealer.revealChild = true
     this._cover.file = image
+    this.coverFile = image
   }
 
   private onPaidPriceChanged(currency: string, amount: number) {

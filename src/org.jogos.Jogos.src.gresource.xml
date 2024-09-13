@@ -11,6 +11,7 @@
     <file>widgets/games.js</file>
     <file>widgets/sidebarItem.js</file>
     <file>lib/fetch.js</file>
+    <file>utils/convertCover.js</file>
     <file>utils/createFolder.js</file>
     <file>model/certification.js</file>
     <file>model/game.js</file>

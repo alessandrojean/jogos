@@ -120,6 +120,8 @@ export default class GamesRepository {
     this.connection.statement_execute_non_select(builder.get_statement(), null)
 
     game.id = this.lastId()
+
+    return game.id
   }
 
   update(game: Game) {
@@ -177,6 +179,12 @@ export default class GamesRepository {
     )
 
     this.connection.statement_execute_non_select(builder.get_statement(), null)
+
+    const cover = game.cover
+
+    if (cover.query_exists(null)) {
+      cover.delete(null)
+    }
   }
 }
 

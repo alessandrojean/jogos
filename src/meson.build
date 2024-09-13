@@ -16,6 +16,7 @@ sources = files(
   'widgets/games.ts',
   'widgets/sidebarItem.ts',
   'lib/fetch.ts',
+  'utils/convertCover.ts',
   'utils/createFolder.ts',
   'repositories/games.ts',
 )

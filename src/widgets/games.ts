@@ -401,7 +401,7 @@ export class GamesWidget extends Gtk.Stack {
   selectGame(game: Game) {
     const item = new GameItem({ game })
     const [contains, position] = this.dataModel.find_with_equal_func(item, (a: GameItem, b: GameItem) => {
-      return a.game.id === b.game.id
+      return a?.game.id === b?.game.id
     })
 
     if (contains) {
@@ -454,6 +454,9 @@ export class GamesWidget extends Gtk.Stack {
     if (response === 'delete') {
       const gameItem = this.selectionModel.get_selected_item<GameItem>()
       this.emit('game-delete', gameItem.game)
+
+      GamesRepository.instance.delete(gameItem.game)
+      this.loadItems()
     }
   }
 

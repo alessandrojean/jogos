@@ -20,6 +20,7 @@
     "--device=dri",
     "--socket=fallback-x11",
     "--socket=wayland",
+    "--filesystem=home",
     "--env=GJS_DISABLE_JIT=1",
     "--env=GSK_RENDERER=gl"
   ],
@@ -83,6 +84,26 @@
           "type": "git",
           "url": "https://gitlab.gnome.org/jwestman/blueprint-compiler",
           "tag": "v0.14.0"
+        }
+      ]
+    },
+    {
+      "name": "imagemagick",
+      "config-opts": [
+        "--disable-static",
+        "--disable-docs"
+      ],
+      "cleanup": [
+        "/bin",
+        "/include",
+        "/lib/pkgconfig",
+        "*.la"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://github.com/ImageMagick/ImageMagick/archive/7.1.1-38.tar.gz",
+          "sha256": "5e449530ccec8b85ae2bfd1ad773184fb7a4737d40fd9439db8a5d4beee4403e"
         }
       ]
     },

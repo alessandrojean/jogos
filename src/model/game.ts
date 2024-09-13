@@ -215,15 +215,20 @@ export default class Game extends GObject.Object {
     })
   }
 
-  get coverFile(): string | null {
+  get cover(): Gio.File {
     const fileUri = GLib.build_filenamev([
       GLib.get_home_dir(), '.jogos', 'covers', `${this.id}.jpg`
     ])
-    const file = Gio.File.new_for_path(fileUri)
+
+    return Gio.File.new_for_path(fileUri)
+  }
+
+  get coverFile(): string | null {
+    const file = this.cover
     const exists = file.query_exists(null)
     const isFile = file.query_file_type(Gio.FileQueryInfoFlags.NONE, null) === Gio.FileType.REGULAR
 
-    return (exists && isFile) ? fileUri : null
+    return (exists && isFile) ? this.cover.get_path() : null
   }
 
   get createdAt(): Date {
