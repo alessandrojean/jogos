@@ -233,11 +233,11 @@ export class CreateDialogWidget extends Adw.Dialog {
     this._releaseYear.value = now.get_year()
     this._releaseYear.adjustment.upper = now.get_year()
 
-    this._boughtDateLabel.label = now.format('%d/%m/%Y') ?? ''
+    this._boughtDateLabel.label = now.format(_('%d/%m/%Y')) ?? ''
     this._boughtDate.select_day(now)
 
     this._boughtDate.connect('day-selected', (self) => {
-      this._boughtDateLabel.label = self.get_date().format('%d/%m/%Y') ?? ''
+      this._boughtDateLabel.label = self.get_date().format(_('%d/%m/%Y')) ?? ''
     })
   }
 

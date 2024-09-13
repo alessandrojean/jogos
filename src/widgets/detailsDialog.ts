@@ -71,9 +71,9 @@ export class DetailsDialogWidget extends Adw.Dialog {
     this._story.subtitle = this.game.story
     this._developer.subtitle = this.game.developer
     this._publisher.subtitle = this.game.publisher
-    this._creationDate.subtitle = this.game.createdAtDateTime.format('%d/%m/%Y %T') ?? ''
-    this._modificationDate.subtitle = this.game.modifiedAtDateTime.format('%d/%m/%Y %T') ?? ''
-    this._boughtDate.subtitle = this.game.boughtAtDateTime?.format('%d/%m/%Y') ?? _('Unknown')
+    this._creationDate.subtitle = this.game.createdAtDateTime.format(_('%d/%m/%Y %T')) ?? ''
+    this._modificationDate.subtitle = this.game.modifiedAtDateTime.format(_('%d/%m/%Y %T')) ?? ''
+    this._boughtDate.subtitle = this.game.boughtAtDateTime?.format(_('%d/%m/%Y')) ?? _('Unknown')
     this._store.subtitle = this.game.store ?? _('Unknown')
 
     const currency = getCurrency(this.game.paidPriceCurrency) ?? getCurrency('USD')!
