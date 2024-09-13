@@ -65,6 +65,7 @@ gridview {
 
 textview.card {
   padding: 16px 15px;
+  background-color: var(--card-bg-color);
 }
 
 .property.story {
