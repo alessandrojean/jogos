@@ -90,6 +90,13 @@ template $GamesWidget : Stack {
     vexpand: true;
   }
 
+  Adw.StatusPage noFavorites {
+    title: _("No favorites");
+    description: _("You haven't marked any game as favorite");
+    icon-name: "lucide-star-symbolic";
+    vexpand: true;
+  }
+
   Adw.StatusPage noGamesForPlatform {
     title: _("No games found");
     description: _("You haven't created any game for this platform");

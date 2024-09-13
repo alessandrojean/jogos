@@ -19,6 +19,7 @@ export class GamesWidget extends Gtk.Stack {
   private _noResultsFound!: Adw.StatusPage
   private _noGamesForPlatform!: Adw.StatusPage
   private _noGames!: Adw.StatusPage
+  private _noFavorites!: Adw.StatusPage
 
   private _columnView!: Gtk.ColumnView
   private _titleColumn!: Gtk.ColumnViewColumn
@@ -47,7 +48,7 @@ export class GamesWidget extends Gtk.Stack {
       InternalChildren: [
         'items', 'noResultsFound', 'noGamesForPlatform', 'columnView',
         'titleColumn', 'platformColumn', 'developerColumn', 'yearColumn',
-        'noGames', 'grid', 'gridView', 'popoverMenu'
+        'noGames', 'grid', 'gridView', 'popoverMenu', 'noFavorites'
       ],
       Signals: {
         'game-activate': {
@@ -346,6 +347,17 @@ export class GamesWidget extends Gtk.Stack {
       Gtk.PropertyExpression.new(GameItem.$gtype, null, 'game'),
       'favorite'
     )
+
+    const nItems = this.filterModel.get_n_items()
+    const search = this.titleFilter.search ?? ''
+
+    if (nItems === 0 && search.length === 0) {
+      this.visibleChild = this._noFavorites
+    } else if (nItems === 0 && search.length > 0) {
+      this.visibleChild = this._noResultsFound
+    } else {
+      this.visibleChild = this.viewGrid ? this._grid : this._items
+    }
   }
 
   selectPlatform(platform: Game['platform'] | null) {
@@ -372,8 +384,11 @@ export class GamesWidget extends Gtk.Stack {
 
     const nItems = this.filterModel.get_n_items()
     const platform = this.platformFilter.search ?? ''
+    const favorite = this.favoriteFilter.expression instanceof Gtk.PropertyExpression
 
-    if (nItems === 0 && platform.length === 0 && query.length === 0) {
+    if (nItems === 0 && favorite && query.length === 0) {
+      this.visibleChild = this._noFavorites
+    } else if (nItems === 0 && platform.length === 0 && query.length === 0) {
       this.visibleChild = this._noGames
     } else if (nItems === 0 && query.length === 0) {
       this.visibleChild = this._noGamesForPlatform
