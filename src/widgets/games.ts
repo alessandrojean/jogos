@@ -121,20 +121,22 @@ export class GamesWidget extends Gtk.Stack {
   }
 
   private initColumnView() {
+    const gameExpr = Gtk.PropertyExpression.new(GameItem.$gtype, null, 'game')
+
     this._titleColumn.sorter = new Gtk.StringSorter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, null, 'title')
+      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'title')
     })
 
     this._platformColumn.sorter = new Gtk.StringSorter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, null, 'platform')
+      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'platform')
     })
 
     this._developerColumn.sorter = new Gtk.StringSorter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, null, 'developer')
+      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'developer')
     })
 
     this._yearColumn.sorter = new Gtk.NumericSorter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, null, 'release-year')
+      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'release-year')
     })
 
     // Factories

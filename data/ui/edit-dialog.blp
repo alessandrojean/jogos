@@ -20,6 +20,7 @@ template $EditDialogWidget : Adw.Dialog {
       [end]
       Button saveButton {
         label: _("Save");
+        action-name: "edit-dialog.save";
         styles ["suggested-action"]
       }
     }
@@ -31,13 +32,13 @@ template $EditDialogWidget : Adw.Dialog {
         margin-end: 20;
         margin-top: 24;
         margin-bottom: 20;
-        spacing: 12;
+        spacing: 24;
 
         Adw.PreferencesGroup {
           margin-bottom: 12;
 
           Adw.Clamp {
-            maximum-size: 170;
+            maximum-size: 150;
 
             Overlay {
               halign: center;
@@ -51,6 +52,7 @@ template $EditDialogWidget : Adw.Dialog {
                 valign: end;
                 margin-bottom: 6;
                 margin-end: 6;
+                action-name: "edit-dialog.new-cover";
 
                 styles ["circular", "osd"]
               }
@@ -67,6 +69,7 @@ template $EditDialogWidget : Adw.Dialog {
                   valign: end;
                   margin-bottom: 6;
                   margin-end: 6;
+                  action-name: "edit-dialog.remove-cover";
 
                   styles ["circular", "osd"]
                 }
@@ -91,13 +94,14 @@ template $EditDialogWidget : Adw.Dialog {
 
           Adw.ComboRow platform {
             title: _("Platform");
-            model: StringList {
-              strings ["PLAYSTATION_5", "XBOX_SERIES"]
-            };
+            factory: SignalListItemFactory {};
+            enable-search: true;
           }
         }
 
         Adw.PreferencesGroup {
+          title: _("Details");
+
           Adw.EntryRow developer {
             title: _("Developer");
           }
@@ -116,15 +120,26 @@ template $EditDialogWidget : Adw.Dialog {
               step-increment: 1;
             };
           }
-        }
 
-        Adw.PreferencesGroup {
-          Adw.EntryRow story {
-            title: _("Story");
+          Adw.ComboRow certification {
+            title: _("Certification");
+            factory: SignalListItemFactory {};
+            enable-search: true;
           }
         }
 
         Adw.PreferencesGroup {
+          title: _("Story");
+
+          Gtk.TextView story {
+            wrap-mode: word;
+            styles ["card"]
+          }
+        }
+
+        Adw.PreferencesGroup {
+          title: _("Storage");
+
           Adw.EntryRow barcode {
             title: _("Barcode");
 
@@ -132,24 +147,83 @@ template $EditDialogWidget : Adw.Dialog {
           }
 
           Adw.ComboRow storageMedia {
-            title: _("Storage media");
-            model: StringList {
-              strings ["BLURAY", "DVD", "CD", "CARTRIDGE"]
-            };
+            title: _("Media");
           }
 
           Adw.ComboRow condition {
             title: _("Condition");
-            model: StringList {
-              strings ["CIB", "LOOSE", "SEALED"]
-            };
+          }
+        }
+
+        Adw.PreferencesGroup {
+          title: _("Store");
+
+          Adw.ExpanderRow {
+            title: _("Bought date");
+
+            [suffix]
+            Label boughtDateLabel {}
+
+            Adw.Clamp {
+              margin-top: 16;
+              margin-bottom: 16;
+              maximum-size: 250;
+
+              Box {
+                orientation: vertical;
+                spacing: 16;
+
+                Calendar boughtDate {
+                  show-week-numbers: true;
+                  styles ["card"]
+                }
+
+                Box {
+                  spacing: 10;
+                  halign: center;
+
+                  Button {
+                    label: _("Today");
+                    halign: center;
+                    styles ["raised"]
+                  }
+
+                  Button {
+                    label: _("Unknown");
+                    halign: center;
+                    styles ["raised"]
+                  }
+                }
+
+              }
+
+            }
           }
 
-          Adw.ComboRow certification {
-            title: _("Certification");
-            model: StringList {
-              strings ["Everyone", "Everyone 10+", "Teen", "Mature 17+", "Adults Only"]
-            };
+          Adw.EntryRow store {
+            title: _("Location");
+          }
+
+          Adw.ExpanderRow {
+            title: _("Paid price");
+            expanded: true;
+
+            [suffix]
+            Label paidPriceLabel {
+              label: "USD 0.00";
+            }
+
+            Adw.ComboRow currency {
+              title: _("Currency");
+              enable-search: true;
+              model: StringList {
+                strings ["USD", "EUR", "BRL"]
+              };
+            }
+
+            Adw.EntryRow amount {
+              title: _("Amount");
+            }
           }
         }
       }

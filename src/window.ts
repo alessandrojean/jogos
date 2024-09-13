@@ -76,6 +76,20 @@ export class Window extends Adw.ApplicationWindow {
     const createNewGame = new Gio.SimpleAction({ name: 'create-new-game' })
     createNewGame.connect('activate', () => this.onCreateNewGameAction())
     this.add_action(createNewGame)
+
+    const showSearchAction = new Gio.SimpleAction({ name: 'show-search' })
+    showSearchAction.connect('activate', () => {
+      if (this._searchBar.searchModeEnabled) {
+        this._searchEntry.grab_focus()
+        return
+      }
+
+      this._searchBar.searchModeEnabled = true
+    })
+    this.add_action(showSearchAction)
+
+    this.application.set_accels_for_action('win.show-search', ['<Control>f'])
+    this.application.set_accels_for_action('win.create-new-game', ['<Control>n'])
   }
 
   private initSignals() {
@@ -89,10 +103,7 @@ export class Window extends Adw.ApplicationWindow {
       detailsDialog.present(this)
     })
 
-    this._gamesWidget.connect('game-edit', (_self, game: Game) => {
-      const editDialog = new EditDialogWidget(game)
-      editDialog.present(this)
-    })
+    this._gamesWidget.connect('game-edit', (_self, game: Game) => this.onGameEdit(game))
   }
 
   private initSidebar() {
@@ -127,20 +138,6 @@ export class Window extends Adw.ApplicationWindow {
     this._searchEntry.connect('search-changed', () => {
       this._gamesWidget.search(this._searchEntry.text)
     })
-
-    const showSearchAction = new Gio.SimpleAction({ name: 'show-search' })
-
-    showSearchAction.connect('activate', () => {
-      if (this._searchBar.searchModeEnabled) {
-        this._searchEntry.grab_focus()
-        return
-      }
-
-      this._searchBar.searchModeEnabled = true
-    })
-
-    this.add_action(showSearchAction)
-    this.application.set_accels_for_action('win.show-search', ['<Control>f'])
   }
 
   private initButtons() {
@@ -265,5 +262,18 @@ export class Window extends Adw.ApplicationWindow {
     })
 
     createDialog.present(this)
+  }
+
+  private onGameEdit(game: Game) {
+    const editDialog = new EditDialogWidget(game)
+
+    editDialog.connect('game-updated', (_self, updatedGame) => {
+      this._gamesWidget.search('')
+      this._gamesWidget.selectPlatform(updatedGame.platform)
+      this._gamesWidget.loadItems()
+      this._gamesWidget.selectGame(updatedGame)
+    })
+
+    editDialog.present(this)
   }
 }

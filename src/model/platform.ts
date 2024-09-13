@@ -65,15 +65,15 @@ export const platforms: Platform[] = [
 
   new Platform({ id: 'NINTENDO_3DS', name: 'Nintendo 3DS', iconName: 'nintendo-3ds', generation: 8 }),
   new Platform({ id: 'NINTENDO_SWITCH', name: 'Nintendo Switch', iconName: 'nintendo-switch', generation: 8 }),
+  new Platform({ id: 'NINTENDO_WII_U', name: 'Nintendo Wii U', iconName: 'wii-u', generation: 8 }),
   new Platform({ id: 'PLAYSTATION_4', name: 'PlayStation 4', iconName: 'playstation', generation: 8 }),
   new Platform({ id: 'PLAYSTATION_VITA', name: 'PlayStation Vita', iconName: 'playstation', generation: 8 }),
-  new Platform({ id: 'NINTENDO_WII_U', name: 'Nintendo Wii U', iconName: 'wii-u', generation: 8 }),
   new Platform({ id: 'XBOX_ONE', name: 'Xbox One', iconName: 'xbox', generation: 8 }),
 
   new Platform({ id: 'NINTENDO_DS', name: 'Nintendo DS', iconName: 'nintendo-ds', generation: 7 }),
-  new Platform({ id: 'PSP', name: 'PSP', iconName: 'playstation', generation: 7 }),
-  new Platform({ id: 'PLAYSTATION_3', name: 'PlayStation 3', iconName: 'playstation', generation: 7 }),
   new Platform({ id: 'NINTENDO_WII', name: 'Nintendo Wii', iconName: 'wii', generation: 7 }),
+  new Platform({ id: 'PLAYSTATION_3', name: 'PlayStation 3', iconName: 'playstation', generation: 7 }),
+  new Platform({ id: 'PSP', name: 'PSP', iconName: 'playstation', generation: 7 }),
   new Platform({ id: 'XBOX_360', name: 'Xbox 360', iconName: 'xbox', generation: 7 }),
 
   new Platform({ id: 'DREAMCAST', name: 'Dreamcast', iconName: 'dreamcast', generation: 6 }),
