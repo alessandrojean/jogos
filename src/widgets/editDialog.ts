@@ -5,6 +5,7 @@ import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
 import { Certification, certifications, certificationSystemName, certificationSystems, getCertification } from '../model/certification.js'
+import { currencies, Currency, getCurrency } from '../model/currency.js'
 import Game from '../model/game.js'
 import { GameCondition, gameConditions, getGameCondition } from '../model/gameCondition.js'
 import { getPlatform, Platform, platforms } from '../model/platform.js'
@@ -86,6 +87,7 @@ export class EditDialogWidget extends Adw.Dialog {
     this.initConditions()
     this.initCertifications()
     this.initMedias()
+    this.initCurrencies()
     this.initDates()
     this.initPaidPrice()
     this.fillData()
@@ -216,6 +218,14 @@ export class EditDialogWidget extends Adw.Dialog {
     this._storageMedia.expression = Gtk.PropertyExpression.new(StorageMedia.$gtype, null, 'name')
   }
 
+  private initCurrencies() {
+    const currencyModel = new Gio.ListStore({ itemType: Currency.$gtype })
+    currencyModel.splice(0, 0, currencies)
+
+    this._currency.model = currencyModel
+    this._currency.expression = Gtk.PropertyExpression.new(Currency.$gtype, null, 'iso')
+  }
+
   private initDates() {
     const now = GLib.DateTime.new_now_local()
     this._releaseYear.value = now.get_year()
@@ -231,19 +241,19 @@ export class EditDialogWidget extends Adw.Dialog {
 
   private initPaidPrice() {
     this._amount.connect('notify::text', () => {
-      const currency = (this._currency.selectedItem as Gtk.StringObject).string
+      const currency = this._currency.selectedItem as Currency
       const amountText = this._amount.text.replace(',', '.')
       const amount = Number.parseFloat(amountText.length === 0 ? '0' : amountText)
 
-      this.onPaidPriceChanged(currency ?? 'USD', Number.isNaN(amount) ? 0.0 : amount)
+      this.onPaidPriceChanged(currency ?? getCurrency('USD'), Number.isNaN(amount) ? 0.0 : amount)
     })
 
     this._currency.connect('notify::selected-item', () => {
-      const currency = (this._currency.selectedItem as Gtk.StringObject).string
+      const currency = this._currency.selectedItem as Currency
       const amountText = this._amount.text.replace(',', '.')
       const amount = Number.parseFloat(amountText.length === 0 ? '0' : amountText)
 
-      this.onPaidPriceChanged(currency ?? 'USD', Number.isNaN(amount) ? 0.0 : amount)
+      this.onPaidPriceChanged(currency ?? getCurrency('USD'), Number.isNaN(amount) ? 0.0 : amount)
     })
   }
 
@@ -259,7 +269,7 @@ export class EditDialogWidget extends Adw.Dialog {
     this._storageMedia.set_selected(storageMedias.indexOf(getStorageMedia(this.game.storageMedia)))
     this._condition.set_selected(gameConditions.indexOf(getGameCondition(this.game.condition)))
     this._store.text = this.game.store ?? ''
-    this._currency.set_selected(['USD', 'EUR', 'BRL'].indexOf(this.game.paidPriceCurrency))
+    this._currency.set_selected(currencies.indexOf(getCurrency(this.game.paidPriceCurrency) ?? getCurrency('USD')!))
     this._amount.text = '%.2f'.format(this.game.paidPriceAmount)
 
     const cover = this.game.cover
@@ -363,7 +373,7 @@ export class EditDialogWidget extends Adw.Dialog {
       boughtDate: this._boughtDate.get_date().to_unix(),
       store: this._store.text,
       paidPriceAmount: Number.isNaN(amount) ? 0.0 : amount,
-      paidPriceCurrency: (this._currency.selectedItem as Gtk.StringObject).string
+      paidPriceCurrency: (this._currency.selectedItem as Currency).iso
     })
 
     GamesRepository.instance.update(game)
@@ -386,8 +396,8 @@ export class EditDialogWidget extends Adw.Dialog {
     this.coverFile = image
   }
 
-  private onPaidPriceChanged(currency: string, amount: number) {
-    this._paidPriceLabel.label = `${currency} %.2f`.format(amount)
+  private onPaidPriceChanged(currency: Currency, amount: number) {
+    this._paidPriceLabel.label = `${currency.symbol} %.2f`.format(amount)
   }
 
   present(parent?: Gtk.Widget | null): void {

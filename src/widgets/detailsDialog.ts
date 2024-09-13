@@ -3,6 +3,7 @@ import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
 import { getCertification } from '../model/certification.js'
+import { getCurrency } from '../model/currency.js'
 import Game from '../model/game.js'
 import { getGameCondition } from '../model/gameCondition.js'
 import { getPlatform, platformName } from '../model/platform.js'
@@ -74,7 +75,9 @@ export class DetailsDialogWidget extends Adw.Dialog {
     this._modificationDate.subtitle = this.game.modifiedAtDateTime.format('%d/%m/%Y %T') ?? ''
     this._boughtDate.subtitle = this.game.boughtAtDateTime?.format('%d/%m/%Y') ?? _('Unknown')
     this._store.subtitle = this.game.store ?? _('Unknown')
-    this._paidPrice.subtitle = `${this.game.paidPriceCurrency} %.2f`.format(this.game.paidPriceAmount)
+
+    const currency = getCurrency(this.game.paidPriceCurrency) ?? getCurrency('USD')!
+    this._paidPrice.subtitle = `${currency.symbol} %.2f`.format(this.game.paidPriceAmount)
 
     const certification = getCertification(this.game.certification)
     this._certification.subtitle = certification?.name ?? _('Unknown')

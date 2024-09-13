@@ -5,6 +5,7 @@ import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
 import { Certification, certifications, certificationSystemName, certificationSystems } from '../model/certification.js'
+import { currencies, Currency } from '../model/currency.js'
 import Game from '../model/game.js'
 import { GameCondition, gameConditions } from '../model/gameCondition.js'
 import { getPlatform, Platform, PlatformId, platforms } from '../model/platform.js'
@@ -85,6 +86,7 @@ export class CreateDialogWidget extends Adw.Dialog {
     this.initConditions()
     this.initCertifications()
     this.initMedias()
+    this.initCurrencies()
     this.initDates()
     this.initPaidPrice()
     this.initValidation()
@@ -218,6 +220,14 @@ export class CreateDialogWidget extends Adw.Dialog {
     this._storageMedia.expression = Gtk.PropertyExpression.new(StorageMedia.$gtype, null, 'name')
   }
 
+  private initCurrencies() {
+    const currencyModel = new Gio.ListStore({ itemType: Currency.$gtype })
+    currencyModel.splice(0, 0, currencies)
+
+    this._currency.model = currencyModel
+    this._currency.expression = Gtk.PropertyExpression.new(Currency.$gtype, null, 'iso')
+  }
+
   private initDates() {
     const now = GLib.DateTime.new_now_local()
     this._releaseYear.value = now.get_year()
@@ -332,7 +342,7 @@ export class CreateDialogWidget extends Adw.Dialog {
       boughtDate: this._boughtDate.get_date().to_unix(),
       store: this._store.text,
       paidPriceAmount: Number.isNaN(amount) ? 0.0 : amount,
-      paidPriceCurrency: (this._currency.selectedItem as Gtk.StringObject).string
+      paidPriceCurrency: (this._currency.selectedItem as Currency).iso
     })
 
     const id = GamesRepository.instance.create(game)

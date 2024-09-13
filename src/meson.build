@@ -6,6 +6,7 @@ sources = files(
   'window.ts',
   'settings.ts',
   'model/certification.ts',
+  'model/currency.ts',
   'model/game.ts',
   'model/gameCondition.ts',
   'model/platform.ts',

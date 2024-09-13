@@ -216,9 +216,6 @@ template $CreateDialogWidget : Adw.Dialog {
             Adw.ComboRow currency {
               title: _("Currency");
               enable-search: true;
-              model: StringList {
-                strings ["USD", "EUR", "BRL"]
-              };
             }
 
             Adw.EntryRow amount {
