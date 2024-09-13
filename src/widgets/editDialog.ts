@@ -11,6 +11,7 @@ import { getPlatform, Platform, platforms } from '../model/platform.js'
 import { getStorageMedia, StorageMedia, storageMedias } from '../model/storageMedia.js'
 import GamesRepository from '../repositories/games.js'
 import convertCover from '../utils/convertCover.js'
+import { createValidator, integer, max, optional, real, required, setupEntryRow, touch, validate, WidgetMap } from '../utils/validators.js'
 
 export class EditDialogWidget extends Adw.Dialog {
   private _cover!: Gtk.Picture
@@ -35,6 +36,16 @@ export class EditDialogWidget extends Adw.Dialog {
 
   private window?: Gtk.Widget | null = null
   private coverFile: Gio.File | null = null
+
+  private validator = createValidator({
+    title: { required },
+    developer: { required },
+    publisher: { required },
+    barcode: { number: optional(integer), max: max(13) },
+    amount: { real }
+  })
+
+  private widgetMap!: WidgetMap<keyof EditDialogWidget['validator']>
 
   game!: Game
 
@@ -78,6 +89,7 @@ export class EditDialogWidget extends Adw.Dialog {
     this.initDates()
     this.initPaidPrice()
     this.fillData()
+    this.initValidation()
   }
 
   private initActions() {
@@ -265,6 +277,26 @@ export class EditDialogWidget extends Adw.Dialog {
     }
   }
 
+  private initValidation() {
+    this.widgetMap = {
+      title: this._title,
+      developer: this._developer,
+      publisher: this._publisher,
+      barcode: this._barcode,
+      amount: this._amount
+    }
+
+    for (const [key, editable] of Object.entries(this.widgetMap)) {
+      setupEntryRow(
+        this.validator,
+        editable as Adw.EntryRow,
+        key as keyof EditDialogWidget['widgetMap']
+      )
+    }
+
+    touch(this.validator, this.widgetMap)
+  }
+
   private onNewCoverAction() {
     if (!this.window || !(this.window instanceof Gtk.Window)) {
       return
@@ -306,6 +338,10 @@ export class EditDialogWidget extends Adw.Dialog {
   }
 
   private async onSaveAction() {
+    if (!validate(this.validator, this.widgetMap)) {
+      return
+    }
+
     const amount = Number.parseFloat(this._amount.text.replace(',', '.'))
 
     const game = new Game({
