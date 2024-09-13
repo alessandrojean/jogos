@@ -256,7 +256,6 @@ export class CreateDialogWidget extends Adw.Dialog {
       filters: imageFilters,
       defaultFilter: filter,
       modal: true,
-      initialFolder: Gio.File.new_for_path(GLib.get_home_dir()),
     })
 
     fileDialog.open(this.window, null, (_self, result, _data) => {
