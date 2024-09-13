@@ -47,51 +47,54 @@ template $JogosWindow : Adw.ApplicationWindow {
     content: Adw.NavigationPage content {
       title: _("Games");
 
-      child: Adw.ToolbarView {
-        [top]
-        Box {
-          orientation: vertical;
+      child: Adw.ToastOverlay toastOverlay {
+        Adw.ToolbarView {
+          [top]
+          Box {
+            orientation: vertical;
 
-          Adw.HeaderBar {
-            [start]
-            ToggleButton searchButton {
-              icon-name: 'lucide-search-symbolic';
-              tooltip-text: _("Search the collection...");
+            Adw.HeaderBar {
+              [start]
+              ToggleButton searchButton {
+                icon-name: 'lucide-search-symbolic';
+                tooltip-text: _("Search the collection...");
+              }
+
+              [end]
+              Adw.SplitButton viewAndSort {
+                icon-name: "lucide-layout-list-symbolic";
+                tooltip-text: _("View in list");
+                dropdown-tooltip: _("View options");
+              }
+
+              [end]
+              Button {
+                action-name: "win.create-new-game";
+                icon-name: "lucide-plus-symbolic";
+                tooltip-text: _("New game");
+              }
             }
 
-            [end]
-            Adw.SplitButton viewAndSort {
-              icon-name: "lucide-layout-list-symbolic";
-              tooltip-text: _("View in list");
-              dropdown-tooltip: _("View options");
-            }
+            SearchBar searchBar {
+              key-capture-widget: splitView;
+              search-mode-enabled: bind searchButton.active bidirectional;
 
-            [end]
-            Button {
-              action-name: "win.create-new-game";
-              icon-name: "lucide-plus-symbolic";
-              tooltip-text: _("New game");
+              SearchEntry searchEntry {
+                search-delay: 100;
+                placeholder-text: _("Search the collection...");
+                width-request: 400;
+              }
             }
           }
 
-          SearchBar searchBar {
-            key-capture-widget: splitView;
-            search-mode-enabled: bind searchButton.active bidirectional;
+          content: $GamesWidget gamesWidget {};
 
-            SearchEntry searchEntry {
-              search-delay: 100;
-              placeholder-text: _("Search the collection...");
-              width-request: 400;
-            }
-          }
+          styles [
+            "view"
+          ]
         }
-
-        content: $GamesWidget gamesWidget {};
-
-        styles [
-          "view"
-        ]
       };
+
     };
   };
 }

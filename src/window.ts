@@ -26,6 +26,7 @@ export class Window extends Adw.ApplicationWindow {
   private _searchBar!: Gtk.SearchBar
   private _searchEntry!: Gtk.SearchEntry
   private _viewAndSort!: Adw.SplitButton
+  private _toastOverlay!: Adw.ToastOverlay
 
   private changeSortAction!: Gio.SimpleAction
 
@@ -49,7 +50,7 @@ export class Window extends Adw.ApplicationWindow {
       Template: 'resource:///org/jogos/Jogos/ui/window.ui',
       InternalChildren: [
         'splitView', 'sidebarList', 'content', 'gamesWidget',
-        'searchBar', 'searchEntry', 'viewAndSort'
+        'searchBar', 'searchEntry', 'viewAndSort', 'toastOverlay'
       ],
     }, this)
 
@@ -132,6 +133,7 @@ export class Window extends Adw.ApplicationWindow {
     })
 
     this._gamesWidget.connect('game-edit', (_self, game: Game) => this.onGameEdit(game))
+    this._gamesWidget.connect('game-delete', (_self, game: Game) => this.onGameDelete(game))
 
     this._gamesWidget.connect('sort-changed', (_self, property: Gtk.StringObject) => {
       this.changeSortAction.state = GLib.Variant.new_string(property.string)
@@ -333,6 +335,13 @@ export class Window extends Adw.ApplicationWindow {
       this._gamesWidget.selectPlatform(game.platform)
       this._gamesWidget.loadItems()
       this._gamesWidget.selectGame(game)
+
+      const toast = new Adw.Toast({
+        title: _('Game created'),
+        timeout: 3,
+      })
+
+      this._toastOverlay.add_toast(toast)
     })
 
     createDialog.present(this)
@@ -346,8 +355,24 @@ export class Window extends Adw.ApplicationWindow {
       this._gamesWidget.selectPlatform(updatedGame.platform)
       this._gamesWidget.loadItems()
       this._gamesWidget.selectGame(updatedGame)
+
+      const toast = new Adw.Toast({
+        title: _('Game updated'),
+        timeout: 3,
+      })
+
+      this._toastOverlay.add_toast(toast)
     })
 
     editDialog.present(this)
+  }
+
+  private onGameDelete(_game: Game) {
+    const toast = new Adw.Toast({
+      title: _('Game deleted'),
+      timeout: 3,
+    })
+
+    this._toastOverlay.add_toast(toast)
   }
 }
