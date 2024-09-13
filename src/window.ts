@@ -242,6 +242,7 @@ export class Window extends Adw.ApplicationWindow {
     }
 
     if (itemId === 'WISHLIST') {
+      this._gamesWidget.showWishlist()
       return
     }
 

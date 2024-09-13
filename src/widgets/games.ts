@@ -20,6 +20,7 @@ export class GamesWidget extends Gtk.Stack {
   private _noGamesForPlatform!: Adw.StatusPage
   private _noGames!: Adw.StatusPage
   private _noFavorites!: Adw.StatusPage
+  private _noWishlist!: Adw.StatusPage
 
   private _columnView!: Gtk.ColumnView
   private _titleColumn!: Gtk.ColumnViewColumn
@@ -35,11 +36,24 @@ export class GamesWidget extends Gtk.Stack {
   private platformFilter!: Gtk.StringFilter
   private titleFilter!: Gtk.StringFilter
   private favoriteFilter!: Gtk.BoolFilter
+  private wishlistFilter!: Gtk.BoolFilter
   private filterModel!: Gtk.FilterListModel
 
   private _popoverMenu!: Gtk.PopoverMenu
 
   private viewGrid = true
+
+  private isWishlist = Gtk.ClosureExpression.new(
+    GObject.TYPE_BOOLEAN,
+    (g: GameItem) => g.game.wishlist,
+    null,
+  )
+
+  private isNotWishlist = Gtk.ClosureExpression.new(
+    GObject.TYPE_BOOLEAN,
+    (g: GameItem) => !g.game.wishlist,
+    null,
+  )
 
   static {
     GObject.registerClass({
@@ -48,7 +62,8 @@ export class GamesWidget extends Gtk.Stack {
       InternalChildren: [
         'items', 'noResultsFound', 'noGamesForPlatform', 'columnView',
         'titleColumn', 'platformColumn', 'developerColumn', 'yearColumn',
-        'noGames', 'grid', 'gridView', 'popoverMenu', 'noFavorites'
+        'noGames', 'grid', 'gridView', 'popoverMenu', 'noFavorites',
+        'noWishlist',
       ],
       Signals: {
         'game-activate': {
@@ -113,10 +128,13 @@ export class GamesWidget extends Gtk.Stack {
       expression: Gtk.ConstantExpression.new_for_value(true),
     })
 
+    this.wishlistFilter = new Gtk.BoolFilter({ expression: this.isNotWishlist })
+
     this.filter = new Gtk.EveryFilter()
     this.filter.append(this.platformFilter)
     this.filter.append(this.titleFilter)
     this.filter.append(this.favoriteFilter)
+    this.filter.append(this.wishlistFilter)
 
     this.dataModel = new Gio.ListStore({ itemType: GameItem.$gtype })
   }
@@ -292,17 +310,25 @@ export class GamesWidget extends Gtk.Stack {
 
   showFavorites() {
     this.selectPlatform(null)
-    this.favoriteFilter.expression = Gtk.PropertyExpression.new(
-      Game.$gtype,
-      Gtk.PropertyExpression.new(GameItem.$gtype, null, 'game'),
-      'favorite'
+    this.favoriteFilter.expression = Gtk.ClosureExpression.new(
+      GObject.TYPE_BOOLEAN,
+      (g: GameItem) => g.game.favorite,
+      null
     )
+
+    this.changeVisibleChild()
+  }
+
+  showWishlist() {
+    this.selectPlatform(null)
+    this.wishlistFilter.expression = this.isWishlist
 
     this.changeVisibleChild()
   }
 
   selectPlatform(platform: Game['platform'] | null) {
     this.favoriteFilter.expression = Gtk.ConstantExpression.new_for_value(true)
+    this.wishlistFilter.expression = this.isNotWishlist
     this.platformFilter.search = platform ?? ''
     this._platformColumn.visible = platform === null
 
@@ -360,12 +386,15 @@ export class GamesWidget extends Gtk.Stack {
   }
 
   private changeVisibleChild() {
-    const query = this.titleFilter.search
+    const query = this.titleFilter.search ?? ''
     const nItems = this.filterModel.get_n_items()
     const platform = this.platformFilter.search ?? ''
-    const favorite = this.favoriteFilter.expression instanceof Gtk.PropertyExpression
+    const favorite = this.favoriteFilter.expression instanceof Gtk.ClosureExpression
+    const wishlist = this.wishlistFilter.expression === this.isWishlist
 
-    if (nItems === 0 && favorite && query.length === 0) {
+    if (nItems === 0 && wishlist && query.length === 0) {
+      this.visibleChild = this._noWishlist
+    } else if (nItems === 0 && favorite && query.length === 0) {
       this.visibleChild = this._noFavorites
     } else if (nItems === 0 && platform.length === 0 && query.length === 0) {
       this.visibleChild = this._noGames

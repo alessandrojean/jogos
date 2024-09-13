@@ -97,6 +97,33 @@ template $GamesWidget : Stack {
     vexpand: true;
   }
 
+  Adw.StatusPage noWishlist {
+    title: _("No games in wishlist");
+    description: _("You haven't created any game in the wishlist");
+    icon-name: "lucide-folder-heart-symbolic";
+    vexpand: true;
+
+    Box {
+      margin-top: 18;
+      orientation: vertical;
+      halign: center;
+
+      Button {
+        action-name: "win.create-new-game";
+
+        Adw.ButtonContent {
+          icon-name: "lucide-plus-symbolic";
+          label: _("New game");
+        }
+
+        styles [
+          "suggested-action",
+          "pill"
+        ]
+      }
+    }
+  }
+
   Adw.StatusPage noGamesForPlatform {
     title: _("No games found");
     description: _("You haven't created any game for this platform");
