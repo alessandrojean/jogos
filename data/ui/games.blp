@@ -38,6 +38,12 @@ template $GamesWidget : Stack {
           factory: SignalListItemFactory {};
         }
 
+        ColumnViewColumn yearColumn {
+          title: _("Release year");
+          resizable: true;
+          factory: SignalListItemFactory {};
+        }
+
         ColumnViewColumn platformColumn {
           title: _("Platform");
           resizable: true;
@@ -50,8 +56,8 @@ template $GamesWidget : Stack {
           factory: SignalListItemFactory {};
         }
 
-        ColumnViewColumn yearColumn {
-          title: _("Release year");
+        ColumnViewColumn modificationColumn {
+          title: _("Modification");
           resizable: true;
           factory: SignalListItemFactory {};
         }

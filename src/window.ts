@@ -10,7 +10,7 @@ import { PlatformId, platforms } from './model/platform.js'
 import { CreateDialogWidget } from './widgets/createDialog.js'
 import { DetailsDialogWidget } from './widgets/detailsDialog.js'
 import { EditDialogWidget } from './widgets/editDialog.js'
-import { GamesWidget } from './widgets/games.js'
+import { GamesWidget, SortProperty } from './widgets/games.js'
 import type { SidebarItem } from './widgets/sidebarItem.js'
 import { SidebarItemWidget } from './widgets/sidebarItem.js'
 
@@ -25,8 +25,9 @@ export class Window extends Adw.ApplicationWindow {
   private _gamesWidget!: GamesWidget
   private _searchBar!: Gtk.SearchBar
   private _searchEntry!: Gtk.SearchEntry
-  private _showList!: Gtk.Button
-  private _showGrid!: Gtk.Button
+  private _viewAndSort!: Adw.SplitButton
+
+  private changeSortAction!: Gio.SimpleAction
 
   private sidebarItems: SidebarItem[] = [
     { id: 'ALL_GAMES', label: _('All games'), iconName: 'lucide-gamepad-2', section: 'top-pinned' },
@@ -48,7 +49,7 @@ export class Window extends Adw.ApplicationWindow {
       Template: 'resource:///org/jogos/Jogos/ui/window.ui',
       InternalChildren: [
         'splitView', 'sidebarList', 'content', 'gamesWidget',
-        'searchBar', 'searchEntry', 'showList', 'showGrid'
+        'searchBar', 'searchEntry', 'viewAndSort'
       ],
     }, this)
 
@@ -69,7 +70,7 @@ export class Window extends Adw.ApplicationWindow {
     this.initSignals()
     this.initSearchBar()
     this.initSidebar()
-    this.initButtons()
+    this.initViewOptions()
   }
 
   private initActions() {
@@ -96,6 +97,23 @@ export class Window extends Adw.ApplicationWindow {
     showGridAction.connect('activate', () => this.onShowGrid())
     this.add_action(showGridAction)
 
+    const jogosGroup = new Gio.SimpleActionGroup()
+
+    this.changeSortAction = new Gio.SimpleAction({
+      name: 'change-sort',
+      parameterType: GLib.VariantType.new('s'),
+      state: GLib.Variant.new_string('title_asc'),
+    })
+    this.changeSortAction.connect('activate', (_self, sort: GLib.Variant<string>) => {
+      this.changeSortAction.state = sort
+
+      const [sortOption] = sort.get_string()
+      this.onChangeSortAction(sortOption)
+    })
+    jogosGroup.add_action(this.changeSortAction)
+
+    this.insert_action_group('jogos', jogosGroup)
+
     this.application.set_accels_for_action('win.show-search', ['<Control>f'])
     this.application.set_accels_for_action('win.create-new-game', ['<Control>n'])
     this.application.set_accels_for_action('win.show-list', ['<Control>1'])
@@ -114,6 +132,10 @@ export class Window extends Adw.ApplicationWindow {
     })
 
     this._gamesWidget.connect('game-edit', (_self, game: Game) => this.onGameEdit(game))
+
+    this._gamesWidget.connect('sort-changed', (_self, property: Gtk.StringObject) => {
+      this.changeSortAction.state = GLib.Variant.new_string(property.string)
+    })
   }
 
   private initSidebar() {
@@ -150,31 +172,65 @@ export class Window extends Adw.ApplicationWindow {
     })
   }
 
-  private initButtons() {
-    this._showGrid.connect('clicked', () => this.onShowGrid())
-    this._showList.connect('clicked', () => this.onShowList())
-
+  private initViewOptions() {
     const saved = Application.settings.get<boolean>('show-grid')
 
     if (!saved) {
-      this._gamesWidget.showList()
-      this._showGrid.visible = true
-      this._showList.visible = false
+      this.onShowList()
     }
+
+    this._viewAndSort.connect('clicked', () => this.onChangeView())
+
+    // Building up here as Blueprint doesn't support targets yet.
+    const items = [
+      { label: _('A-Z'), value: 'title_asc' },
+      { label: _('Z-A'), value: 'title_desc' },
+      { label: _('Developer A-Z'), value: 'developer_asc' },
+      { label: _('Developer Z-A'), value: 'developer_desc' },
+      { label: _('Platform A-Z'), value: 'platform_asc' },
+      { label: _('Platform Z-A'), value: 'platform_desc' },
+      { label: _('Last modification'), value: 'modification_desc' },
+      { label: _('First modification'), value: 'modification_asc' },
+      { label: _('Last release'), value: 'year_desc' },
+      { label: _('First release'), value: 'year_asc' },
+    ]
+
+    const viewOptionsMenu = new Gio.Menu()
+    const sortMenu = new Gio.Menu()
+
+    for (const item of items) {
+      const menuItem = Gio.MenuItem.new(item.label, 'jogos.change-sort')
+      menuItem.set_action_and_target_value('jogos.change-sort', GLib.Variant.new_string(item.value))
+
+      sortMenu.append_item(menuItem)
+    }
+
+    viewOptionsMenu.append_section(_('Sort by'), sortMenu)
+    this._viewAndSort.menuModel = viewOptionsMenu
   }
 
-  private onShowGrid() {
-    this._gamesWidget.showGrid()
-    this._showGrid.visible = false
-    this._showList.visible = true
-    Application.settings.setValue('show-grid', true)
+  private onChangeView() {
+    const showGrid = Application.settings.get<boolean>('show-grid')
+
+    if (showGrid) {
+      this.onShowList()
+    } else {
+      this.onShowGrid()
+    }
   }
 
   private onShowList() {
     this._gamesWidget.showList()
-    this._showList.visible = false
-    this._showGrid.visible = true
+    this._viewAndSort.iconName = 'lucide-grid-2x2-symbolic'
+    this._viewAndSort.tooltipText = _('View in grid')
     Application.settings.setValue('show-grid', false)
+  }
+
+  private onShowGrid() {
+    this._gamesWidget.showGrid()
+    this._viewAndSort.iconName = 'lucide-layout-list-symbolic'
+    this._viewAndSort.tooltipText = _('View in list')
+    Application.settings.setValue('show-grid', true)
   }
 
   private quit() {
@@ -258,6 +314,10 @@ export class Window extends Adw.ApplicationWindow {
       this._splitView.set_show_content(true)
     }
 
+  }
+
+  private onChangeSortAction(sort: string) {
+    this._gamesWidget.sortBy(sort as SortProperty)
   }
 
   private onCreateNewGameAction() {

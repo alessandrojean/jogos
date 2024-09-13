@@ -13,6 +13,12 @@ import GameTitleColumnWidget from './gameTitleColumn.js'
 
 Gio._promisify(Adw.AlertDialog.prototype, 'choose', 'choose_finish')
 
+export type SortProperty = 'title_asc' | 'title_desc'
+  | 'modification_date_desc' | 'modification_date_asc'
+  | 'platform_asc' | 'platform_desc'
+  | 'developer_asc' | 'developer_desc'
+  | 'year_asc' | 'year_desc'
+
 export class GamesWidget extends Gtk.Stack {
   private _items!: Gtk.ScrolledWindow
   private _grid!: Gtk.ScrolledWindow
@@ -27,17 +33,19 @@ export class GamesWidget extends Gtk.Stack {
   private _platformColumn!: Gtk.ColumnViewColumn
   private _developerColumn!: Gtk.ColumnViewColumn
   private _yearColumn!: Gtk.ColumnViewColumn
+  private _modificationColumn!: Gtk.ColumnViewColumn
 
   private _gridView!: Gtk.GridView
 
   private dataModel!: Gio.ListStore<GameItem>
-  private selectionModel!: Gtk.SingleSelection
+  private sortModel!: Gtk.SortListModel<GameItem>
+  private filterModel!: Gtk.FilterListModel<GameItem>
+  private selectionModel!: Gtk.SingleSelection<GameItem>
   private filter!: Gtk.EveryFilter
   private platformFilter!: Gtk.StringFilter
   private titleFilter!: Gtk.StringFilter
   private favoriteFilter!: Gtk.BoolFilter
   private wishlistFilter!: Gtk.BoolFilter
-  private filterModel!: Gtk.FilterListModel
 
   private _popoverMenu!: Gtk.PopoverMenu
 
@@ -63,7 +71,7 @@ export class GamesWidget extends Gtk.Stack {
         'items', 'noResultsFound', 'noGamesForPlatform', 'columnView',
         'titleColumn', 'platformColumn', 'developerColumn', 'yearColumn',
         'noGames', 'grid', 'gridView', 'popoverMenu', 'noFavorites',
-        'noWishlist',
+        'noWishlist', 'modificationColumn'
       ],
       Signals: {
         'game-activate': {
@@ -74,6 +82,9 @@ export class GamesWidget extends Gtk.Stack {
         },
         'game-delete': {
           param_types: [Game.$gtype],
+        },
+        'sort-changed': {
+          param_types: [Gtk.StringObject.$gtype]
         }
       }
     }, this)
@@ -137,25 +148,43 @@ export class GamesWidget extends Gtk.Stack {
     this.filter.append(this.wishlistFilter)
 
     this.dataModel = new Gio.ListStore({ itemType: GameItem.$gtype })
+
+    this.sortModel = new Gtk.SortListModel({
+      model: this.dataModel,
+      sorter: this._columnView.sorter,
+    })
+
+    this.filterModel = new Gtk.FilterListModel({
+      model: this.sortModel,
+      filter: this.filter,
+    })
+
+    this.selectionModel = new Gtk.SingleSelection({
+      model: this.filterModel,
+    })
   }
 
   private initColumnView() {
     const gameExpr = Gtk.PropertyExpression.new(GameItem.$gtype, null, 'game')
 
     this._titleColumn.sorter = new Gtk.StringSorter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'title')
+      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'title'),
     })
 
     this._platformColumn.sorter = new Gtk.StringSorter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'platform')
+      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'platform'),
     })
 
     this._developerColumn.sorter = new Gtk.StringSorter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'developer')
+      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'developer'),
     })
 
     this._yearColumn.sorter = new Gtk.NumericSorter({
       expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'release-year')
+    })
+
+    this._modificationColumn.sorter = new Gtk.NumericSorter({
+      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'modification-date'),
     })
 
     // Factories
@@ -229,8 +258,8 @@ export class GamesWidget extends Gtk.Stack {
     factoryYear.connect('setup', (_self, listItem: Gtk.ColumnViewCell) => {
       const label = new Gtk.Label({
         label: '',
-        xalign: 0.0,
-        cssClasses: ['dim-label']
+        halign: Gtk.Align.END,
+        cssClasses: ['dim-label', 'numeric']
       })
       this.setupCell(label, listItem)
       listItem.set_child(label)
@@ -240,21 +269,24 @@ export class GamesWidget extends Gtk.Stack {
       const label = listItem.get_child() as Gtk.Label
       const modelItem = listItem.get_item<GameItem>()
       label.label = modelItem.game.releaseYear.toString()
-
     })
 
-    const sortModel = new Gtk.SortListModel({
-      model: this.dataModel,
-      sorter: this._columnView.sorter,
+    const factoryModification = this._modificationColumn.factory as Gtk.SignalListItemFactory
+
+    factoryModification.connect('setup', (_self, listItem: Gtk.ColumnViewCell) => {
+      const label = new Gtk.Label({
+        label: '',
+        halign: Gtk.Align.END,
+        cssClasses: ['dim-label', 'numeric']
+      })
+      this.setupCell(label, listItem)
+      listItem.set_child(label)
     })
 
-    this.filterModel = new Gtk.FilterListModel({
-      model: sortModel,
-      filter: this.filter,
-    })
-
-    this.selectionModel = new Gtk.SingleSelection({
-      model: this.filterModel,
+    factoryModification.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
+      const label = listItem.get_child() as Gtk.Label
+      const modelItem = listItem.get_item<GameItem>()
+      label.label = modelItem.game.modifiedAtDateTime.format(_('%d/%m/%Y')) ?? _('Unknown')
     })
 
     this._columnView.model = this.selectionModel
@@ -262,6 +294,10 @@ export class GamesWidget extends Gtk.Stack {
     this._columnView.connect('activate', (self, position) => {
       const item = self.model.get_item(position) as GameItem
       this.emit('game-activate', item.game)
+    })
+
+    this._columnView.sorter.connect('changed', (sorter: Gtk.ColumnViewSorter) => {
+      this.onColumnViewSortChanged(sorter)
     })
   }
 
@@ -371,6 +407,22 @@ export class GamesWidget extends Gtk.Stack {
     }
   }
 
+  sortBy(sortProperty: SortProperty) {
+    const [property, direction] = sortProperty.split('_')
+    const sortType = direction === 'asc' ? Gtk.SortType.ASCENDING : Gtk.SortType.DESCENDING
+
+    const map: Record<string, Gtk.ColumnViewColumn> = {
+      title: this._titleColumn,
+      developer: this._developerColumn,
+      platform: this._platformColumn,
+      modification: this._modificationColumn,
+      year: this._yearColumn,
+    }
+
+    this._columnView.sort_by_column(null, sortType)
+    this._columnView.sort_by_column(map[property] ?? null, sortType)
+  }
+
   private setupCell(widget: Gtk.Widget, item: Gtk.ListItem) {
     const rightClickEvent = new Gtk.GestureClick({ button: Gdk.BUTTON_SECONDARY })
     rightClickEvent.connect('pressed', (_source, _nPress, x, y) => {
@@ -405,6 +457,27 @@ export class GamesWidget extends Gtk.Stack {
       this.visibleChild = this._noResultsFound
     } else {
       this.visibleChild = this.viewGrid ? this._grid : this._items
+    }
+  }
+
+  private onColumnViewSortChanged(sorter: Gtk.ColumnViewSorter) {
+    const column = sorter.primarySortColumn
+    const order = sorter.primarySortOrder === Gtk.SortType.ASCENDING ? 'asc' : 'desc'
+
+    if (!column) {
+      return
+    }
+
+    if (column === this._titleColumn) {
+      this.emit('sort-changed', Gtk.StringObject.new(`title_${order}`))
+    } else if (column === this._yearColumn) {
+      this.emit('sort-changed', Gtk.StringObject.new(`year_${order}`))
+    } else if (column === this._developerColumn) {
+      this.emit('sort-changed', Gtk.StringObject.new(`developer_${order}`))
+    } else if (column === this._platformColumn) {
+      this.emit('sort-changed', Gtk.StringObject.new(`platform_${order}`))
+    } else if (column === this._modificationColumn) {
+      this.emit('sort-changed', Gtk.StringObject.new(`modification_${order}`))
     }
   }
 
