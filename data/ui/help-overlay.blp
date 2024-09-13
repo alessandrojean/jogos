@@ -31,6 +31,25 @@ ShortcutsWindow help_overlay {
     }
 
     ShortcutsGroup {
+      title: _("View");
+
+      ShortcutsShortcut {
+        title: _("Show/hide the action menu");
+        accelerator: "F10";
+      }
+
+      ShortcutsShortcut {
+        title: _("List view");
+        action-name: "win.show-list";
+      }
+
+      ShortcutsShortcut {
+        title: _("Grid view");
+        action-name: "win.show-grid";
+      }
+    }
+
+    ShortcutsGroup {
       title: _("General");
 
       ShortcutsShortcut {

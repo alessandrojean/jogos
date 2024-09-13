@@ -88,8 +88,18 @@ export class Window extends Adw.ApplicationWindow {
     })
     this.add_action(showSearchAction)
 
+    const showListAction = new Gio.SimpleAction({ name: 'show-list' })
+    showListAction.connect('activate', () => this.onShowList())
+    this.add_action(showListAction)
+
+    const showGridAction = new Gio.SimpleAction({ name: 'show-grid' })
+    showGridAction.connect('activate', () => this.onShowGrid())
+    this.add_action(showGridAction)
+
     this.application.set_accels_for_action('win.show-search', ['<Control>f'])
     this.application.set_accels_for_action('win.create-new-game', ['<Control>n'])
+    this.application.set_accels_for_action('win.show-list', ['<Control>1'])
+    this.application.set_accels_for_action('win.show-grid', ['<Control>2'])
   }
 
   private initSignals() {
@@ -141,19 +151,8 @@ export class Window extends Adw.ApplicationWindow {
   }
 
   private initButtons() {
-    this._showGrid.connect('clicked', () => {
-      this._gamesWidget.showGrid()
-      this._showGrid.visible = false
-      this._showList.visible = true
-      Application.settings.setValue('show-grid', true)
-    })
-
-    this._showList.connect('clicked', () => {
-      this._gamesWidget.showList()
-      this._showList.visible = false
-      this._showGrid.visible = true
-      Application.settings.setValue('show-grid', false)
-    })
+    this._showGrid.connect('clicked', () => this.onShowGrid())
+    this._showList.connect('clicked', () => this.onShowList())
 
     const saved = Application.settings.get<boolean>('show-grid')
 
@@ -162,6 +161,20 @@ export class Window extends Adw.ApplicationWindow {
       this._showGrid.visible = true
       this._showList.visible = false
     }
+  }
+
+  private onShowGrid() {
+    this._gamesWidget.showGrid()
+    this._showGrid.visible = false
+    this._showList.visible = true
+    Application.settings.setValue('show-grid', true)
+  }
+
+  private onShowList() {
+    this._gamesWidget.showList()
+    this._showList.visible = false
+    this._showGrid.visible = true
+    Application.settings.setValue('show-grid', false)
   }
 
   private quit() {
