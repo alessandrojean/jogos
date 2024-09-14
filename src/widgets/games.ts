@@ -34,6 +34,7 @@ export class GamesWidget extends Gtk.Stack {
   private _developerColumn!: Gtk.ColumnViewColumn
   private _yearColumn!: Gtk.ColumnViewColumn
   private _modificationColumn!: Gtk.ColumnViewColumn
+  private _favoriteColumn!: Gtk.ColumnViewColumn
 
   private _gridView!: Gtk.GridView
 
@@ -71,7 +72,7 @@ export class GamesWidget extends Gtk.Stack {
         'items', 'noResultsFound', 'noGamesForPlatform', 'columnView',
         'titleColumn', 'platformColumn', 'developerColumn', 'yearColumn',
         'noGames', 'grid', 'gridView', 'popoverMenu', 'noFavorites',
-        'noWishlist', 'modificationColumn'
+        'noWishlist', 'modificationColumn', 'favoriteColumn'
       ],
       Signals: {
         'game-activate': {
@@ -81,6 +82,12 @@ export class GamesWidget extends Gtk.Stack {
           param_types: [Game.$gtype],
         },
         'game-delete': {
+          param_types: [Game.$gtype],
+        },
+        'game-favorited': {
+          param_types: [Game.$gtype],
+        },
+        'game-unfavorited': {
           param_types: [Game.$gtype],
         },
         'sort-changed': {
@@ -258,7 +265,7 @@ export class GamesWidget extends Gtk.Stack {
     factoryYear.connect('setup', (_self, listItem: Gtk.ColumnViewCell) => {
       const label = new Gtk.Label({
         label: '',
-        halign: Gtk.Align.END,
+        xalign: 1.0,
         cssClasses: ['dim-label', 'numeric']
       })
       this.setupCell(label, listItem)
@@ -276,7 +283,7 @@ export class GamesWidget extends Gtk.Stack {
     factoryModification.connect('setup', (_self, listItem: Gtk.ColumnViewCell) => {
       const label = new Gtk.Label({
         label: '',
-        halign: Gtk.Align.END,
+        xalign: 1.0,
         cssClasses: ['dim-label', 'numeric']
       })
       this.setupCell(label, listItem)
@@ -287,6 +294,28 @@ export class GamesWidget extends Gtk.Stack {
       const label = listItem.get_child() as Gtk.Label
       const modelItem = listItem.get_item<GameItem>()
       label.label = modelItem.game.modifiedAtDateTime.format(_('%d/%m/%Y')) ?? _('Unknown')
+    })
+
+    const factoryFavorite = this._favoriteColumn.factory as Gtk.SignalListItemFactory
+
+    factoryFavorite.connect('setup', (_self, listItem: Gtk.ColumnViewCell) => {
+      const button = new Gtk.Button({
+        iconName: 'lucide-star-symbolic',
+        cssClasses: ['flat', 'circular', 'dim-label', 'star']
+      })
+
+      this.setupCell(button, listItem)
+      listItem.child = button
+    })
+
+    factoryFavorite.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
+      const button = listItem.get_child() as Gtk.Button
+      const modelItem = listItem.get_item<GameItem>()
+
+      button.connect('clicked', () => this.onFavoriteClicked(modelItem))
+
+      button.iconName = modelItem.game.favorite ? 'lucide-star-solid-symbolic' : 'lucide-star-symbolic'
+      button.tooltipText = modelItem.game.favorite ? _('Unfavorite') : _('Favorite')
     })
 
     this._columnView.model = this.selectionModel
@@ -342,6 +371,7 @@ export class GamesWidget extends Gtk.Stack {
     const allGames = GamesRepository.instance.list()
 
     this.dataModel.splice(0, this.dataModel.nItems, allGames.map(game => new GameItem({ game })))
+    this.changeVisibleChild()
   }
 
   showFavorites() {
@@ -393,16 +423,23 @@ export class GamesWidget extends Gtk.Stack {
   }
 
   selectGame(game: Game) {
-    const item = new GameItem({ game })
-    const [contains, position] = this.dataModel.find_with_equal_func(item, (a: GameItem, b: GameItem) => {
-      return a?.game.id === b?.game.id
-    })
+    // Doing the search manually as find_with_equal_func is not working.
+    let position = -1
 
-    if (contains) {
+    for (let i = 0; i < this.dataModel.nItems; i++) {
+      if (this.dataModel.get_item(i)?.game.id === game.id) {
+        position = i
+        break
+      }
+    }
+
+    if (position >= 0) {
+      this.selectionModel.set_selected(position)
+
       if (this.viewGrid) {
-        this._gridView.scroll_to(position, Gtk.ListScrollFlags.SELECT, null)
+        this._gridView.scroll_to(position, Gtk.ListScrollFlags.NONE, null)
       } else {
-        this._columnView.scroll_to(position, null, Gtk.ListScrollFlags.SELECT, null)
+        this._columnView.scroll_to(position, null, Gtk.ListScrollFlags.NONE, null)
       }
     }
   }
@@ -424,16 +461,25 @@ export class GamesWidget extends Gtk.Stack {
   }
 
   private setupCell(widget: Gtk.Widget, item: Gtk.ListItem) {
-    const rightClickEvent = new Gtk.GestureClick({ button: Gdk.BUTTON_SECONDARY })
-    rightClickEvent.connect('pressed', (_source, _nPress, x, y) => {
-      this.selectionModel.select_item(item.get_position(), true)
-
-      const point = new Graphene.Point({ x, y })
-      const [, targetPoint] = widget.compute_point(this._items, point)
-      const position = new Gdk.Rectangle({ x: targetPoint.x, y: targetPoint.y })
-      this._popoverMenu.pointingTo = position
-      this._popoverMenu.popup()
+    const rightClickEvent = new Gtk.GestureClick({
+      propagationPhase: Gtk.PropagationPhase.BUBBLE,
+      button: Gdk.BUTTON_SECONDARY,
     })
+
+    rightClickEvent.connect('pressed', (source, nPress, x, y) => {
+      if (nPress === 1) {
+        this.selectionModel.select_item(item.get_position(), true)
+
+        const point = new Graphene.Point({ x, y })
+        const [, targetPoint] = widget.compute_point(this._items, point)
+        const position = new Gdk.Rectangle({ x: targetPoint.x, y: targetPoint.y })
+        this._popoverMenu.pointingTo = position
+        this._popoverMenu.popup()
+
+        source.set_state(Gtk.EventSequenceState.CLAIMED)
+      }
+    })
+
     widget.add_controller(rightClickEvent)
   }
 
@@ -457,6 +503,28 @@ export class GamesWidget extends Gtk.Stack {
       this.visibleChild = this._noResultsFound
     } else {
       this.visibleChild = this.viewGrid ? this._grid : this._items
+    }
+  }
+
+  private onFavoriteClicked(gameItem: GameItem) {
+    GamesRepository.instance.toggleFavorite(gameItem.game)
+    const updatedGame = GamesRepository.instance.get(gameItem.game.id)
+
+    // this.loadItems()
+    const [found, position] = this.dataModel.find(gameItem)
+
+    if (found && updatedGame) {
+      this.dataModel.splice(position, 1, [
+        new GameItem({ game: updatedGame, listUi: gameItem.listUi, gridUi: gameItem.gridUi })
+      ])
+
+      this.changeVisibleChild()
+
+      if (gameItem.game.favorite) {
+        this.emit('game-unfavorited', updatedGame)
+      } else {
+        this.emit('game-favorited', updatedGame)
+      }
     }
   }
 

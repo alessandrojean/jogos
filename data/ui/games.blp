@@ -61,6 +61,10 @@ template $GamesWidget : Stack {
           resizable: true;
           factory: SignalListItemFactory {};
         }
+
+        ColumnViewColumn favoriteColumn {
+          factory: SignalListItemFactory {};
+        }
       }
 
       PopoverMenu popoverMenu {

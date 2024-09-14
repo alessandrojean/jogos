@@ -90,6 +90,21 @@ export default class GamesRepository {
     return games
   }
 
+  get(id: number) {
+    const request = this.connection.execute_select_command(/* sql */`
+      SELECT * FROM game WHERE id = ${id};
+    `)
+
+    const iterator = request.create_iter()
+    let game: Game | null = null
+
+    while (iterator.move_next()) {
+      game = Game.fromIterator(iterator)
+    }
+
+    return game
+  }
+
   create(game: Game) {
     const now = GLib.DateTime.new_now_local().to_unix()
 
@@ -122,6 +137,29 @@ export default class GamesRepository {
     game.id = this.lastId()
 
     return game.id
+  }
+
+  toggleFavorite(game: Game) {
+    const now = GLib.DateTime.new_now_local().to_unix()
+
+    const builder = new Gda.SqlBuilder({
+      stmt_type: Gda.SqlStatementType.UPDATE,
+    })
+
+    builder.set_table('game')
+    builder.add_field_value_as_gvalue('favorite', !game.favorite as any)
+    builder.add_field_value_as_gvalue('updated_at', now as any)
+
+    builder.set_where(
+      builder.add_cond(
+        Gda.SqlOperatorType.EQ,
+        builder.add_field_id('id', null),
+        builder.add_expr_value(game.id as any),
+        0
+      )
+    )
+
+    this.connection.statement_execute_non_select(builder.get_statement(), null)
   }
 
   update(game: Game) {

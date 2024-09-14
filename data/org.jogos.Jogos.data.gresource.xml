@@ -20,6 +20,7 @@
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-menu-symbolic.svg">icons/lucide-menu-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-panel-left-symbolic.svg">icons/lucide-panel-left-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-star-symbolic.svg">icons/lucide-star-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-star-solid-symbolic.svg">icons/lucide-star-solid-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-grid-2x2-symbolic.svg">icons/lucide-grid-2x2-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-layout-list-symbolic.svg">icons/lucide-layout-list-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-chevron-right-symbolic.svg">icons/lucide-chevron-right-symbolic.svg</file>

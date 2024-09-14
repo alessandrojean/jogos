@@ -134,6 +134,8 @@ export class Window extends Adw.ApplicationWindow {
 
     this._gamesWidget.connect('game-edit', (_self, game: Game) => this.onGameEdit(game))
     this._gamesWidget.connect('game-delete', (_self, game: Game) => this.onGameDelete(game))
+    this._gamesWidget.connect('game-favorited', (_self, game: Game) => this.onGameFavorited(game))
+    this._gamesWidget.connect('game-unfavorited', (_self, game: Game) => this.onGameUnfavorited(game))
 
     this._gamesWidget.connect('sort-changed', (_self, property: Gtk.StringObject) => {
       this.changeSortAction.state = GLib.Variant.new_string(property.string)
@@ -185,12 +187,12 @@ export class Window extends Adw.ApplicationWindow {
 
     // Building up here as Blueprint doesn't support targets yet.
     const items = [
-      { label: _('A-Z'), value: 'title_asc' },
-      { label: _('Z-A'), value: 'title_desc' },
-      { label: _('Developer A-Z'), value: 'developer_asc' },
-      { label: _('Developer Z-A'), value: 'developer_desc' },
-      { label: _('Platform A-Z'), value: 'platform_asc' },
-      { label: _('Platform Z-A'), value: 'platform_desc' },
+      { label: _('A–Z'), value: 'title_asc' },
+      { label: _('Z–A'), value: 'title_desc' },
+      { label: _('Developer A–Z'), value: 'developer_asc' },
+      { label: _('Developer Z–A'), value: 'developer_desc' },
+      { label: _('Platform A–Z'), value: 'platform_asc' },
+      { label: _('Platform Z–A'), value: 'platform_desc' },
       { label: _('Last modification'), value: 'modification_desc' },
       { label: _('First modification'), value: 'modification_asc' },
       { label: _('Last release'), value: 'year_desc' },
@@ -330,14 +332,14 @@ export class Window extends Adw.ApplicationWindow {
 
     const createDialog = new CreateDialogWidget({ defaultPlatform: platform })
 
-    createDialog.connect('game-created', (_self, game) => {
+    createDialog.connect('game-created', (_self, game: Game) => {
       this._gamesWidget.search('')
       this._gamesWidget.selectPlatform(game.platform)
       this._gamesWidget.loadItems()
       this._gamesWidget.selectGame(game)
 
       const toast = new Adw.Toast({
-        title: _('Game created'),
+        title: _('"%s" was created').format(game.title),
         timeout: 3,
       })
 
@@ -357,7 +359,7 @@ export class Window extends Adw.ApplicationWindow {
       this._gamesWidget.selectGame(updatedGame)
 
       const toast = new Adw.Toast({
-        title: _('Game updated'),
+        title: _('"%s" was updated').format(game.title),
         timeout: 3,
       })
 
@@ -367,9 +369,27 @@ export class Window extends Adw.ApplicationWindow {
     editDialog.present(this)
   }
 
-  private onGameDelete(_game: Game) {
+  private onGameDelete(game: Game) {
     const toast = new Adw.Toast({
-      title: _('Game deleted'),
+      title: _('"%s" was deleted').format(game.title),
+      timeout: 3,
+    })
+
+    this._toastOverlay.add_toast(toast)
+  }
+
+  private onGameFavorited(game: Game) {
+    const toast = new Adw.Toast({
+      title: _('"%s" was added to the favorites').format(game.title),
+      timeout: 3,
+    })
+
+    this._toastOverlay.add_toast(toast)
+  }
+
+  private onGameUnfavorited(game: Game) {
+    const toast = new Adw.Toast({
+      title: _('"%s" was removed from favorites').format(game.title),
       timeout: 3,
     })
 
