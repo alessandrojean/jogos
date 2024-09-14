@@ -32,6 +32,7 @@ export class EditDialogWidget extends Adw.Dialog {
   private _currency!: Adw.ComboRow
   private _store!: Adw.EntryRow
   private _certification!: Adw.ComboRow
+  private _wishlist!: Adw.SwitchRow
 
   private _deleteRevealer!: Gtk.Revealer
 
@@ -43,7 +44,7 @@ export class EditDialogWidget extends Adw.Dialog {
     developer: { required },
     publisher: { required },
     barcode: { number: optional(integer), max: max(13) },
-    amount: { real }
+    amount: { number: optional(real) }
   })
 
   private widgetMap!: WidgetMap<keyof EditDialogWidget['validator']>
@@ -67,7 +68,7 @@ export class EditDialogWidget extends Adw.Dialog {
         'cover', 'title', 'barcode', 'developer', 'publisher', 'releaseYear',
         'platform', 'story', 'deleteRevealer', 'condition', 'storageMedia',
         'boughtDateLabel', 'boughtDate', 'paidPriceLabel', 'currency', 'amount',
-        'story', 'store', 'certification'
+        'story', 'store', 'certification', 'wishlist'
       ],
       Signals: {
         'game-updated': {
@@ -271,6 +272,7 @@ export class EditDialogWidget extends Adw.Dialog {
     this._store.text = this.game.store ?? ''
     this._currency.set_selected(currencies.indexOf(getCurrency(this.game.paidPriceCurrency) ?? getCurrency('USD')!))
     this._amount.text = '%.2f'.format(this.game.paidPriceAmount)
+    this._wishlist.active = this.game.wishlist
 
     const cover = this.game.cover
 
@@ -372,6 +374,7 @@ export class EditDialogWidget extends Adw.Dialog {
       condition: (this._condition.selectedItem as GameCondition).id,
       boughtDate: this._boughtDate.get_date().to_unix(),
       store: this._store.text,
+      wishlist: this._wishlist.active,
       paidPriceAmount: Number.isNaN(amount) ? 0.0 : amount,
       paidPriceCurrency: (this._currency.selectedItem as Currency).iso
     })

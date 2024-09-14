@@ -32,6 +32,7 @@ export class CreateDialogWidget extends Adw.Dialog {
   private _currency!: Adw.ComboRow
   private _store!: Adw.EntryRow
   private _certification!: Adw.ComboRow
+  private _wishlist!: Adw.SwitchRow
 
   private _deleteRevealer!: Gtk.Revealer
 
@@ -43,13 +44,14 @@ export class CreateDialogWidget extends Adw.Dialog {
     developer: { required },
     publisher: { required },
     barcode: { number: optional(integer), max: max(13) },
-    amount: { real }
+    amount: { number: optional(real) }
   })
 
   private widgetMap!: WidgetMap<keyof CreateDialogWidget['validator']>
 
   game!: Game
   defaultPlatform: PlatformId | null = null
+  defaultWishlist: boolean = false
 
   static {
     GObject.registerClass({
@@ -62,13 +64,20 @@ export class CreateDialogWidget extends Adw.Dialog {
           '',
           GObject.ParamFlags.READWRITE,
           ''
+        ),
+        defaultWishlist: GObject.ParamSpec.boolean(
+          'default-wishlist',
+          '',
+          '',
+          GObject.ParamFlags.READWRITE,
+          false
         )
       },
       InternalChildren: [
         'cover', 'title', 'barcode', 'developer', 'publisher', 'releaseYear',
         'platform', 'story', 'deleteRevealer', 'condition', 'storageMedia',
         'boughtDateLabel', 'boughtDate', 'paidPriceLabel', 'currency', 'amount',
-        'story', 'store', 'certification'
+        'story', 'store', 'certification', 'wishlist'
       ],
       Signals: {
         'game-created': {
@@ -90,6 +99,8 @@ export class CreateDialogWidget extends Adw.Dialog {
     this.initDates()
     this.initPaidPrice()
     this.initValidation()
+
+    this._wishlist.active = params.defaultWishlist ?? false
   }
 
   private initActions() {
@@ -341,6 +352,7 @@ export class CreateDialogWidget extends Adw.Dialog {
       condition: (this._condition.selectedItem as GameCondition).id,
       boughtDate: this._boughtDate.get_date().to_unix(),
       store: this._store.text,
+      wishlist: this._wishlist.active,
       paidPriceAmount: Number.isNaN(amount) ? 0.0 : amount,
       paidPriceCurrency: (this._currency.selectedItem as Currency).iso
     })

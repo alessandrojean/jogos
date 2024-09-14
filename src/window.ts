@@ -330,7 +330,10 @@ export class Window extends Adw.ApplicationWindow {
       ? this.sidebarItems[selected].id as PlatformId
       : null
 
-    const createDialog = new CreateDialogWidget({ defaultPlatform: platform })
+    const createDialog = new CreateDialogWidget({
+      defaultPlatform: platform,
+      defaultWishlist: this.sidebarItems[selected].id === 'WISHLIST'
+    })
 
     createDialog.connect('game-created', (_self, game: Game) => {
       this._gamesWidget.search('')

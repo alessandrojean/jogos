@@ -68,7 +68,7 @@ export class DetailsDialogWidget extends Adw.Dialog {
     this._platform.label = platformName(this.game.platform)
     this._year.label = this.game.releaseYear.toString()
     this._barcode.subtitle = this.game.barcode?.length ? this.game.barcode : _('Not informed')
-    this._story.subtitle = this.game.story
+    this._story.subtitle = this.game.story.length > 0 ? this.game.story : _('Not informed')
     this._developer.subtitle = this.game.developer
     this._publisher.subtitle = this.game.publisher
     this._creationDate.subtitle = this.game.createdAtDateTime.format(_('%d/%m/%Y %T')) ?? ''

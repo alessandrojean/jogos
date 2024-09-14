@@ -156,7 +156,16 @@ template $CreateDialogWidget : Adw.Dialog {
         }
 
         Adw.PreferencesGroup {
+          title: _("Wishlist");
+
+          Adw.SwitchRow wishlist {
+            title: _("Add to wishlist");
+          }
+        }
+
+        Adw.PreferencesGroup {
           title: _("Store");
+          visible: bind wishlist.active inverted;
 
           Adw.ExpanderRow {
             title: _("Bought date");
