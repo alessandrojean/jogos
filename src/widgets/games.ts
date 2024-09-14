@@ -11,8 +11,6 @@ import GamesRepository from '../repositories/games.js'
 import GameGridItemWidget from './gameGridItem.js'
 import GameTitleColumnWidget from './gameTitleColumn.js'
 
-Gio._promisify(Adw.AlertDialog.prototype, 'choose', 'choose_finish')
-
 export type SortProperty = 'title_asc' | 'title_desc'
   | 'modification_date_desc' | 'modification_date_asc'
   | 'platform_asc' | 'platform_desc'

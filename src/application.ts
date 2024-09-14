@@ -30,6 +30,10 @@ export class Application extends Adw.Application {
     this.initAboutDialog()
 
     Gio._promisify(Gtk.UriLauncher.prototype, 'launch', 'launch_finish')
+    Gio._promisify(Adw.AlertDialog.prototype, 'choose', 'choose_finish')
+    Gio._promisify(Gtk.FileDialog.prototype, 'open', 'open_finish')
+    // @ts-ignore
+    Gio._promisify(Gio.Subprocess.prototype, 'wait_async')
 
     Application.settings = new Settings({ schema: pkg.name })
 

@@ -309,38 +309,32 @@ export class EditDialogWidget extends Adw.Dialog {
     touch(this.validator, this.widgetMap)
   }
 
-  private onNewCoverAction() {
+  private async onNewCoverAction() {
     if (!this.window || !(this.window instanceof Gtk.Window)) {
       return
     }
 
-    const filter = new Gtk.FileFilter({ name: _('Images') })
+    const filter = new Gtk.FileFilter()
     filter.add_mime_type('image/jpeg')
     filter.add_mime_type('image/png')
     filter.add_mime_type('image/gif')
     filter.add_mime_type('image/webp')
 
-    const imageFilters = new Gio.ListStore({ itemType: Gtk.FileFilter.$gtype })
-    imageFilters.append(filter)
-
     const fileDialog = new Gtk.FileDialog({
       title: _('Select a cover'),
-      filters: imageFilters,
       defaultFilter: filter,
       modal: true,
     })
 
-    fileDialog.open(this.window, null, (_self, result, _data) => {
-      try {
-        const image = fileDialog.open_finish(result)
+    try {
+      const image = await fileDialog.open(this.window, null)
 
-        if (image) {
-          this.onCoverOpen(image)
-        }
-      } catch {
-        // Do nothing.
+      if (image) {
+        this.onCoverOpen(image)
       }
-    })
+    } catch (_e: any) {
+      // Do nothing
+    }
   }
 
   private onRemoveCoverAction() {

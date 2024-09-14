@@ -1,9 +1,6 @@
 import Gio from 'gi://Gio'
 import GLib from 'gi://GLib'
 
-// @ts-ignore
-Gio._promisify(Gio.Subprocess.prototype, 'wait_async')
-
 export default async function convertCover(coverFile: Gio.File, gameId: number) {
   try {
     const finalCoverPath = GLib.build_filenamev([GLib.get_home_dir(), '.jogos', 'covers', `${gameId}.jpg`])
