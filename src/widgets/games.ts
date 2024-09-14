@@ -388,6 +388,7 @@ export class GamesWidget extends Gtk.Stack {
   showWishlist() {
     this.selectPlatform(null)
     this.wishlistFilter.expression = this.isWishlist
+    this._favoriteColumn.visible = false
 
     this.changeVisibleChild()
   }
@@ -397,6 +398,7 @@ export class GamesWidget extends Gtk.Stack {
     this.wishlistFilter.expression = this.isNotWishlist
     this.platformFilter.search = platform ?? ''
     this._platformColumn.visible = platform === null
+    this._favoriteColumn.visible = true
 
     this.changeVisibleChild()
   }
