@@ -26,5 +26,10 @@
       <summary>Show grid view</summary>
       <description>Grid view state</description>
     </key>
+    <key name="preferred-currency" type="s">
+      <default>'USD'</default>
+      <summary>Preferred currency</summary>
+      <description>The preferred currency for the games</description>
+    </key>
 	</schema>
 </schemalist>

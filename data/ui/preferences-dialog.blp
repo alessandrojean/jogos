@@ -1,0 +1,24 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $PreferencesDialogWidget : Adw.PreferencesDialog {
+  content-width: 800;
+  content-height: 600;
+  title: _("Preferences");
+  search-enabled: true;
+
+  Adw.PreferencesPage {
+    title: _("General");
+    icon-name: "lucide-settings-symbolic";
+
+    Adw.PreferencesGroup {
+      title: _("Location");
+      description: _("Change the location related preferences of the application");
+
+      Adw.ComboRow preferredCurrency {
+        title: _("Preferred currency");
+        enable-search: true;
+      }
+    }
+  }
+}

@@ -8,6 +8,7 @@ import GamesRepository from './repositories/games.js'
 import { Settings } from './settings.js'
 import { createFolder } from './utils/createFolder.js'
 import { GamesWidget } from './widgets/games.js'
+import PreferencesDialogWidget from './widgets/preferencesDialog.js'
 import { SidebarItemWidget } from './widgets/sidebarItem.js'
 import { Window } from './window.js'
 
@@ -68,13 +69,16 @@ export class Application extends Adw.Application {
   }
 
   private initActions() {
-    const quit_action = new Gio.SimpleAction({ name: 'quit' })
-    quit_action.connect('activate', () => {
-      this.quit()
-    })
+    const quitAction = new Gio.SimpleAction({ name: 'quit' })
+    quitAction.connect('activate', () => this.quit())
+    this.add_action(quitAction)
 
-    this.add_action(quit_action)
+    const preferencesAction = new Gio.SimpleAction({ name: 'preferences' })
+    preferencesAction.connect('activate', () => this.onPreferencesAction())
+    this.add_action(preferencesAction)
+
     this.set_accels_for_action('app.quit', ['<Control>q'])
+    this.set_accels_for_action('app.preferences', ['<Control>comma'])
   }
 
   private initAboutDialog() {
@@ -104,5 +108,10 @@ export class Application extends Adw.Application {
 
     createFolder(appFolderPath)
     createFolder(coversFolderPath)
+  }
+
+  private onPreferencesAction() {
+    const preferencesDialog = new PreferencesDialogWidget()
+    preferencesDialog.present(this.window)
   }
 }

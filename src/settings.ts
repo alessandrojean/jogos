@@ -1,6 +1,10 @@
 import Gio from 'gi://Gio'
 import GLib from 'gi://GLib'
 import GObject from 'gi://GObject'
+import { Currency, getCurrency } from './model/currency.js'
+
+type PreferenceKey = 'window-size' | 'window-position' | 'window-maximized'
+  | 'last-sidebar-item' | 'show-grid' | 'preferred-currency'
 
 export class Settings extends Gio.Settings {
   private keyTypes: Record<string, string>
@@ -18,11 +22,19 @@ export class Settings extends Gio.Settings {
     })
   }
 
-  get<T>(name: string): T {
-    return this.get_value(name).deepUnpack() as T
+  get<T>(key: PreferenceKey): T {
+    return this.get_value(key).deepUnpack() as T
   }
 
-  setValue<T>(name: string, value: T) {
-    this.set_value(name, GLib.Variant.new(this.keyTypes[name], value))
+  setValue<T>(key: PreferenceKey, value: T) {
+    this.set_value(key, GLib.Variant.new(this.keyTypes[key], value))
+  }
+
+  get preferredCurrency(): Currency {
+    return getCurrency(this.get('preferred-currency')) ?? getCurrency('USD')!
+  }
+
+  set preferredCurrency(value: Currency) {
+    this.setValue('preferred-currency', value.iso)
   }
 }

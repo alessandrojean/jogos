@@ -17,6 +17,7 @@ sources = files(
   'widgets/games.ts',
   'widgets/gameGridItem.ts',
   'widgets/gameTitleColumn.ts',
+  'widgets/preferencesDialog.ts',
   'widgets/sidebarItem.ts',
   'lib/fetch.ts',
   'utils/convertCover.ts',

@@ -9,6 +9,7 @@
     <file>ui/game-grid-item.ui</file>
     <file>ui/game-title-column.ui</file>
     <file>ui/games.ui</file>
+    <file>ui/preferences-dialog.ui</file>
     <file>ui/sidebar-item.ui</file>
     <file>ui/window.ui</file>
     <file alias="gtk/help-overlay.ui">ui/help-overlay.ui</file>
@@ -28,6 +29,7 @@
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-trash-2-symbolic.svg">icons/lucide-trash-2-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-folder-heart-symbolic.svg">icons/lucide-folder-heart-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-history-symbolic.svg">icons/lucide-history-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-settings-symbolic.svg">icons/lucide-settings-symbolic.svg</file>
 
     <file compressed="true" preprocess="xml-stripblanks" alias="classind-livre.svg">certifications/classind-livre.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="classind-10-anos.svg">certifications/classind-10-anos.svg</file>

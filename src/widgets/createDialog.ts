@@ -4,6 +4,7 @@ import GLib from 'gi://GLib'
 import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
+import { Application } from '../application.js'
 import { Certification, certifications, certificationSystemName, certificationSystems } from '../model/certification.js'
 import { currencies, Currency } from '../model/currency.js'
 import Game from '../model/game.js'
@@ -237,6 +238,9 @@ export class CreateDialogWidget extends Adw.Dialog {
 
     this._currency.model = currencyModel
     this._currency.expression = Gtk.PropertyExpression.new(Currency.$gtype, null, 'iso')
+
+    const preferredCurrency = Application.settings.preferredCurrency
+    this._currency.selected = currencies.indexOf(preferredCurrency)
   }
 
   private initDates() {

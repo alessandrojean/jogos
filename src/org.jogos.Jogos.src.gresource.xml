@@ -11,6 +11,7 @@
     <file>widgets/gameGridItem.js</file>
     <file>widgets/gameTitleColumn.js</file>
     <file>widgets/games.js</file>
+    <file>widgets/preferencesDialog.js</file>
     <file>widgets/sidebarItem.js</file>
     <file>lib/fetch.js</file>
     <file>utils/convertCover.js</file>
