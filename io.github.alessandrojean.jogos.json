@@ -1,5 +1,5 @@
 {
-  "id": "org.jogos.Jogos",
+  "id": "io.github.alessandrojean.jogos",
   "runtime": "org.gnome.Platform",
   "runtime-version": "master",
   "sdk": "org.gnome.Sdk",
@@ -13,7 +13,7 @@
   "build-options": {
     "append-path": "/usr/lib/sdk/node20/bin:/usr/lib/sdk/typescript/bin"
   },
-  "command": "org.jogos.Jogos",
+  "command": "io.github.alessandrojean.jogos",
   "finish-args": [
     "--share=ipc",
     "--share=network",

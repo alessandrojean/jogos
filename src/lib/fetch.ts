@@ -9,6 +9,9 @@ interface FetchOptions {
   body?: string | object
 }
 
+Gio._promisify(Soup.Session.prototype, 'send_async', 'send_finish')
+Gio._promisify(Gio.MemoryOutputStream.prototype, 'splice_async', 'splice_finish')
+
 export default async function fetch(options: FetchOptions) {
   const session = new Soup.Session()
   const method = options.method ?? 'GET'
@@ -39,14 +42,7 @@ export default async function fetch(options: FetchOptions) {
 
   print(`Fetching ${options.url}`)
 
-  const inputStream = await promiseTask(
-    session,
-    "send_async",
-    "send_finish",
-    message,
-    GLib.PRIORITY_DEFAULT,
-    null,
-  )
+  const inputStream = await session.send_async(message, GLib.PRIORITY_DEFAULT, null)
 
   const { statusCode, reasonPhrase } = message
   const ok = statusCode >= 200 && statusCode < 300
@@ -72,13 +68,9 @@ export default async function fetch(options: FetchOptions) {
     async gBytes() {
       const outputStream = Gio.MemoryOutputStream.new_resizable()
 
-      await promiseTask(
-        outputStream,
-        "splice_async",
-        "splice_finish",
+      await outputStream.splice_async(
         inputStream,
-        Gio.OutputStreamSpliceFlags.CLOSE_TARGET |
-          Gio.OutputStreamSpliceFlags.CLOSE_SOURCE,
+        Gio.OutputStreamSpliceFlags.CLOSE_TARGET | Gio.OutputStreamSpliceFlags.CLOSE_SOURCE,
         GLib.PRIORITY_DEFAULT,
         null,
       )
@@ -88,31 +80,4 @@ export default async function fetch(options: FetchOptions) {
     },
   }
 
-}
-
-type FunctionKeys<T extends object> = {
-  [K in keyof T]: T[K] extends (...args: any[]) => any ? K : never
-}[keyof T]
-
-function promiseTask<
-  T extends object,
-  M extends FunctionKeys<T>,
-  F extends FunctionKeys<T>
->(
-  object: T,
-  method: M,
-  finish: F,
-  ...args: T[M] extends (...args: infer P) => any ? P : never
-): Promise<T[F] extends (...args: any[]) => infer R ? R : never> {
-  return new Promise((resolve, reject) => {
-    // @ts-expect-error
-    object[method](...args, (self, asyncResult) => {
-      try {
-        // @ts-expect-error
-        resolve(object[finish](asyncResult));
-      } catch (err) {
-        reject(err);
-      }
-    });
-  });
 }

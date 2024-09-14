@@ -38,8 +38,8 @@ typescript = custom_target(
 )
 
 src_res = gnome.compile_resources(
-  'org.jogos.Jogos.src',
-  'org.jogos.Jogos.src.gresource.xml',
+  'io.github.alessandrojean.jogos.src',
+  'io.github.alessandrojean.jogos.src.gresource.xml',
   dependencies: typescript,
   source_dir: tsc_out,
   gresource_bundle: true,
@@ -54,11 +54,11 @@ bin_conf.set('PACKAGE_NAME', meson.project_name())
 bin_conf.set('prefix', get_option('prefix'))
 bin_conf.set('libdir', join_paths(get_option('prefix'), get_option('libdir')))
 bin_conf.set('datadir', join_paths(get_option('prefix'), get_option('datadir')))
-bin_conf.set('resource_path', '/org/jogos/Jogos')
+bin_conf.set('resource_path', '/io/github/alessandrojean/jogos')
 
 app_launcher = configure_file(
-  input: 'org.jogos.Jogos.in',
-  output: 'org.jogos.Jogos',
+  input: 'io.github.alessandrojean.jogos.in',
+  output: 'io.github.alessandrojean.jogos',
   configuration: bin_conf,
   install: true,
   install_dir: get_option('bindir')

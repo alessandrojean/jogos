@@ -57,7 +57,7 @@ export class CreateDialogWidget extends Adw.Dialog {
   static {
     GObject.registerClass({
       GTypeName: 'CreateDialogWidget',
-      Template: 'resource:///org/jogos/Jogos/ui/create-dialog.ui',
+      Template: 'resource:///io/github/alessandrojean/jogos/ui/create-dialog.ui',
       Properties: {
         defaultPlatform: GObject.ParamSpec.string(
           'default-platform',

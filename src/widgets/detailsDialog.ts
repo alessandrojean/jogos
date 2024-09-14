@@ -35,7 +35,7 @@ export class DetailsDialogWidget extends Adw.Dialog {
   static {
     GObject.registerClass({
       GTypeName: 'DetailsDialogWidget',
-      Template: 'resource:///org/jogos/Jogos/ui/details-dialog.ui',
+      Template: 'resource:///io/github/alessandrojean/jogos/ui/details-dialog.ui',
       Properties: {
         game: GObject.ParamSpec.object(
           'game',

@@ -1,6 +1,6 @@
-data/org.jogos.Jogos.desktop.in
-data/org.jogos.Jogos.appdata.xml.in
-data/org.jogos.Jogos.gschema.xml
+data/io.github.alessandrojean.jogos.desktop.in
+data/io.github.alessandrojean.jogos.appdata.xml.in
+data/io.github.alessandrojean.jogos.gschema.xml
 data/window.ui
 src/main.ts
 src/window.ts

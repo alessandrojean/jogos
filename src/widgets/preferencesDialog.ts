@@ -11,7 +11,7 @@ export default class PreferencesDialogWidget extends Adw.PreferencesDialog {
   static {
     GObject.registerClass({
       GTypeName: 'PreferencesDialogWidget',
-      Template: 'resource:///org/jogos/Jogos/ui/preferences-dialog.ui',
+      Template: 'resource:///io/github/alessandrojean/jogos/ui/preferences-dialog.ui',
       InternalChildren: ['preferredCurrency']
     }, this)
   }

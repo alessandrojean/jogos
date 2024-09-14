@@ -1,7 +1,7 @@
 [Desktop Entry]
-Name=jogos
-Exec=org.jogos.Jogos
-Icon=org.jogos.Jogos
+Name=Jogos
+Exec=io.github.alessandrojean.jogos
+Icon=io.github.alessandrojean.jogos
 Terminal=false
 Type=Application
 Categories=GTK;

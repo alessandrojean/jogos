@@ -65,7 +65,7 @@ export class GamesWidget extends Gtk.Stack {
   static {
     GObject.registerClass({
       GTypeName: 'GamesWidget',
-      Template: 'resource:///org/jogos/Jogos/ui/games.ui',
+      Template: 'resource:///io/github/alessandrojean/jogos/ui/games.ui',
       InternalChildren: [
         'items', 'noResultsFound', 'noGamesForPlatform', 'columnView',
         'titleColumn', 'platformColumn', 'developerColumn', 'yearColumn',

@@ -1,6 +1,6 @@
 desktop_file = i18n.merge_file(
-        input: 'org.jogos.Jogos.desktop.in',
-       output: 'org.jogos.Jogos.desktop',
+        input: 'io.github.alessandrojean.jogos.desktop.in',
+       output: 'io.github.alessandrojean.jogos.desktop',
          type: 'desktop',
        po_dir: '../po',
       install: true,
@@ -13,8 +13,8 @@ if desktop_utils.found()
 endif
 
 appstream_file = i18n.merge_file(
-        input: 'org.jogos.Jogos.metainfo.xml.in',
-       output: 'org.jogos.Jogos.metainfo.xml',
+        input: 'io.github.alessandrojean.jogos.metainfo.xml.in',
+       output: 'io.github.alessandrojean.jogos.metainfo.xml',
        po_dir: '../po',
       install: true,
   install_dir: join_paths(get_option('datadir'), 'metainfo')
@@ -25,7 +25,7 @@ if appstream_util.found()
   test('Validate appstream file', appstream_util, args: ['validate', '--nonet', appstream_file])
 endif
 
-gsettings_schema = 'org.jogos.Jogos.gschema.xml'
+gsettings_schema = 'io.github.alessandrojean.jogos.gschema.xml'
 
 local_schemas = configure_file(
   copy: true,
@@ -70,8 +70,8 @@ blueprints = custom_target('blueprints',
 )
 
 data_res = gnome.compile_resources(
-  'org.jogos.Jogos.data',
-  'org.jogos.Jogos.data.gresource.xml',
+  'io.github.alessandrojean.jogos.data',
+  'io.github.alessandrojean.jogos.data.gresource.xml',
   gresource_bundle: true,
   install: true,
   install_dir: pkgdatadir,

@@ -47,7 +47,7 @@ export class Window extends Adw.ApplicationWindow {
   static {
     GObject.registerClass({
       GTypeName: 'JogosWindow',
-      Template: 'resource:///org/jogos/Jogos/ui/window.ui',
+      Template: 'resource:///io/github/alessandrojean/jogos/ui/window.ui',
       InternalChildren: [
         'splitView', 'sidebarList', 'content', 'gamesWidget',
         'searchBar', 'searchEntry', 'viewAndSort', 'toastOverlay'

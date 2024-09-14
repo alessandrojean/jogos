@@ -12,7 +12,7 @@ export default class GameGridItemWidget extends Gtk.Box {
   static {
     GObject.registerClass({
       GTypeName: 'GameGridItemWidget',
-      Template: 'resource:///org/jogos/Jogos/ui/game-grid-item.ui',
+      Template: 'resource:///io/github/alessandrojean/jogos/ui/game-grid-item.ui',
       Properties: {
         title: GObject.ParamSpec.string(
           'title',

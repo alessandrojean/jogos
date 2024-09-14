@@ -20,7 +20,7 @@ export class SidebarItemWidget extends Gtk.ListBoxRow {
   static {
     GObject.registerClass({
       GTypeName: 'SidebarItemWidget',
-      Template: 'resource:///org/jogos/Jogos/ui/sidebar-item.ui',
+      Template: 'resource:///io/github/alessandrojean/jogos/ui/sidebar-item.ui',
       InternalChildren: ['itemIcon', 'itemLabel'],
       Properties: {
         id: GObject.ParamSpec.string(

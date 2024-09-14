@@ -12,7 +12,7 @@ export default class GameTitleColumnWidget extends Gtk.Box {
   static {
     GObject.registerClass({
       GTypeName: 'GameTitleColumnWidget',
-      Template: 'resource:///org/jogos/Jogos/ui/game-title-column.ui',
+      Template: 'resource:///io/github/alessandrojean/jogos/ui/game-title-column.ui',
       Properties: {
         title: GObject.ParamSpec.string(
           'title',

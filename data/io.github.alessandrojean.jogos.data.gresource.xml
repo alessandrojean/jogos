@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/jogos/Jogos">
+  <gresource prefix="/io/github/alessandrojean/jogos">
     <file>style.css</file>
     <file>style-hc.css</file>
     <file>ui/create-dialog.ui</file>
@@ -14,7 +14,7 @@
     <file>ui/window.ui</file>
     <file alias="gtk/help-overlay.ui">ui/help-overlay.ui</file>
   </gresource>
-  <gresource prefix="/org/jogos/Jogos/icons/scalable/actions/">
+  <gresource prefix="/io/github/alessandrojean/jogos/icons/scalable/actions/">
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-search-symbolic.svg">icons/lucide-search-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-gamepad-2-symbolic.svg">icons/lucide-gamepad-2-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="lucide-plus-symbolic.svg">icons/lucide-plus-symbolic.svg</file>

@@ -8,11 +8,11 @@ variables:
 
 flatpak:
   variables:
-    MANIFEST_PATH: "build-aux/flatpak/org.jogos.Jogos.json"
-    BUNDLE: "org.jogos.Jogos.flatpak"
+    MANIFEST_PATH: "build-aux/flatpak/io.github.alessandrojean.jogos.json"
+    BUNDLE: "io.github.alessandrojean.jogos.flatpak"
     FLATPAK_MODULE: "jogos"
     RUNTIME_REPO: "https://nightly.gnome.org/gnome-nightly.flatpakrepo"
-    APP_ID: "org.jogos.Jogos"
+    APP_ID: "io.github.alessandrojean.jogos"
   extends: .flatpak
   before_script:
     - flatpak --user install -y org.freedesktop.Sdk.Extension.node20//24.08beta org.freedesktop.Sdk.Extension.typescript//24.08beta

@@ -1,4 +1,4 @@
-application_id = 'org.jogos.Jogos'
+application_id = 'io.github.alessandrojean.jogos'
 
 scalable_dir = join_paths('hicolor', 'scalable', 'apps')
 install_data(

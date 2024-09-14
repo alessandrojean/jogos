@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="jogos">
-	<schema id="org.jogos.Jogos" path="/org/jogos/Jogos/">
+	<schema id="io.github.alessandrojean.jogos" path="/io/github/alessandrojean/jogos/">
     <key name="window-size" type="ai">
       <default>[]</default>
       <summary>Window size</summary>

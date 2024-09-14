@@ -26,7 +26,7 @@ export class Application extends Adw.Application {
 
   constructor() {
     super({
-      application_id: 'org.jogos.Jogos',
+      application_id: 'io.github.alessandrojean.jogos',
       flags: Gio.ApplicationFlags.DEFAULT_FLAGS,
     })
 
@@ -89,13 +89,20 @@ export class Application extends Adw.Application {
     show_about_action.connect('activate', () => {
       const aboutDialog = new Adw.AboutDialog({
         applicationName: _('Jogos'),
-        applicationIcon: 'org.jogos.Jogos',
+        applicationIcon: 'io.github.alessandrojean.jogos',
         developerName: 'Alessandro Jean',
         version: '0.1',
         developers: ['Alessandro Jean https://alessandrojean.github.io'],
         copyright: '© 2024 Alessandro Jean',
+        website: 'https://alessandrojean.github.io/jogos',
+        issueUrl: 'https://github.com/alessandrojean/jogos/issues/new/choose',
         licenseType: Gtk.License.MIT_X11,
       })
+
+      aboutDialog.add_credit_section('Icons', [
+        'Lucide https://lucide.dev',
+        'Simple Icons https://simpleicons.org'
+      ])
 
       aboutDialog.present(this.active_window)
     })

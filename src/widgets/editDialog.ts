@@ -54,7 +54,7 @@ export class EditDialogWidget extends Adw.Dialog {
   static {
     GObject.registerClass({
       GTypeName: 'EditDialogWidget',
-      Template: 'resource:///org/jogos/Jogos/ui/edit-dialog.ui',
+      Template: 'resource:///io/github/alessandrojean/jogos/ui/edit-dialog.ui',
       Properties: {
         game: GObject.ParamSpec.object(
           'game',

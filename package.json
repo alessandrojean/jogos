@@ -4,7 +4,7 @@
   "description": "Template for writing GNOME applications in TypeScript",
   "main": "src/main.ts",
   "repository": "https://github.com/alessandrojean/jogos",
-  "author": "Alessandro Jean <14254807+alessandrojean@users.noreply.github.com>",
+  "author": "Alessandro Jean",
   "license": "MIT",
   "dependencies": {
     "@girs/gda-6.0": "6.0.0-4.0.0-beta.15",
