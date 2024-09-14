@@ -293,6 +293,7 @@ export class Window extends Adw.ApplicationWindow {
 
     if (itemId === 'ALL_GAMES') {
       this._gamesWidget.selectPlatform(null)
+      this._gamesWidget.sortBy('title_asc')
       return
     }
 
@@ -307,6 +308,8 @@ export class Window extends Adw.ApplicationWindow {
     }
 
     if (itemId === 'RECENTS') {
+      this._gamesWidget.selectPlatform(null)
+      this._gamesWidget.sortBy('modification_date_desc')
       return
     }
 
