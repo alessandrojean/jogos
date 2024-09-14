@@ -69,6 +69,7 @@
     <file compressed="true" preprocess="xml-stripblanks" alias="snes.svg">platforms/snes.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="nes.svg">platforms/nes.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="atari.svg">platforms/atari.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="pc.svg">platforms/pc.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="windows.svg">platforms/windows.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="mac-os.svg">platforms/mac-os.svg</file>
   </gresource>
 </gresources>

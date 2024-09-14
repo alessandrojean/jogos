@@ -6,7 +6,7 @@ export type PlatformId = 'PLAYSTATION_4' | 'PLAYSTATION_5' | 'XBOX_SERIES'
   | 'XBOX_360' | 'DREAMCAST' | 'GAME_BOY_ADVANCE' | 'GAMECUBE' | 'PLAYSTATION_2'
   | 'XBOX' | 'GAME_BOY_COLOR' | 'NINTENDO_64' | 'PLAYSTATION' | 'SATURN'
   | 'GAME_BOY' | 'MEGA_DRIVE' | 'SUPER_NINTENDO' | 'MASTER_SYSTEM' | 'NES'
-  | 'ATARI_2600' | 'PC'
+  | 'ATARI_2600' | 'WINDOWS' | 'MAC_OS'
 
 export class Platform extends GObject.Object {
   id!: PlatformId
@@ -58,7 +58,8 @@ export class Platform extends GObject.Object {
 }
 
 export const platforms: Platform[] = [
-  new Platform({ id: 'PC', name: 'PC', iconName: 'pc', generation: -1 }),
+  new Platform({ id: 'MAC_OS', name: 'macOS', iconName: 'mac-os', generation: -1 }),
+  new Platform({ id: 'WINDOWS', name: 'Windows', iconName: 'windows', generation: -1 }),
 
   new Platform({ id: 'PLAYSTATION_5', name: 'PlayStation 5', iconName: 'playstation', generation: 9 }),
   new Platform({ id: 'XBOX_SERIES', name: 'Xbox Series', iconName: 'xbox', generation: 9 }),
