@@ -340,7 +340,13 @@ export class Window extends Adw.ApplicationWindow {
 
     createDialog.connect('game-created', (_self, game: Game) => {
       this._gamesWidget.search('')
-      this._gamesWidget.selectPlatform(game.platform)
+
+      if (game.wishlist) {
+        this._gamesWidget.showWishlist()
+      } else {
+        this._gamesWidget.selectPlatform(game.platform)
+      }
+
       this._gamesWidget.loadItems()
       this._gamesWidget.selectGame(game)
 
@@ -360,7 +366,13 @@ export class Window extends Adw.ApplicationWindow {
 
     editDialog.connect('game-updated', (_self, updatedGame) => {
       this._gamesWidget.search('')
-      this._gamesWidget.selectPlatform(updatedGame.platform)
+
+      if (game.wishlist) {
+        this._gamesWidget.showWishlist()
+      } else {
+        this._gamesWidget.selectPlatform(game.platform)
+      }
+
       this._gamesWidget.loadItems()
       this._gamesWidget.selectGame(updatedGame)
 
