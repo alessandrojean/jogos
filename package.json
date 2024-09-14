@@ -7,10 +7,20 @@
   "author": "Alessandro Jean",
   "license": "MIT",
   "dependencies": {
-    "@girs/gda-6.0": "6.0.0-4.0.0-beta.15",
-    "typescript": "^5.1.0"
+    "typescript": "5.6.2"
   },
   "devDependencies": {
+    "@girs/adw-1": "1.6.0-4.0.0-beta.15",
+    "@girs/gda-6.0": "6.0.0-4.0.0-beta.15",
+    "@girs/gdk-4.0": "4.0.0-4.0.0-beta.15",
+    "@girs/gio-2.0": "2.80.3-4.0.0-beta.15",
+    "@girs/girepository-3.0": "3.0.0-4.0.0-beta.15",
+    "@girs/gjs": "4.0.0-beta.15",
+    "@girs/glib-2.0": "2.80.3-4.0.0-beta.15",
+    "@girs/gobject-2.0": "2.80.3-4.0.0-beta.15",
+    "@girs/graphene-1.0": "1.0.0-4.0.0-beta.15",
+    "@girs/gtk-4.0": "4.14.5-4.0.0-beta.15",
+    "@girs/soup-3.0": "3.4.4-4.0.0-beta.15",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "eslint": "^8.42.0",

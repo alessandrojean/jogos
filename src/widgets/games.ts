@@ -1,5 +1,5 @@
 import Adw from 'gi://Adw'
-import Gdk from 'gi://Gdk?version=4.0'
+import Gdk from 'gi://Gdk'
 import Gio from 'gi://Gio'
 import GObject from 'gi://GObject'
 import Graphene from 'gi://Graphene'
@@ -291,7 +291,7 @@ export class GamesWidget extends Gtk.Stack {
     factoryModification.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
       const label = listItem.get_child() as Gtk.Label
       const modelItem = listItem.get_item<GameItem>()
-      label.label = modelItem.game.modifiedAtDateTime.format(_('%d/%m/%Y')) ?? _('Unknown')
+      label.label = modelItem.game.modifiedAtDateTime.format(_!('%d/%m/%Y')) ?? _!('Unknown')
     })
 
     const factoryFavorite = this._favoriteColumn.factory as Gtk.SignalListItemFactory
@@ -313,7 +313,7 @@ export class GamesWidget extends Gtk.Stack {
       button.connect('clicked', () => this.onFavoriteClicked(modelItem))
 
       button.iconName = modelItem.game.favorite ? 'lucide-star-solid-symbolic' : 'lucide-star-symbolic'
-      button.tooltipText = modelItem.game.favorite ? _('Unfavorite') : _('Favorite')
+      button.tooltipText = modelItem.game.favorite ? _!('Unfavorite') : _!('Favorite')
     })
 
     this._columnView.model = this.selectionModel
@@ -561,17 +561,19 @@ export class GamesWidget extends Gtk.Stack {
 
   private async onDeleteAction() {
     const dialog = new Adw.AlertDialog({
-      heading: _('Delete this game?'),
-      body: _('After the deletion, it can not be recovered.'),
+      heading: _!('Delete this game?'),
+      body: _!('After the deletion, it can not be recovered.'),
       close_response: 'cancel'
     })
 
-    dialog.add_response('cancel', _('Cancel'))
-    dialog.add_response('delete', _('Delete'))
+    dialog.add_response('cancel', _!('Cancel'))
+    dialog.add_response('delete', _!('Delete'))
     dialog.set_default_response('cancel')
     dialog.set_response_appearance('delete', Adw.ResponseAppearance.DESTRUCTIVE)
 
-    const response = await dialog.choose(this.root, null)
+    // TODO: Remove the Promise cast when ts-for-gir fixes this.
+    // https://github.com/gjsify/ts-for-gir/issues/171
+    const response = await (dialog.choose(this.root, null) as unknown as Promise<string>)
 
     if (response === 'delete') {
       const gameItem = this.selectionModel.get_selected_item<GameItem>()
@@ -620,6 +622,7 @@ class GameItem extends GObject.Object {
           'game',
           '',
           '',
+          // @ts-ignore
           GObject.ParamFlags.READWRITE,
           Game.$gtype,
         ),
@@ -627,6 +630,7 @@ class GameItem extends GObject.Object {
           'list-ui',
           '',
           '',
+          // @ts-ignore
           GObject.ParamFlags.READWRITE,
           Gtk.Widget.$gtype,
         ),
@@ -634,6 +638,7 @@ class GameItem extends GObject.Object {
           'grid-ui',
           '',
           '',
+          // @ts-ignore
           GObject.ParamFlags.READWRITE,
           Gtk.Widget.$gtype,
         )
@@ -642,7 +647,7 @@ class GameItem extends GObject.Object {
   }
 
   constructor(params: Partial<GameItem>) {
-    super(params)
+    super()
 
     this.game = params.game!
     this.listUi = params.listUi ?? null

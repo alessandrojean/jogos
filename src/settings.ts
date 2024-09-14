@@ -13,7 +13,7 @@ export class Settings extends Gio.Settings {
     GObject.registerClass(this)
   }
 
-  constructor(params: Partial<Gio.Settings.ConstructorProperties> = {}) {
+  constructor(params: Partial<Gio.Settings.ConstructorProps> = {}) {
     super(params)
 
     this.keyTypes = {}

@@ -1,5 +1,5 @@
-import Gio from 'gi://Gio'
 import GLib from 'gi://GLib'
+import Gio from 'gi://Gio'
 import { coversDirectory } from '../application.js'
 
 export default async function convertCover(coverFile: Gio.File, gameId: number) {

@@ -89,7 +89,7 @@ export class Application extends Adw.Application {
 
     show_about_action.connect('activate', () => {
       const aboutDialog = new Adw.AboutDialog({
-        applicationName: _('Jogos'),
+        applicationName: _!('Jogos'),
         applicationIcon: 'io.github.alessandrojean.jogos',
         developerName: 'Alessandro Jean',
         version: '0.1',

@@ -1,6 +1,6 @@
 import GObject from 'gi://GObject'
 
-export type GameConditionId = 'LOOSE' | 'CIB' | 'SEALED'
+export type GameConditionId = 'LOOSE' | 'CIB' | 'SEALED' | 'UNKNOWN'
 
 export class GameCondition extends GObject.Object {
   id!: GameConditionId
@@ -28,15 +28,16 @@ export class GameCondition extends GObject.Object {
   }
 
   constructor(params: Partial<GameCondition>) {
-    super(params)
+    super()
     Object.assign(this, params)
   }
 }
 
 export const gameConditions: GameCondition[] = [
-  new GameCondition({ id: 'CIB', name: _('CIB') }),
-  new GameCondition({ id: 'LOOSE', name: _('Loose') }),
-  new GameCondition({ id: 'SEALED', name: _('Sealed') }),
+  new GameCondition({ id: 'CIB', name: _!('CIB') }),
+  new GameCondition({ id: 'LOOSE', name: _!('Loose') }),
+  new GameCondition({ id: 'SEALED', name: _!('Sealed') }),
+  new GameCondition({ id: 'UNKNOWN', name: _!('Unknown') }),
 ]
 
 const gameConditionMap = Object.fromEntries(gameConditions.map(p => [p.id, p])) as Record<GameConditionId, GameCondition>
@@ -46,6 +47,6 @@ export function getGameCondition(id: GameConditionId) {
 }
 
 export function gameConditionName(id: GameConditionId): string {
-  return getGameCondition(id)?.name ?? _('Unknown')
+  return getGameCondition(id)?.name ?? _!('Unknown')
 }
 

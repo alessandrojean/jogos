@@ -52,7 +52,7 @@ export class Platform extends GObject.Object {
   }
 
   constructor(params: Partial<Platform>) {
-    super(params)
+    super()
     Object.assign(this, params)
   }
 }
@@ -105,6 +105,6 @@ export function getPlatform(id: PlatformId) {
 }
 
 export function platformName(id: PlatformId): string {
-  return getPlatform(id)?.name ?? _('Unknown')
+  return getPlatform(id)?.name ?? _!('Unknown')
 }
 

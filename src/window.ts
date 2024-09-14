@@ -31,10 +31,10 @@ export class Window extends Adw.ApplicationWindow {
   private changeSortAction!: Gio.SimpleAction
 
   private sidebarItems: SidebarItem[] = [
-    { id: 'ALL_GAMES', label: _('All games'), iconName: 'lucide-gamepad-2', section: 'top-pinned' },
-    { id: 'RECENTS', label: _('Recents'), iconName: 'lucide-history', section: 'top-pinned' },
-    { id: 'FAVORITES', label: _('Favorites'), iconName: 'lucide-star', section: 'top-pinned' },
-    { id: 'WISHLIST', label: _('Wishlist'), iconName: 'lucide-folder-heart', section: 'top-pinned' },
+    { id: 'ALL_GAMES', label: _!('All games'), iconName: 'lucide-gamepad-2', section: 'top-pinned' },
+    { id: 'RECENTS', label: _!('Recents'), iconName: 'lucide-history', section: 'top-pinned' },
+    { id: 'FAVORITES', label: _!('Favorites'), iconName: 'lucide-star', section: 'top-pinned' },
+    { id: 'WISHLIST', label: _!('Wishlist'), iconName: 'lucide-folder-heart', section: 'top-pinned' },
 
     ...platforms.map(platform => ({
       id: platform.id,
@@ -63,7 +63,7 @@ export class Window extends Adw.ApplicationWindow {
     )
   }
 
-  constructor(params?: Partial<Adw.ApplicationWindow.ConstructorProperties>) {
+  constructor(params?: Partial<Adw.ApplicationWindow.ConstructorProps>) {
     super(params)
 
     this.restoreWindowGeometry()
@@ -187,16 +187,16 @@ export class Window extends Adw.ApplicationWindow {
 
     // Building up here as Blueprint doesn't support targets yet.
     const items = [
-      { label: _('A–Z'), value: 'title_asc' },
-      { label: _('Z–A'), value: 'title_desc' },
-      { label: _('Developer A–Z'), value: 'developer_asc' },
-      { label: _('Developer Z–A'), value: 'developer_desc' },
-      { label: _('Platform A–Z'), value: 'platform_asc' },
-      { label: _('Platform Z–A'), value: 'platform_desc' },
-      { label: _('Last modification'), value: 'modification_desc' },
-      { label: _('First modification'), value: 'modification_asc' },
-      { label: _('Last release'), value: 'year_desc' },
-      { label: _('First release'), value: 'year_asc' },
+      { label: _!('A–Z'), value: 'title_asc' },
+      { label: _!('Z–A'), value: 'title_desc' },
+      { label: _!('Developer A–Z'), value: 'developer_asc' },
+      { label: _!('Developer Z–A'), value: 'developer_desc' },
+      { label: _!('Platform A–Z'), value: 'platform_asc' },
+      { label: _!('Platform Z–A'), value: 'platform_desc' },
+      { label: _!('Last modification'), value: 'modification_desc' },
+      { label: _!('First modification'), value: 'modification_asc' },
+      { label: _!('Last release'), value: 'year_desc' },
+      { label: _!('First release'), value: 'year_asc' },
     ]
 
     const viewOptionsMenu = new Gio.Menu()
@@ -209,7 +209,7 @@ export class Window extends Adw.ApplicationWindow {
       sortMenu.append_item(menuItem)
     }
 
-    viewOptionsMenu.append_section(_('Sort by'), sortMenu)
+    viewOptionsMenu.append_section(_!('Sort by'), sortMenu)
     this._viewAndSort.menuModel = viewOptionsMenu
   }
 
@@ -226,14 +226,14 @@ export class Window extends Adw.ApplicationWindow {
   private onShowList() {
     this._gamesWidget.showList()
     this._viewAndSort.iconName = 'lucide-grid-2x2-symbolic'
-    this._viewAndSort.tooltipText = _('View in grid')
+    this._viewAndSort.tooltipText = _!('View in grid')
     Application.settings.setValue('show-grid', false)
   }
 
   private onShowGrid() {
     this._gamesWidget.showGrid()
     this._viewAndSort.iconName = 'lucide-layout-list-symbolic'
-    this._viewAndSort.tooltipText = _('View in list')
+    this._viewAndSort.tooltipText = _!('View in list')
     Application.settings.setValue('show-grid', true)
   }
 
@@ -351,7 +351,7 @@ export class Window extends Adw.ApplicationWindow {
       this._gamesWidget.selectGame(game)
 
       const toast = new Adw.Toast({
-        title: _('"%s" was created').format(game.title),
+        title: _!('"%s" was created').format(game.title),
         timeout: 3,
       })
 
@@ -377,7 +377,7 @@ export class Window extends Adw.ApplicationWindow {
       this._gamesWidget.selectGame(updatedGame)
 
       const toast = new Adw.Toast({
-        title: _('"%s" was updated').format(game.title),
+        title: _!('"%s" was updated').format(game.title),
         timeout: 3,
       })
 
@@ -389,7 +389,7 @@ export class Window extends Adw.ApplicationWindow {
 
   private onGameDelete(game: Game) {
     const toast = new Adw.Toast({
-      title: _('"%s" was deleted').format(game.title),
+      title: _!('"%s" was deleted').format(game.title),
       timeout: 3,
     })
 
@@ -398,7 +398,7 @@ export class Window extends Adw.ApplicationWindow {
 
   private onGameFavorited(game: Game) {
     const toast = new Adw.Toast({
-      title: _('"%s" was added to the favorites').format(game.title),
+      title: _!('"%s" was added to the favorites').format(game.title),
       timeout: 3,
     })
 
@@ -407,7 +407,7 @@ export class Window extends Adw.ApplicationWindow {
 
   private onGameUnfavorited(game: Game) {
     const toast = new Adw.Toast({
-      title: _('"%s" was removed from favorites').format(game.title),
+      title: _!('"%s" was removed from favorites').format(game.title),
       timeout: 3,
     })
 

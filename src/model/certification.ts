@@ -51,7 +51,7 @@ export class Certification extends GObject.Object {
   }
 
   constructor(params: Partial<Certification>) {
-    super(params)
+    super()
     Object.assign(this, params)
   }
 }
@@ -94,7 +94,7 @@ export function getCertification(id: CertificationId) {
 }
 
 export function certificationName(id: CertificationId): string {
-  return getCertification(id)?.name ?? _('Unknown')
+  return getCertification(id)?.name ?? _!('Unknown')
 }
 
 const systemMap: Record<CertificationSystem, string> = {

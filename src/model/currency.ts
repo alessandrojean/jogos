@@ -34,17 +34,17 @@ export class Currency extends GObject.Object {
   }
 
   constructor(params: Partial<Currency>) {
-    super(params)
+    super()
     Object.assign(this, params)
   }
 }
 
 export const currencies: Currency[] = [
-  new Currency({ iso: 'BRL', name: _('Brazilian real'), symbol: 'R$' }),
-  new Currency({ iso: 'EUR', name: _('Euro'), symbol: '€' }),
-  new Currency({ iso: 'GBP', name: _('Pound sterling'), symbol: '£' }),
-  new Currency({ iso: 'JPY', name: _('Japanese yen'), symbol: '¥' }),
-  new Currency({ iso: 'USD', name: _('United States dollar'), symbol: '$' }),
+  new Currency({ iso: 'BRL', name: _!('Brazilian real'), symbol: 'R$' }),
+  new Currency({ iso: 'EUR', name: _!('Euro'), symbol: '€' }),
+  new Currency({ iso: 'GBP', name: _!('Pound sterling'), symbol: '£' }),
+  new Currency({ iso: 'JPY', name: _!('Japanese yen'), symbol: '¥' }),
+  new Currency({ iso: 'USD', name: _!('United States dollar'), symbol: '$' }),
 ]
 
 const currenciesMap = Object.fromEntries(currencies.map(p => [p.iso, p])) as Record<string, Currency>
@@ -54,6 +54,6 @@ export function getCurrency(iso: string): Currency | undefined {
 }
 
 export function currencyName(iso: string): string {
-  return getCurrency(iso)?.name ?? _('Unknown')
+  return getCurrency(iso)?.name ?? _!('Unknown')
 }
 

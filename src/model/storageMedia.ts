@@ -28,16 +28,16 @@ export class StorageMedia extends GObject.Object {
   }
 
   constructor(params: Partial<StorageMedia>) {
-    super(params)
+    super()
     Object.assign(this, params)
   }
 }
 
 export const storageMedias: StorageMedia[] = [
-  new StorageMedia({ id: 'BLURAY', name: _('Blu-ray') }),
-  new StorageMedia({ id: 'DVD', name: _('DVD') }),
-  new StorageMedia({ id: 'CD', name: _('CD') }),
-  new StorageMedia({ id: 'CARTRIDGE', name: _('Cartridge') }),
+  new StorageMedia({ id: 'BLURAY', name: _!('Blu-ray') }),
+  new StorageMedia({ id: 'DVD', name: _!('DVD') }),
+  new StorageMedia({ id: 'CD', name: _!('CD') }),
+  new StorageMedia({ id: 'CARTRIDGE', name: _!('Cartridge') }),
 ]
 
 const storageMediaMap = Object.fromEntries(storageMedias.map(p => [p.id, p])) as Record<StorageMediaId, StorageMedia>
@@ -47,6 +47,6 @@ export function getStorageMedia(id: StorageMediaId) {
 }
 
 export function storageMediaName(id: StorageMediaId): string {
-  return getStorageMedia(id)?.name ?? _('Unknown')
+  return getStorageMedia(id)?.name ?? _!('Unknown')
 }
 

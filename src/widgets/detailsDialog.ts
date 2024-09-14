@@ -41,6 +41,7 @@ export class DetailsDialogWidget extends Adw.Dialog {
           'game',
           '',
           '',
+          // @ts-ignore
           GObject.ParamFlags.READWRITE,
           Game.$gtype
         ),
@@ -67,30 +68,30 @@ export class DetailsDialogWidget extends Adw.Dialog {
     this._title.label = this.game.title
     this._platform.label = platformName(this.game.platform)
     this._year.label = this.game.releaseYear.toString()
-    this._barcode.subtitle = this.game.barcode?.length ? this.game.barcode : _('Not informed')
-    this._story.subtitle = this.game.story.length > 0 ? this.game.story : _('Not informed')
+    this._barcode.subtitle = this.game.barcode?.length ? this.game.barcode : _!('Not informed')
+    this._story.subtitle = this.game.story.length > 0 ? this.game.story : _!('Not informed')
     this._developer.subtitle = this.game.developer
     this._publisher.subtitle = this.game.publisher
-    this._creationDate.subtitle = this.game.createdAtDateTime.format(_('%d/%m/%Y %T')) ?? ''
-    this._modificationDate.subtitle = this.game.modifiedAtDateTime.format(_('%d/%m/%Y %T')) ?? ''
-    this._boughtDate.subtitle = this.game.boughtAtDateTime?.format(_('%d/%m/%Y')) ?? _('Unknown')
-    this._store.subtitle = this.game.store ?? _('Unknown')
+    this._creationDate.subtitle = this.game.createdAtDateTime.format(_!('%d/%m/%Y %T')) ?? ''
+    this._modificationDate.subtitle = this.game.modifiedAtDateTime.format(_!('%d/%m/%Y %T')) ?? ''
+    this._boughtDate.subtitle = this.game.boughtAtDateTime?.format(_!('%d/%m/%Y')) ?? _!('Unknown')
+    this._store.subtitle = this.game.store ?? _!('Unknown')
 
     const currency = getCurrency(this.game.paidPriceCurrency) ?? getCurrency('USD')!
     this._paidPrice.subtitle = `${currency.symbol} %.2f`.format(this.game.paidPriceAmount)
 
     const certification = getCertification(this.game.certification)
-    this._certification.subtitle = certification?.name ?? _('Unknown')
+    this._certification.subtitle = certification?.name ?? _!('Unknown')
 
     if (certification) {
       this._certificationImage.iconName = certification.iconName
     }
 
     const media = getStorageMedia(this.game.storageMedia)
-    this._storageMedia.subtitle = media?.name ?? _('Unknown')
+    this._storageMedia.subtitle = media?.name ?? _!('Unknown')
 
     const condition = getGameCondition(this.game.condition)
-    this._condition.subtitle = condition?.name ?? _('Unknown')
+    this._condition.subtitle = condition?.name ?? _!('Unknown')
 
     const cover = this.game.cover
     this._cover.file = cover

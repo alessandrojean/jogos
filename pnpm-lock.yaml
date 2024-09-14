@@ -8,19 +8,52 @@ importers:
 
   .:
     dependencies:
+      typescript:
+        specifier: ^5.6.2
+        version: 5.6.2
+    devDependencies:
+      '@girs/adw-1':
+        specifier: 1.6.0-4.0.0-beta.15
+        version: 1.6.0-4.0.0-beta.15
       '@girs/gda-6.0':
         specifier: 6.0.0-4.0.0-beta.15
         version: 6.0.0-4.0.0-beta.15
-      typescript:
-        specifier: ^5.1.0
-        version: 5.5.4
-    devDependencies:
+      '@girs/gdk-4.0':
+        specifier: 4.0.0-4.0.0-beta.15
+        version: 4.0.0-4.0.0-beta.15
+      '@girs/gio-2.0':
+        specifier: 2.80.3-4.0.0-beta.15
+        version: 2.80.3-4.0.0-beta.15
+      '@girs/girepository-3.0':
+        specifier: 3.0.0-4.0.0-beta.15
+        version: 3.0.0-4.0.0-beta.15
+      '@girs/gjs':
+        specifier: 4.0.0-beta.15
+        version: 4.0.0-beta.15
+      '@girs/glib-2.0':
+        specifier: 2.80.3-4.0.0-beta.15
+        version: 2.80.3-4.0.0-beta.15
+      '@girs/gobject-2.0':
+        specifier: 2.80.3-4.0.0-beta.15
+        version: 2.80.3-4.0.0-beta.15
+      '@girs/graphene-1.0':
+        specifier: 1.0.0-4.0.0-beta.15
+        version: 1.0.0-4.0.0-beta.15
+      '@girs/gtk-4.0':
+        specifier: 4.14.5-4.0.0-beta.15
+        version: 4.14.5-4.0.0-beta.15
+      '@girs/soup-3.0':
+        specifier: 3.4.4-4.0.0-beta.15
+        version: 3.4.4-4.0.0-beta.15
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.33.0
-        version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)(typescript@5.5.4)
+        version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.6.2))(eslint@8.57.0)(typescript@5.6.2)
       '@typescript-eslint/parser':
         specifier: ^5.33.0
-        version: 5.62.0(eslint@8.57.0)(typescript@5.5.4)
+        version: 5.62.0(eslint@8.57.0)(typescript@5.6.2)
+      dom:
+        specifier: link:@girs/gjs/dom
+        version: link:@girs/gjs/dom
       eslint:
         specifier: ^8.42.0
         version: 8.57.0
@@ -54,14 +87,29 @@ packages:
     resolution: {integrity: sha512-Ys+3g2TaW7gADOJzPt83SJtCDhMjndcDMFVQ/Tj9iA1BfJzFKD9mAUXT3OenpuPHbI6P/myECxRJrofUsDx/5g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
+  '@girs/adw-1@1.6.0-4.0.0-beta.15':
+    resolution: {integrity: sha512-sSxWJf5tapPi8bNYULZ1ouTcXCb4h/KSP/VBmImiwXS1DhSaXe8d5Wxgj6q8I9qMr++TCgu2YbPvPt2aSORH0w==}
+
   '@girs/cairo-1.0@1.0.0-4.0.0-beta.15':
     resolution: {integrity: sha512-5AAKPp4REjlvE0YMgZrs7rJudBKoM/jzbUyym3amnhkb1Th2L/S/iANX7X0/dYhtVoajZlo7edDHzUXxSJNe/Q==}
+
+  '@girs/freetype2-2.0@2.0.0-4.0.0-beta.15':
+    resolution: {integrity: sha512-kLD/jhCdgrkLzHXNGJoeMwkUYDv7IvPtmIrYQdpLSMD8OUDQmMbrJGO+/hjm+2o9qvggakfzt7fXrmuY4dOi7Q==}
 
   '@girs/gda-6.0@6.0.0-4.0.0-beta.15':
     resolution: {integrity: sha512-2OXdyTcAgfu3QwyS/fNZYlWbXJSpVdEVnuCdjB+7iGGaC7GFdtKfK82MCcVeQN55qZVDWAF4VSvv6Fgsvki5ig==}
 
+  '@girs/gdk-4.0@4.0.0-4.0.0-beta.15':
+    resolution: {integrity: sha512-myaDL9rEluW0Z9kI56YSOrZsMoAekbGDtTAMBAEXNaLOka0DNHBX8/TO89ytY6PTxIospuEqutsCK67xgUtdag==}
+
+  '@girs/gdkpixbuf-2.0@2.0.0-4.0.0-beta.15':
+    resolution: {integrity: sha512-DsS28D2R2t5+odZ3eMCRCSWNI+VWWyQS/YlzqG9nmMLjcAMrFHVlnursuXoMrJN4OlQOPwcMkrcvsBLC7ynaFg==}
+
   '@girs/gio-2.0@2.80.3-4.0.0-beta.15':
     resolution: {integrity: sha512-KxfB+pkmXeFzA/5MBCy+U2/lOLDrA4ct/oVf9mt3iwzJ+xthUNQq/GyN6krIzM+mWwD/itTDUa+f2nEvRHskrg==}
+
+  '@girs/girepository-3.0@3.0.0-4.0.0-beta.15':
+    resolution: {integrity: sha512-QGFaOgI8DTgJd30a8BORtIEFeNZfmqGdxWWcvimYJI/6skJZ9f8DceTaR862Mr6ymRV16DgTWBO7hBZPRn6gRg==}
 
   '@girs/gjs@4.0.0-beta.15':
     resolution: {integrity: sha512-Oa95oCD8PV0AVbOgVSon3qQ2v0kFuVgLz2t6OoJLiHW5JspXx4Juc8c+11rEZ7O/0RVi3/DqYmM0OUCBEe1RSg==}
@@ -69,11 +117,35 @@ packages:
   '@girs/glib-2.0@2.80.3-4.0.0-beta.15':
     resolution: {integrity: sha512-v9UJ83i+zFnicPsjYhw54Q55DVQ6oqfmef4EKXvsfjKYZF7WiaUWVp/dGAIUzanR0FGbdme6myZRJvYZp9EHcA==}
 
+  '@girs/gmodule-2.0@2.0.0-4.0.0-beta.15':
+    resolution: {integrity: sha512-5N66WuYnZByREjgNHRE6Y/5T+j++kFLMd+IqNELgd38tEfsZv9UWomPjpufTG73FapPYwL1pY1eeXX5bEKl39g==}
+
   '@girs/gobject-2.0@2.80.3-4.0.0-beta.15':
     resolution: {integrity: sha512-/t1B/aaEMEa/MCIeBc69RQBI+b0kdUyY27FWIPNoG8QOXB4DNe07O9N3p1w7+QDmqw8dkLJMFexfFwdQ+5LC9w==}
 
+  '@girs/graphene-1.0@1.0.0-4.0.0-beta.15':
+    resolution: {integrity: sha512-XAwy/C0/8HyDUtCSlO2aSeCqj3uHgF+OwSvZ2UGgpNtEYqJjKujL785u2MQYbrseXlx4/ezxZDJn+Mp6QudRxg==}
+
+  '@girs/gsk-4.0@4.0.0-4.0.0-beta.15':
+    resolution: {integrity: sha512-STXgTgVUzjnHd98lHLqe2gNeVkTI1Yrofzl0mzTZEw22t81uY19V3pXk7cEu95XQZAxFv3cabR9TbIP3y6MR3w==}
+
+  '@girs/gtk-4.0@4.14.5-4.0.0-beta.15':
+    resolution: {integrity: sha512-V0UBv3PuBTipBn/JvU6lFsgS5cvR5LhWqC/DIYWtlYHaz6a73Z9fJPdl1CBW6DAKLfBuhf3EGQsHkv2os2yrNw==}
+
+  '@girs/harfbuzz-0.0@8.5.0-4.0.0-beta.15':
+    resolution: {integrity: sha512-GUVTmfWgNbc9EsoE9G8NuYBCLiIfj0BD07WfDKm2/vSJ7ZYEBNLnmva2pBj7JGqp565euEaTFf4aaGJAD5IN/g==}
+
   '@girs/libxml2-2.0@2.0.0-4.0.0-beta.15':
     resolution: {integrity: sha512-7utH24wNZriZ2qQ9UuBSYfFw1l+yCpCrnTSZOJUjXQz5bEU7BGbzNPe82eQG4GTufYp4kCgZwM+OeATHOtJuCQ==}
+
+  '@girs/pango-1.0@1.54.0-4.0.0-beta.15':
+    resolution: {integrity: sha512-kFPK1K6j9uanpf2A+6M/5zFvikqvsoybDTD9hK0sn2vhYeD35dDVvUaq3EhA8wLEMdJF6EERxdOJMC0diqBqOQ==}
+
+  '@girs/pangocairo-1.0@1.0.0-4.0.0-beta.15':
+    resolution: {integrity: sha512-mdtGHyaSdbY9m4yFpANDUkDNPDLeYyEIeztGXeaRGRhGlMD4OPTVzhKvI/kdZBlQFffK4+/07gW+TzFmRFSIxA==}
+
+  '@girs/soup-3.0@3.4.4-4.0.0-beta.15':
+    resolution: {integrity: sha512-ZpRcjgcJv9VE5PfBZ2zzO5IzRzE6qqMWE34Ui5/AUZ1A4Q19u4STXFk5P7KL/t2TfUPQUSkbXCdogAHAi1e/5A==}
 
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -590,8 +662,8 @@ packages:
     resolution: {integrity: sha512-Ne+eE4r0/iWnpAxD852z3A+N0Bt5RN//NjJwRd2VFHEmrywxf5vsZlh4R6lixl6B+wz/8d+maTSAkN1FIkI3LQ==}
     engines: {node: '>=10'}
 
-  typescript@5.5.4:
-    resolution: {integrity: sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==}
+  typescript@5.6.2:
+    resolution: {integrity: sha512-NW8ByodCSNCwZeghjN3o+JX5OFH0Ojg6sadjEKY4huZ52TqbJTJnDo5+Tw98lSy63NZvi4n+ez5m2u5d4PkZyw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -639,10 +711,33 @@ snapshots:
 
   '@eslint/js@8.57.0': {}
 
+  '@girs/adw-1@1.6.0-4.0.0-beta.15':
+    dependencies:
+      '@girs/cairo-1.0': 1.0.0-4.0.0-beta.15
+      '@girs/freetype2-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gdk-4.0': 4.0.0-4.0.0-beta.15
+      '@girs/gdkpixbuf-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gio-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gmodule-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/graphene-1.0': 1.0.0-4.0.0-beta.15
+      '@girs/gsk-4.0': 4.0.0-4.0.0-beta.15
+      '@girs/gtk-4.0': 4.14.5-4.0.0-beta.15
+      '@girs/harfbuzz-0.0': 8.5.0-4.0.0-beta.15
+      '@girs/pango-1.0': 1.54.0-4.0.0-beta.15
+      '@girs/pangocairo-1.0': 1.0.0-4.0.0-beta.15
+
   '@girs/cairo-1.0@1.0.0-4.0.0-beta.15':
     dependencies:
       '@girs/gjs': 4.0.0-beta.15
       '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+
+  '@girs/freetype2-2.0@2.0.0-4.0.0-beta.15':
+    dependencies:
+      '@girs/gjs': 4.0.0-beta.15
       '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
 
   '@girs/gda-6.0@6.0.0-4.0.0-beta.15':
@@ -653,10 +748,40 @@ snapshots:
       '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
       '@girs/libxml2-2.0': 2.0.0-4.0.0-beta.15
 
+  '@girs/gdk-4.0@4.0.0-4.0.0-beta.15':
+    dependencies:
+      '@girs/cairo-1.0': 1.0.0-4.0.0-beta.15
+      '@girs/freetype2-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gdkpixbuf-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gio-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gmodule-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/harfbuzz-0.0': 8.5.0-4.0.0-beta.15
+      '@girs/pango-1.0': 1.54.0-4.0.0-beta.15
+      '@girs/pangocairo-1.0': 1.0.0-4.0.0-beta.15
+
+  '@girs/gdkpixbuf-2.0@2.0.0-4.0.0-beta.15':
+    dependencies:
+      '@girs/gio-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gmodule-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+
   '@girs/gio-2.0@2.80.3-4.0.0-beta.15':
     dependencies:
       '@girs/gjs': 4.0.0-beta.15
       '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+
+  '@girs/girepository-3.0@3.0.0-4.0.0-beta.15':
+    dependencies:
+      '@girs/gio-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gmodule-2.0': 2.0.0-4.0.0-beta.15
       '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
 
   '@girs/gjs@4.0.0-beta.15':
@@ -671,14 +796,94 @@ snapshots:
       '@girs/gjs': 4.0.0-beta.15
       '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
 
+  '@girs/gmodule-2.0@2.0.0-4.0.0-beta.15':
+    dependencies:
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+
   '@girs/gobject-2.0@2.80.3-4.0.0-beta.15':
     dependencies:
       '@girs/gjs': 4.0.0-beta.15
       '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
 
+  '@girs/graphene-1.0@1.0.0-4.0.0-beta.15':
+    dependencies:
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+
+  '@girs/gsk-4.0@4.0.0-4.0.0-beta.15':
+    dependencies:
+      '@girs/cairo-1.0': 1.0.0-4.0.0-beta.15
+      '@girs/freetype2-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gdk-4.0': 4.0.0-4.0.0-beta.15
+      '@girs/gdkpixbuf-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gio-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gmodule-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/graphene-1.0': 1.0.0-4.0.0-beta.15
+      '@girs/harfbuzz-0.0': 8.5.0-4.0.0-beta.15
+      '@girs/pango-1.0': 1.54.0-4.0.0-beta.15
+      '@girs/pangocairo-1.0': 1.0.0-4.0.0-beta.15
+
+  '@girs/gtk-4.0@4.14.5-4.0.0-beta.15':
+    dependencies:
+      '@girs/cairo-1.0': 1.0.0-4.0.0-beta.15
+      '@girs/freetype2-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gdk-4.0': 4.0.0-4.0.0-beta.15
+      '@girs/gdkpixbuf-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gio-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gmodule-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/graphene-1.0': 1.0.0-4.0.0-beta.15
+      '@girs/gsk-4.0': 4.0.0-4.0.0-beta.15
+      '@girs/harfbuzz-0.0': 8.5.0-4.0.0-beta.15
+      '@girs/pango-1.0': 1.54.0-4.0.0-beta.15
+      '@girs/pangocairo-1.0': 1.0.0-4.0.0-beta.15
+
+  '@girs/harfbuzz-0.0@8.5.0-4.0.0-beta.15':
+    dependencies:
+      '@girs/freetype2-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+
   '@girs/libxml2-2.0@2.0.0-4.0.0-beta.15':
     dependencies:
       '@girs/gjs': 4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+
+  '@girs/pango-1.0@1.54.0-4.0.0-beta.15':
+    dependencies:
+      '@girs/cairo-1.0': 1.0.0-4.0.0-beta.15
+      '@girs/freetype2-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gio-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/harfbuzz-0.0': 8.5.0-4.0.0-beta.15
+
+  '@girs/pangocairo-1.0@1.0.0-4.0.0-beta.15':
+    dependencies:
+      '@girs/cairo-1.0': 1.0.0-4.0.0-beta.15
+      '@girs/freetype2-2.0': 2.0.0-4.0.0-beta.15
+      '@girs/gio-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/harfbuzz-0.0': 8.5.0-4.0.0-beta.15
+      '@girs/pango-1.0': 1.54.0-4.0.0-beta.15
+
+  '@girs/soup-3.0@3.4.4-4.0.0-beta.15':
+    dependencies:
+      '@girs/gio-2.0': 2.80.3-4.0.0-beta.15
+      '@girs/gjs': 4.0.0-beta.15
+      '@girs/glib-2.0': 2.80.3-4.0.0-beta.15
       '@girs/gobject-2.0': 2.80.3-4.0.0-beta.15
 
   '@humanwhocodes/config-array@0.11.14':
@@ -709,34 +914,34 @@ snapshots:
 
   '@types/semver@7.5.8': {}
 
-  '@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)(typescript@5.5.4)':
+  '@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.6.2))(eslint@8.57.0)(typescript@5.6.2)':
     dependencies:
       '@eslint-community/regexpp': 4.11.0
-      '@typescript-eslint/parser': 5.62.0(eslint@8.57.0)(typescript@5.5.4)
+      '@typescript-eslint/parser': 5.62.0(eslint@8.57.0)(typescript@5.6.2)
       '@typescript-eslint/scope-manager': 5.62.0
-      '@typescript-eslint/type-utils': 5.62.0(eslint@8.57.0)(typescript@5.5.4)
-      '@typescript-eslint/utils': 5.62.0(eslint@8.57.0)(typescript@5.5.4)
+      '@typescript-eslint/type-utils': 5.62.0(eslint@8.57.0)(typescript@5.6.2)
+      '@typescript-eslint/utils': 5.62.0(eslint@8.57.0)(typescript@5.6.2)
       debug: 4.3.7
       eslint: 8.57.0
       graphemer: 1.4.0
       ignore: 5.3.2
       natural-compare-lite: 1.4.0
       semver: 7.6.3
-      tsutils: 3.21.0(typescript@5.5.4)
+      tsutils: 3.21.0(typescript@5.6.2)
     optionalDependencies:
-      typescript: 5.5.4
+      typescript: 5.6.2
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.5.4)':
+  '@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.6.2)':
     dependencies:
       '@typescript-eslint/scope-manager': 5.62.0
       '@typescript-eslint/types': 5.62.0
-      '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.5.4)
+      '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.6.2)
       debug: 4.3.7
       eslint: 8.57.0
     optionalDependencies:
-      typescript: 5.5.4
+      typescript: 5.6.2
     transitivePeerDependencies:
       - supports-color
 
@@ -745,21 +950,21 @@ snapshots:
       '@typescript-eslint/types': 5.62.0
       '@typescript-eslint/visitor-keys': 5.62.0
 
-  '@typescript-eslint/type-utils@5.62.0(eslint@8.57.0)(typescript@5.5.4)':
+  '@typescript-eslint/type-utils@5.62.0(eslint@8.57.0)(typescript@5.6.2)':
     dependencies:
-      '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.5.4)
-      '@typescript-eslint/utils': 5.62.0(eslint@8.57.0)(typescript@5.5.4)
+      '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.6.2)
+      '@typescript-eslint/utils': 5.62.0(eslint@8.57.0)(typescript@5.6.2)
       debug: 4.3.7
       eslint: 8.57.0
-      tsutils: 3.21.0(typescript@5.5.4)
+      tsutils: 3.21.0(typescript@5.6.2)
     optionalDependencies:
-      typescript: 5.5.4
+      typescript: 5.6.2
     transitivePeerDependencies:
       - supports-color
 
   '@typescript-eslint/types@5.62.0': {}
 
-  '@typescript-eslint/typescript-estree@5.62.0(typescript@5.5.4)':
+  '@typescript-eslint/typescript-estree@5.62.0(typescript@5.6.2)':
     dependencies:
       '@typescript-eslint/types': 5.62.0
       '@typescript-eslint/visitor-keys': 5.62.0
@@ -767,20 +972,20 @@ snapshots:
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.6.3
-      tsutils: 3.21.0(typescript@5.5.4)
+      tsutils: 3.21.0(typescript@5.6.2)
     optionalDependencies:
-      typescript: 5.5.4
+      typescript: 5.6.2
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/utils@5.62.0(eslint@8.57.0)(typescript@5.5.4)':
+  '@typescript-eslint/utils@5.62.0(eslint@8.57.0)(typescript@5.6.2)':
     dependencies:
       '@eslint-community/eslint-utils': 4.4.0(eslint@8.57.0)
       '@types/json-schema': 7.0.15
       '@types/semver': 7.5.8
       '@typescript-eslint/scope-manager': 5.62.0
       '@typescript-eslint/types': 5.62.0
-      '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.5.4)
+      '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.6.2)
       eslint: 8.57.0
       eslint-scope: 5.1.1
       semver: 7.6.3
@@ -1187,10 +1392,10 @@ snapshots:
 
   tslib@1.14.1: {}
 
-  tsutils@3.21.0(typescript@5.5.4):
+  tsutils@3.21.0(typescript@5.6.2):
     dependencies:
       tslib: 1.14.1
-      typescript: 5.5.4
+      typescript: 5.6.2
 
   type-check@0.4.0:
     dependencies:
@@ -1198,7 +1403,7 @@ snapshots:
 
   type-fest@0.20.2: {}
 
-  typescript@5.5.4: {}
+  typescript@5.6.2: {}
 
   uri-js@4.4.1:
     dependencies:

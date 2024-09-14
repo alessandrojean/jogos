@@ -1,4 +1,4 @@
-import Gda from 'gi://Gda?version=6.0'
+import Gda from 'gi://Gda'
 import GLib from 'gi://GLib'
 import { appDirectory } from '../application.js'
 import Game from '../model/game.js'

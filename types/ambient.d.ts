@@ -1,27 +1,26 @@
-declare function _(id: string): string;
-declare function print(args: string): void;
-declare function log(obj: object, others?: object[]): void;
-declare function log(msg: string, subsitutions?: any[]): void;
+// declare function _(id: string): string;
+// declare function print(args: string): void;
+// declare function log(obj: object, others?: object[]): void;
+// declare function log(msg: string, subsitutions?: any[]): void;
 
-declare const pkg: {
-  version: string;
-  name: string;
-};
+// declare const pkg: {
+//   version: string;
+//   name: string;
+// };
 
-declare module console {
-  export function error(obj: object, others?: object[]): void;
-  export function error(msg: string, subsitutions?: any[]): void;
-}
+// declare module console {
+//   export function error(obj: object, others?: object[]): void;
+//   export function error(msg: string, subsitutions?: any[]): void;
+// }
+
+// declare interface String {
+//   format(...replacements: string[]): string;
+//   format(...replacements: number[]): string;
+// }
+// declare interface Number {
+//   toFixed(digits: number): number;
+// }
 
 declare interface String {
-  format(...replacements: string[]): string;
-  format(...replacements: number[]): string;
-}
-declare interface Number {
-  toFixed(digits: number): number;
-}
-
-declare module 'gi://Gda?version=6.0' {
-  import Gda60 from '@girs/gda-6.0'
-  export default Gda60;
+  format(...replacements: any[]): string
 }

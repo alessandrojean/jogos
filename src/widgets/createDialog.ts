@@ -248,11 +248,11 @@ export class CreateDialogWidget extends Adw.Dialog {
     this._releaseYear.value = now.get_year()
     this._releaseYear.adjustment.upper = now.get_year()
 
-    this._boughtDateLabel.label = now.format(_('%d/%m/%Y')) ?? ''
+    this._boughtDateLabel.label = now.format(_!('%d/%m/%Y')) ?? ''
     this._boughtDate.select_day(now)
 
     this._boughtDate.connect('day-selected', (self) => {
-      this._boughtDateLabel.label = self.get_date().format(_('%d/%m/%Y')) ?? ''
+      this._boughtDateLabel.label = self.get_date().format(_!('%d/%m/%Y')) ?? ''
     })
   }
 
@@ -304,13 +304,15 @@ export class CreateDialogWidget extends Adw.Dialog {
     filter.add_mime_type('image/webp')
 
     const fileDialog = new Gtk.FileDialog({
-      title: _('Select a cover'),
+      title: _!('Select a cover'),
       defaultFilter: filter,
       modal: true,
     })
 
     try {
-      const image = await fileDialog.open(this.window, null)
+      // TODO: Remove the Promise cast when ts-for-gir fixes this.
+      // https://github.com/gjsify/ts-for-gir/issues/171
+      const image = await (fileDialog.open(this.window, null) as unknown as Promise<Gio.File | null>)
 
       if (image) {
         this.onCoverOpen(image)
