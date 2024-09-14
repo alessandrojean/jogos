@@ -22,6 +22,7 @@ sources = files(
   'lib/fetch.ts',
   'utils/convertCover.ts',
   'utils/createFolder.ts',
+  'utils/debugInfo.ts',
   'utils/validators.ts',
   'repositories/games.ts',
 )

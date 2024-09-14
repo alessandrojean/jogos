@@ -7,6 +7,7 @@ import Gtk from 'gi://Gtk?version=4.0'
 import GamesRepository from './repositories/games.js'
 import { Settings } from './settings.js'
 import { createFolder } from './utils/createFolder.js'
+import { debugInfo } from './utils/debugInfo.js'
 import { GamesWidget } from './widgets/games.js'
 import PreferencesDialogWidget from './widgets/preferencesDialog.js'
 import { SidebarItemWidget } from './widgets/sidebarItem.js'
@@ -97,6 +98,7 @@ export class Application extends Adw.Application {
         website: 'https://alessandrojean.github.io/jogos',
         issueUrl: 'https://github.com/alessandrojean/jogos/issues/new/choose',
         licenseType: Gtk.License.MIT_X11,
+        debugInfo: debugInfo(appDirectory),
       })
 
       aboutDialog.add_credit_section('Icons', [
