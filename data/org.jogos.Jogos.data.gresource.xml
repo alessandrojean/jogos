@@ -53,22 +53,22 @@
 
     <file compressed="true" preprocess="xml-stripblanks" alias="document-edit-symbolic.svg">icons/lucide-pencil-symbolic.svg</file>
 
-    <file compressed="true" preprocess="xml-stripblanks" alias="playstation-symbolic.svg">icons/playstation-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-switch-symbolic.svg">icons/nintendo-switch-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="xbox-symbolic.svg">icons/xbox-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="wii-u-symbolic.svg">icons/wii-u-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="wii-symbolic.svg">icons/wii-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="gamecube-symbolic.svg">icons/gamecube-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="dreamcast-symbolic.svg">icons/dreamcast-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-3ds-symbolic.svg">icons/nintendo-3ds-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-ds-symbolic.svg">icons/nintendo-ds-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="sega-saturn-symbolic.svg">icons/sega-saturn-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="sega-symbolic.svg">icons/sega-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-64-symbolic.svg">icons/nintendo-64-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-game-boy-symbolic.svg">icons/nintendo-game-boy-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="snes-symbolic.svg">icons/snes-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nes-symbolic.svg">icons/nes-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="atari-symbolic.svg">icons/atari-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="pc-symbolic.svg">icons/pc-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="playstation.svg">platforms/playstation.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-switch.svg">platforms/nintendo-switch.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="xbox.svg">platforms/xbox.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="wii-u.svg">platforms/wii-u.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="wii.svg">platforms/wii.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="gamecube.svg">platforms/gamecube.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="dreamcast.svg">platforms/dreamcast.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-3ds.svg">platforms/nintendo-3ds.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-ds.svg">platforms/nintendo-ds.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="sega-saturn.svg">platforms/sega-saturn.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="sega.svg">platforms/sega.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-64.svg">platforms/nintendo-64.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-game-boy.svg">platforms/nintendo-game-boy.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="snes.svg">platforms/snes.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nes.svg">platforms/nes.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="atari.svg">platforms/atari.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="pc.svg">platforms/pc.svg</file>
   </gresource>
 </gresources>
