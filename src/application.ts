@@ -12,6 +12,9 @@ import PreferencesDialogWidget from './widgets/preferencesDialog.js'
 import { SidebarItemWidget } from './widgets/sidebarItem.js'
 import { Window } from './window.js'
 
+export const appDirectory = GLib.build_filenamev([GLib.get_user_data_dir(), 'jogos'])
+export const coversDirectory = GLib.build_filenamev([appDirectory, 'covers'])
+
 export class Application extends Adw.Application {
   private window?: Window
 
@@ -27,6 +30,7 @@ export class Application extends Adw.Application {
       flags: Gio.ApplicationFlags.DEFAULT_FLAGS,
     })
 
+    this.initDataFolders()
     this.initActions()
     this.initAboutDialog()
 
@@ -43,8 +47,6 @@ export class Application extends Adw.Application {
 
   public vfunc_startup(): void {
     super.vfunc_startup()
-
-    this.initDataFolders()
 
     GObject.type_ensure(GamesWidget.$gtype)
     GObject.type_ensure(SidebarItemWidget.$gtype)
@@ -102,12 +104,8 @@ export class Application extends Adw.Application {
   }
 
   private initDataFolders() {
-    const homeDir = GLib.get_home_dir()
-    const appFolderPath = GLib.build_filenamev([homeDir, '.jogos'])
-    const coversFolderPath = GLib.build_filenamev([appFolderPath, 'covers'])
-
-    createFolder(appFolderPath)
-    createFolder(coversFolderPath)
+    createFolder(appDirectory)
+    createFolder(coversDirectory)
   }
 
   private onPreferencesAction() {

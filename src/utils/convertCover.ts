@@ -1,9 +1,10 @@
 import Gio from 'gi://Gio'
 import GLib from 'gi://GLib'
+import { coversDirectory } from '../application.js'
 
 export default async function convertCover(coverFile: Gio.File, gameId: number) {
   try {
-    const finalCoverPath = GLib.build_filenamev([GLib.get_home_dir(), '.jogos', 'covers', `${gameId}.jpg`])
+    const finalCoverPath = GLib.build_filenamev([coversDirectory, `${gameId}.jpg`])
     const coverPath = coverFile.get_path()
 
     if (!coverPath) {

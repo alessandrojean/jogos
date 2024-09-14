@@ -3,6 +3,7 @@ import Gio from 'gi://Gio'
 import GLib from 'gi://GLib'
 import GObject from 'gi://GObject'
 
+import { coversDirectory } from '../application.js'
 import { CertificationId } from './certification.js'
 import { GameConditionId } from './gameCondition.js'
 import { PlatformId } from './platform.js'
@@ -216,9 +217,7 @@ export default class Game extends GObject.Object {
   }
 
   get cover(): Gio.File {
-    const fileUri = GLib.build_filenamev([
-      GLib.get_home_dir(), '.jogos', 'covers', `${this.id}.jpg`
-    ])
+    const fileUri = GLib.build_filenamev([coversDirectory, `${this.id}.jpg`])
 
     return Gio.File.new_for_path(fileUri)
   }

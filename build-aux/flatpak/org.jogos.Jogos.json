@@ -20,7 +20,7 @@
     "--device=dri",
     "--socket=fallback-x11",
     "--socket=wayland",
-    "--filesystem=home",
+    "--filesystem=xdg-data",
     "--env=GJS_DISABLE_JIT=1",
     "--env=GSK_RENDERER=gl"
   ],

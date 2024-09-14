@@ -1,5 +1,6 @@
 import Gda from 'gi://Gda?version=6.0'
 import GLib from 'gi://GLib'
+import { appDirectory } from '../application.js'
 import Game from '../model/game.js'
 
 export default class GamesRepository {
@@ -17,11 +18,9 @@ export default class GamesRepository {
   }
 
   connect() {
-    const databasePath = GLib.build_filenamev([GLib.get_home_dir(), '.jogos'])
-
     this.connection = new Gda.Connection({
       provider: Gda.Config.get_provider('SQLite'),
-      cncString: `DB_DIR=${databasePath};DB_NAME=jogos`,
+      cncString: `DB_DIR=${appDirectory};DB_NAME=jogos`,
     })
 
     this.connection.open()
