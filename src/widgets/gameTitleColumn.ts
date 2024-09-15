@@ -12,6 +12,7 @@ export default class GameTitleColumnWidget extends ContextMenuBin {
   static {
     GObject.registerClass({
       GTypeName: 'GameTitleColumnWidget',
+      CssName: 'game-title-column',
       Template: 'resource:///io/github/alessandrojean/jogos/ui/game-title-column.ui',
       Properties: {
         title: GObject.ParamSpec.string(

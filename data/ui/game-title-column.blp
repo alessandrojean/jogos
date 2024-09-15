@@ -13,14 +13,14 @@ template $GameTitleColumnWidget : $ContextMenuBin {
         child: Box {
           width-request: 36;
           height-request: 36;
-          styles ["thumbnail"]
+          styles ["game-cover"]
 
           Image {
             icon-name: bind template.platform-icon-name;
             width-request: 36;
             halign: center;
             valign: center;
-            styles ["dim-label"]
+            styles ["empty"]
           }
         };
       }
@@ -32,7 +32,7 @@ template $GameTitleColumnWidget : $ContextMenuBin {
           width-request: 36;
           height-request: 36;
           content-fit: cover;
-          styles ["thumbnail"]
+          styles ["game-cover"]
         };
       }
     }
