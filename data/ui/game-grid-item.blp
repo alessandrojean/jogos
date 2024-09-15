@@ -2,11 +2,13 @@ using Gtk 4.0;
 
 template $GameGridItemWidget : Gtk.Box {
   orientation: vertical;
-  spacing: 8;
+  spacing: 6;
   hexpand: true;
   vexpand: true;
 
   Overlay {
+    styles ["game-cover"]
+
     [overlay]
     Image {
       visible: bind template.show-placeholder;
@@ -14,7 +16,7 @@ template $GameGridItemWidget : Gtk.Box {
       icon-size: large;
       halign: center;
       valign: center;
-      styles ["dim-label"]
+      styles ["empty"]
     }
 
     Picture {
@@ -25,15 +27,14 @@ template $GameGridItemWidget : Gtk.Box {
       vexpand: true;
       can-shrink: true;
       content-fit: cover;
-      styles ["thumbnail", "grid"]
     }
   }
 
-
-  Label {
-    label: bind template.title;
-    halign: center;
-    ellipsize: end;
-    single-line-mode: true;
+  Inscription {
+    text: bind template.title;
+    min-lines: 2;
+    text-overflow: ellipsize_end;
+    xalign: 0.5;
+    yalign: 0;
   }
 }

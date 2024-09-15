@@ -1,6 +1,7 @@
 /* Some styles are inspired by Nautilus. */
 
 /* Grid view */
+
 gridview {
   padding: 18px;
   border-spacing: 6px;
@@ -9,6 +10,15 @@ gridview {
 gridview > child {
   padding: 6px;
   border-radius: 12px;
+}
+
+game-grid-item .game-cover picture {
+  border-radius: 8px;
+  background: color-mix(in srgb, currentColor 20%, transparent);
+}
+
+game-grid-item .game-cover image.empty {
+  color: color-mix(in srgb, currentColor 50%, transparent);
 }
 
 /* Column view */
