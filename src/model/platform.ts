@@ -6,7 +6,7 @@ export type PlatformId = 'PLAYSTATION_4' | 'PLAYSTATION_5' | 'XBOX_SERIES'
   | 'XBOX_360' | 'DREAMCAST' | 'GAME_BOY_ADVANCE' | 'GAMECUBE' | 'PLAYSTATION_2'
   | 'XBOX' | 'GAME_BOY_COLOR' | 'NINTENDO_64' | 'PLAYSTATION' | 'SATURN'
   | 'GAME_BOY' | 'MEGA_DRIVE' | 'SUPER_NINTENDO' | 'MASTER_SYSTEM' | 'NES'
-  | 'ATARI_2600' | 'WINDOWS' | 'MAC_OS'
+  | 'ATARI_2600' | 'WINDOWS' | 'MAC_OS' | 'ATARI_7800' | 'ATARI_JAGUAR'
 
 export class Platform extends GObject.Object {
   id!: PlatformId
@@ -78,21 +78,23 @@ export const platforms: Platform[] = [
   new Platform({ id: 'XBOX_360', name: 'Xbox 360', iconName: 'xbox', generation: 7 }),
 
   new Platform({ id: 'DREAMCAST', name: 'Dreamcast', iconName: 'dreamcast', generation: 6 }),
-  new Platform({ id: 'GAME_BOY_ADVANCE', name: 'Game Boy Advance', iconName: 'nintendo-game-boy', generation: 6 }),
+  new Platform({ id: 'GAME_BOY_ADVANCE', name: 'Game Boy Advance', iconName: 'nintendo-game-boy-advance', generation: 6 }),
   new Platform({ id: 'GAMECUBE', name: 'GameCube', iconName: 'gamecube', generation: 6 }),
   new Platform({ id: 'PLAYSTATION_2', name: 'PlayStation 2', iconName: 'playstation', generation: 6 }),
   new Platform({ id: 'XBOX', name: 'Xbox', iconName: 'xbox', generation: 6 }),
 
+  new Platform({ id: 'ATARI_JAGUAR', name: 'Atari Jaguar', iconName: 'atari-jaguar', generation: 5 }),
   new Platform({ id: 'GAME_BOY_COLOR', name: 'Game Boy Color', iconName: 'nintendo-game-boy', generation: 5 }),
   new Platform({ id: 'NINTENDO_64', name: 'Nintendo 64', iconName: 'nintendo-64', generation: 5 }),
   new Platform({ id: 'PLAYSTATION', name: 'PlayStation', iconName: 'playstation', generation: 5 }),
   new Platform({ id: 'SATURN', name: 'Saturn', iconName: 'sega-saturn', generation: 5 }),
 
   new Platform({ id: 'GAME_BOY', name: 'Game Boy', iconName: 'nintendo-game-boy', generation: 4 }),
-  new Platform({ id: 'MEGA_DRIVE', name: 'Mega Drive', iconName: 'sega', generation: 4 }),
+  new Platform({ id: 'MEGA_DRIVE', name: 'Mega Drive', iconName: 'sega-mega-drive', generation: 4 }),
   new Platform({ id: 'SUPER_NINTENDO', name: 'Super Nintendo', iconName: 'snes', generation: 4 }),
 
-  new Platform({ id: 'MASTER_SYSTEM', name: 'Master System', iconName: 'sega', generation: 3 }),
+  new Platform({ id: 'ATARI_7800', name: 'Atari 7800', iconName: 'atari', generation: 3 }),
+  new Platform({ id: 'MASTER_SYSTEM', name: 'Master System', iconName: 'sega-master-system', generation: 3 }),
   new Platform({ id: 'NES', name: 'NES', iconName: 'nes', generation: 3 }),
 
   new Platform({ id: 'ATARI_2600', name: 'Atari 2600', iconName: 'atari', generation: 2 }),
