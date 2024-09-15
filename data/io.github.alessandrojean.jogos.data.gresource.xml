@@ -55,23 +55,23 @@
 
     <file compressed="true" preprocess="xml-stripblanks" alias="document-edit-symbolic.svg">icons/lucide-pencil-symbolic.svg</file>
 
-    <file compressed="true" preprocess="xml-stripblanks" alias="playstation.svg">platforms/playstation.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-switch.svg">platforms/nintendo-switch.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="xbox.svg">platforms/xbox.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="wii-u.svg">platforms/wii-u.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="wii.svg">platforms/wii.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="gamecube.svg">platforms/gamecube.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="dreamcast.svg">platforms/dreamcast.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-3ds.svg">platforms/nintendo-3ds.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-ds.svg">platforms/nintendo-ds.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="sega-saturn.svg">platforms/sega-saturn.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="sega.svg">platforms/sega.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-64.svg">platforms/nintendo-64.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-game-boy.svg">platforms/nintendo-game-boy.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="snes.svg">platforms/snes.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nes.svg">platforms/nes.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="atari.svg">platforms/atari.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="windows.svg">platforms/windows.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="mac-os.svg">platforms/mac-os.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="playstation-symbolic.svg">platforms/playstation-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-switch-symbolic.svg">platforms/nintendo-switch-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="xbox-symbolic.svg">platforms/xbox-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="wii-u-symbolic.svg">platforms/wii-u-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="wii-symbolic.svg">platforms/wii-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="gamecube-symbolic.svg">platforms/gamecube-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="dreamcast-symbolic.svg">platforms/dreamcast-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-3ds-symbolic.svg">platforms/nintendo-3ds-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-ds-symbolic.svg">platforms/nintendo-ds-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="sega-saturn-symbolic.svg">platforms/sega-saturn-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="sega-symbolic.svg">platforms/sega-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-64-symbolic.svg">platforms/nintendo-64-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-game-boy-symbolic.svg">platforms/nintendo-game-boy-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="snes-symbolic.svg">platforms/snes-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="nes-symbolic.svg">platforms/nes-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="atari-symbolic.svg">platforms/atari-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="windows-symbolic.svg">platforms/windows-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="mac-os-symbolic.svg">platforms/mac-os-symbolic.svg</file>
   </gresource>
 </gresources>
