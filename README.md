@@ -1,57 +1,72 @@
-# GNOME Typescript Template
+# Jogos
 
-A template that provides the basic foundations for GNOME applications written in Typescript.
+A simple physical game collection manager, created with GTK 4 and Libadwaita.
 
-![The main view of the Typescript Template application.](./data/screenshots/screenshot-1.png)
+<p align="center">
+  <picture style="width: 90%">
+    <source media="(prefers-color-scheme: dark)" srcset="./.github/images/screenshot-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="./.github/images/screenshot-light.png">
+    <img alt="Screenshot of Jogos" src="./.github/images/screenshot-dark.png">
+  </picture>
+</p>
 
-## Template Features
+> [!WARNING]
+> Jogos is under active development and is an ongoing **WIP**. Anyone is welcome
+> to try it out, but do not expect a fully featured, bug-free experience. Some
+> features will be missing and/or broken. Stay tuned for any news and future
+> stable releases.
 
-This template provides:
+## Features
 
-* A main window using modern libadwaita widgets and best practices
-* A starting point for metadata, desktop files, and icons
-* A flatpak manifest for nightly builds
-* A GitLab CI configuration that produces flatpak bundles
-* A stub for translation support
-* Thoroughly commented code to assist with learning
+The following items are the major features aimed to be added to Jogos on the
+initial releases.
 
-## Getting Started
+- Import games from IGDB.com;
+- Custom game creation;
+- Statistics of the collection;
 
-This template comes with a `create-project.py` script. When you're ready to initialize your project,
-navigate to your checkout of the template and run the following command in the terminal:
+The project is open to suggestions and ideas, so feel free to reach out
+if you have anything you'd like to see implemented.
 
-```
-# NOTE: Don't copy the `$`. It's simply an indicator
-# that you should run a command as a regular user.
-$ python3 create-project.py
-```
+## Download
 
-The script will ask you for your project name, application id, and author information and then
-replace the placeholder values in the template with the values you provide. Once finished,
-you will find a folder with the project name you gave the script in the template repo. Move
-this folder to wherever you store your projects.
+As Jogos is still **WIP**, there's no public build yet. The plan is make
+the project available to download through [Flathub] once it's usable.
 
-## Setting Up Your Development Environment
+[Flathub]: https://flathub.org/
 
-### Visual Studio Code
+## Contributing
 
-When working with Typescript, I currently recommend using [Visual Studio Code](https://flathub.org/apps/com.visualstudio.code).
-VSCode has many well-supported extensions for JavaScript and TypeScript. You will need the following extensions in VSCode:
+Contributions are very **welcome**! Please review the [CONTRIBUTING.md] guide
+before getting started.
 
-* ESLint by Microsoft
-* Prettier ESLint by Rebecca Vest
-* Flatpak by Bilal Elmoussaoui
-* XML by Red Hat
-* EditorConfig for VS Code by EditorConfig
-* Meson by mesonbuild
+[CONTRIBUTING.md]: CONTRIBUTING.md
 
-### Flatpak
+### Setting Up Your Development Environment
 
-You will also need to install the GNOME Nightly flatpak SDK and the Node and Typescript
-SDK extensions. First, add the flatpak repositories if you have not already configured them.
+#### Visual Studio Code
+
+The project recommends using using [Visual Studio Code] with the following
+extensions installed:
+
+- ESLint by Microsoft
+- Flatpak by Bilal Elmoussaoui
+- XML by Red Hat
+- EditorConfig for VS Code by EditorConfig
+- Meson by mesonbuild
+- Gtk Blueprint by Bodil Stokke
+
+[Visual Studio Code]: https://flathub.org/apps/com.visualstudio.code
+
+#### Flatpak
+
+You will also need to install the GNOME Nightly flatpak SDK and the Node and
+Typescript SDK extensions. First, add the flatpak repositories if you have
+not already configured them.
+
 In a terminal, run:
 
-```
+```console
 $ flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 $ flatpak remote-add --user --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 $ flatpak remote-add --user --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
@@ -59,53 +74,31 @@ $ flatpak remote-add --user --if-not-exists gnome-nightly https://nightly.gnome.
 
 Then install the SDKs and extensions:
 
-```
+```console
 $ flatpak --user install org.gnome.Sdk//master org.gnome.Platform//master
 $ flatpak --user install org.freedesktop.Sdk.Extension.node20//24.08beta org.freedesktop.Sdk.Extension.typescript//24.08beta
 ```
 
 Also ensure that you have `flatpak-builder` installed.
 
-### Node Package Manager & ESLint
+### Building and Running the App
 
-This step is optional, but highly recommended for setting up linting and code formattting.
-Install `npm`, then run `npm install` in your project directory.
+When you open your project directory in VS Code, you should see a box icon on
+the bottom left of your screen with your application ID. If you see this and
+no errors, that means that the flatpak VS Code extension properly loaded
+your project.
 
-## Building & Running Your App
+Open your command palette (View -> Command Palette in the menu bar, or
+Ctrl+Shift+P) and type "Flatpak". Select "Flatpak: Build" from the list.
+Once the build is done, open the command palette again and select
+"Flatpak: Run". You should see the window depicted in the screenshot
+at the top of this file.
 
-### In VS Code
+After your initial build, you can use the "Flatpak: Build and Run" action
+from the command palette to do both steps at once.
 
-When you open your project directory in VS Code, you should see a box icon on the bottom left
-of your screen with your application ID. If you see this and no errors, that means that the
-flatpak VS Code extension properly loaded your project.
+## License
 
-Open your command palette (View -> Command Palette in the menu bar, or Ctrl+Shift+P) and
-type "Flatpak". Select "Flatpak: Build" from the list. Once the build is done, open the
-command palette again and select "Flatpak: Run". You should see the window depicted in
-the screenshot at the top of this file.
+> You can check out the full license [here](LICENSE).
 
-After your initial build, you can use the "Flatpak: Build and Run" action from the
-command palette to do both steps at once.
-
-### In The Terminal
-
-To build the application, run:
-
-```
-$ flatpak-builder --user flatpak_app build-aux/flatpak/<application_id>.json
-```
-
-And to run the application:
-
-```
-$ flatpak-builder --run flatpak_app build-aux/flatpak/<application_id>.json
-```
-
-## References
-
-For the next steps in your application development journey, visit the following links:
-
-* Read our [Developer Documentation](https://developer.gnome.org/documentation/) for tutorials and references.
-* Read our [Human Interface Guidelines](https://developer.gnome.org/hig/) to learn the best practices for designing a GNOME application.
-* Visit [gjs.guide](https://gjs.guide/) for a comprehensive overview of GJS.
-* If you plan to host your repo on GitHub, set up [flatpak-github-actions](https://github.com/flatpak/flatpak-github-actions).
+This repository is licensed under the terms of the **MIT** license.
