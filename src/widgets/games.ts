@@ -1,8 +1,6 @@
 import Adw from 'gi://Adw'
-import Gdk from 'gi://Gdk'
 import Gio from 'gi://Gio'
 import GObject from 'gi://GObject'
-import Graphene from 'gi://Graphene'
 import Gtk from 'gi://Gtk?version=4.0'
 
 import { Application } from '../application.js'
@@ -10,6 +8,7 @@ import Game from '../model/game.js'
 import { getPlatform, PlatformId, platformName } from '../model/platform.js'
 import GamesRepository from '../repositories/games.js'
 import { localeOptions, LocaleOptions } from '../utils/locale.js'
+import ContextMenuBin from './contextMenuBin.js'
 import GameGridItemWidget from './gameGridItem.js'
 import GameTitleColumnWidget from './gameTitleColumn.js'
 
@@ -52,6 +51,7 @@ export class GamesWidget extends Gtk.Stack {
 
   private viewGrid = true
   private locale!: LocaleOptions
+  private menuModel!: Gio.Menu
 
   private isWishlist = Gtk.ClosureExpression.new(
     GObject.TYPE_BOOLEAN,
@@ -73,7 +73,7 @@ export class GamesWidget extends Gtk.Stack {
         'items', 'noResultsFound', 'noGamesForPlatform', 'columnView',
         'titleColumn', 'platformColumn', 'developerColumn', 'yearColumn',
         'noGames', 'grid', 'gridView', 'popoverMenu', 'noFavorites',
-        'noWishlist', 'modificationColumn', 'favoriteColumn'
+        'noWishlist', 'modificationColumn', 'favoriteColumn',
       ],
       Signals: {
         'game-activate': {
@@ -102,6 +102,7 @@ export class GamesWidget extends Gtk.Stack {
     super()
 
     this.initLocale()
+    this.initMenuModel()
     this.initActions()
     this.initCommon()
     this.initColumnView()
@@ -116,6 +117,20 @@ export class GamesWidget extends Gtk.Stack {
       this.locale = localeOptions()
       this.loadItems()
     })
+  }
+
+  private initMenuModel() {
+    this.menuModel = new Gio.Menu()
+
+    const section1 = new Gio.Menu()
+    const section2 = new Gio.Menu()
+
+    section1.append_item(Gio.MenuItem.new(_!('De_tails'), 'games.details'))
+    section2.append_item(Gio.MenuItem.new(_!('_Edit'), 'games.edit'))
+    section2.append_item(Gio.MenuItem.new(_!('_Delete'), 'games.delete'))
+
+    this.menuModel.append_section(null, section1)
+    this.menuModel.append_section(null, section2)
   }
 
   private initActions() {
@@ -134,9 +149,9 @@ export class GamesWidget extends Gtk.Stack {
     deleteAction.connect('activate', () => this.onDeleteAction())
     gamesGroup.add_action(deleteAction)
 
-    const popupMenuAction = new Gio.SimpleAction({ name: 'popup-menu' })
-    popupMenuAction.connect('activate', () => this.onPopupMenuAction())
-    gamesGroup.add_action(popupMenuAction)
+    // const popupMenuAction = new Gio.SimpleAction({ name: 'popup-menu' })
+    // popupMenuAction.connect('activate', () => this.onPopupMenuAction())
+    // gamesGroup.add_action(popupMenuAction)
   }
 
   private initCommon() {
@@ -210,7 +225,11 @@ export class GamesWidget extends Gtk.Stack {
     const factoryTitle = this._titleColumn.factory as Gtk.SignalListItemFactory
 
     factoryTitle.connect('setup', (_self, listItem: Gtk.ColumnViewCell) => {
-      const title = new GameTitleColumnWidget({ title: '', cover: null })
+      const title = new GameTitleColumnWidget({
+        title: '',
+        cover: null,
+        menuModel: this.menuModel,
+      })
 
       listItem.child = title
     })
@@ -223,17 +242,17 @@ export class GamesWidget extends Gtk.Stack {
       title.cover = modelItem.game.cover
       title.platformIconName = getPlatform(modelItem.game.platform).iconName
 
-      this.setupCell(title, listItem)
-      modelItem.listUi = title
+      // this.setupCell(title, listItem)
+      // modelItem.listUi = title
     })
 
-    factoryTitle.connect('unbind', (_self, listItem: Gtk.ColumnViewCell) => {
-      const item = listItem.get_item<GameItem>()
+    // factoryTitle.connect('unbind', (_self, listItem: Gtk.ColumnViewCell) => {
+    //   const item = listItem.get_item<GameItem>()
 
-      if (item != null) {
-        item.listUi = null
-      }
-    })
+    //   if (item != null) {
+    //     item.listUi = null
+    //   }
+    // })
 
     const factoryPlatform = this._platformColumn.factory as Gtk.SignalListItemFactory
 
@@ -243,13 +262,18 @@ export class GamesWidget extends Gtk.Stack {
         xalign: 0.0,
         cssClasses: ['dim-label']
       })
-      this.setupCell(label, listItem)
-      listItem.set_child(label)
+
+      const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
+      contextMenuBin.child = label
+
+      // this.setupCell(label, listItem)
+      listItem.child = contextMenuBin
     })
 
     factoryPlatform.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
-      const label = listItem.get_child() as Gtk.Label
+      const label = (listItem.get_child() as ContextMenuBin).get_child() as Gtk.Label
       const modelItem = listItem.get_item<GameItem>()
+
       label.label = platformName(modelItem.game.platform)
     })
 
@@ -261,13 +285,18 @@ export class GamesWidget extends Gtk.Stack {
         xalign: 0.0,
         cssClasses: ['dim-label']
       })
-      this.setupCell(label, listItem)
-      listItem.set_child(label)
+
+      const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
+      contextMenuBin.child = label
+
+      // this.setupCell(label, listItem)
+      listItem.child = contextMenuBin
     })
 
     factoryDeveloper.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
-      const label = listItem.get_child() as Gtk.Label
+      const label = (listItem.get_child() as ContextMenuBin).get_child() as Gtk.Label
       const modelItem = listItem.get_item<GameItem>()
+
       label.label = modelItem.game.developer
     })
 
@@ -279,13 +308,18 @@ export class GamesWidget extends Gtk.Stack {
         xalign: 1.0,
         cssClasses: ['dim-label', 'numeric']
       })
-      this.setupCell(label, listItem)
-      listItem.set_child(label)
+
+      const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
+      contextMenuBin.child = label
+
+      // this.setupCell(label, listItem)
+      listItem.child = contextMenuBin
     })
 
     factoryYear.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
-      const label = listItem.get_child() as Gtk.Label
+      const label = (listItem.get_child() as ContextMenuBin).get_child() as Gtk.Label
       const modelItem = listItem.get_item<GameItem>()
+
       label.label = modelItem.game.releaseYear.toString()
     })
 
@@ -297,13 +331,18 @@ export class GamesWidget extends Gtk.Stack {
         xalign: 1.0,
         cssClasses: ['dim-label', 'numeric']
       })
-      this.setupCell(label, listItem)
-      listItem.set_child(label)
+
+      const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
+      contextMenuBin.child = label
+
+      // this.setupCell(label, listItem)
+      listItem.child = contextMenuBin
     })
 
     factoryModification.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
-      const label = listItem.get_child() as Gtk.Label
+      const label = (listItem.get_child() as ContextMenuBin).get_child() as Gtk.Label
       const modelItem = listItem.get_item<GameItem>()
+
       label.label = modelItem.game.modifiedAtDateTime.format(this.locale.dateFormat) ?? _!('Unknown')
     })
 
@@ -315,12 +354,15 @@ export class GamesWidget extends Gtk.Stack {
         cssClasses: ['flat', 'circular', 'dim-label', 'star']
       })
 
-      this.setupCell(button, listItem)
-      listItem.child = button
+      const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
+      contextMenuBin.child = button
+
+      // this.setupCell(button, listItem)
+      listItem.child = contextMenuBin
     })
 
     factoryFavorite.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
-      const button = listItem.get_child() as Gtk.Button
+      const button = (listItem.get_child() as ContextMenuBin).get_child() as Gtk.Button
       const modelItem = listItem.get_item<GameItem>()
 
       button.connect('clicked', () => this.onFavoriteClicked(modelItem))
@@ -345,9 +387,13 @@ export class GamesWidget extends Gtk.Stack {
     const factory = this._gridView.factory as Gtk.SignalListItemFactory
 
     factory.connect('setup', (_self, listItem: Gtk.ListItem) => {
-      const gridItem = new GameGridItemWidget({ title: '', cover: null })
+      const gridItem = new GameGridItemWidget({
+        title: '',
+        cover: null,
+        menuModel: this.menuModel,
+      })
 
-      this.setupCell(gridItem, listItem)
+      // this.setupCell(gridItem, listItem)
       listItem.child = gridItem
     })
 
@@ -359,16 +405,16 @@ export class GamesWidget extends Gtk.Stack {
       gridItem.cover = modelItem.game.cover
       gridItem.platformIconName = getPlatform(modelItem.game.platform).iconName
 
-      modelItem.gridUi = gridItem
+      // modelItem.gridUi = gridItem
     })
 
-    factory.connect('unbind', (_self, listItem: Gtk.ListItem) => {
-      const item = listItem.get_item<GameItem>()
+    // factory.connect('unbind', (_self, listItem: Gtk.ListItem) => {
+    //   const item = listItem.get_item<GameItem>()
 
-      if (item != null) {
-        item.gridUi = null
-      }
-    })
+    //   if (item != null) {
+    //     item.gridUi = null
+    //   }
+    // })
 
     this._gridView.model = this.selectionModel
 
@@ -473,28 +519,28 @@ export class GamesWidget extends Gtk.Stack {
     this._columnView.sort_by_column(map[property] ?? null, sortType)
   }
 
-  private setupCell(widget: Gtk.Widget, item: Gtk.ListItem) {
-    const rightClickEvent = new Gtk.GestureClick({
-      propagationPhase: Gtk.PropagationPhase.BUBBLE,
-      button: Gdk.BUTTON_SECONDARY,
-    })
+  // private setupCell(widget: Gtk.Widget, item: Gtk.ListItem) {
+  //   const rightClickEvent = new Gtk.GestureClick({
+  //     propagationPhase: Gtk.PropagationPhase.BUBBLE,
+  //     button: Gdk.BUTTON_SECONDARY,
+  //   })
 
-    rightClickEvent.connect('pressed', (source, nPress, x, y) => {
-      if (nPress === 1) {
-        this.selectionModel.select_item(item.get_position(), true)
+  //   rightClickEvent.connect('pressed', (source, nPress, x, y) => {
+  //     if (nPress === 1) {
+  //       this.selectionModel.select_item(item.get_position(), true)
 
-        const point = new Graphene.Point({ x, y })
-        const [, targetPoint] = widget.compute_point(this._items, point)
-        const position = new Gdk.Rectangle({ x: targetPoint.x, y: targetPoint.y })
-        this._popoverMenu.pointingTo = position
-        this._popoverMenu.popup()
+  //       const point = new Graphene.Point({ x, y })
+  //       const [, targetPoint] = widget.compute_point(this._items, point)
+  //       const position = new Gdk.Rectangle({ x: targetPoint.x, y: targetPoint.y })
+  //       this._popoverMenu.pointingTo = position
+  //       this._popoverMenu.popup()
 
-        source.set_state(Gtk.EventSequenceState.CLAIMED)
-      }
-    })
+  //       source.set_state(Gtk.EventSequenceState.CLAIMED)
+  //     }
+  //   })
 
-    widget.add_controller(rightClickEvent)
-  }
+  //   widget.add_controller(rightClickEvent)
+  // }
 
   private changeVisibleChild() {
     const query = this.titleFilter.search ?? ''
@@ -597,25 +643,25 @@ export class GamesWidget extends Gtk.Stack {
     }
   }
 
-  private onPopupMenuAction() {
-    const selectedItem = this.selectionModel.get_selected_item<GameItem>()
-    const row = this.viewGrid ? selectedItem.gridUi : selectedItem.listUi
+  // private onPopupMenuAction() {
+  //   const selectedItem = this.selectionModel.get_selected_item<GameItem>()
+  //   const row = this.viewGrid ? selectedItem.gridUi : selectedItem.listUi
 
-    if (!row) {
-      return
-    }
+  //   if (!row) {
+  //     return
+  //   }
 
-    const [, bounds] = row.compute_bounds(this._items)
-    const bottomLeft = bounds.get_bottom_left()
-    const position = new Gdk.Rectangle({
-      x: bottomLeft.x,
-      y: bottomLeft.y + 12
-    })
+  //   const [, bounds] = row.compute_bounds(this._items)
+  //   const bottomLeft = bounds.get_bottom_left()
+  //   const position = new Gdk.Rectangle({
+  //     x: bottomLeft.x,
+  //     y: bottomLeft.y + 12
+  //   })
 
-    this._popoverMenu.pointingTo = position
-    this._popoverMenu.popup()
-    this._popoverMenu.grab_focus()
-  }
+  //   this._popoverMenu.pointingTo = position
+  //   this._popoverMenu.popup()
+  //   this._popoverMenu.grab_focus()
+  // }
 }
 
 /**

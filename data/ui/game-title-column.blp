@@ -1,43 +1,45 @@
 using Gtk 4.0;
 
-template $GameTitleColumnWidget : Gtk.Box {
-  orientation: horizontal;
-  spacing: 12;
+template $GameTitleColumnWidget : $ContextMenuBin {
+  child: Box {
+    orientation: horizontal;
+    spacing: 12;
 
-  Stack {
-    visible-child-name: bind template.visible-cover;
+    Stack {
+      visible-child-name: bind template.visible-cover;
 
-    StackPage {
-      name: "placeholder";
-      child: Box {
-        width-request: 36;
-        height-request: 36;
-        styles ["thumbnail"]
-
-        Image {
-          icon-name: bind template.platform-icon-name;
+      StackPage {
+        name: "placeholder";
+        child: Box {
           width-request: 36;
-          halign: center;
-          valign: center;
-          styles ["dim-label"]
-        }
-      };
+          height-request: 36;
+          styles ["thumbnail"]
+
+          Image {
+            icon-name: bind template.platform-icon-name;
+            width-request: 36;
+            halign: center;
+            valign: center;
+            styles ["dim-label"]
+          }
+        };
+      }
+
+      StackPage {
+        name: "cover";
+        child: Picture {
+          file: bind template.cover;
+          width-request: 36;
+          height-request: 36;
+          content-fit: cover;
+          styles ["thumbnail"]
+        };
+      }
     }
 
-    StackPage {
-      name: "cover";
-      child: Picture {
-        file: bind template.cover;
-        width-request: 36;
-        height-request: 36;
-        content-fit: cover;
-        styles ["thumbnail"]
-      };
+    Label {
+      label: bind template.title;
+      xalign: 0.0;
     }
-  }
-
-  Label {
-    label: bind template.title;
-    xalign: 0.0;
-  }
+  };
 }

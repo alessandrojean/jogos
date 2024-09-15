@@ -1,40 +1,42 @@
 using Gtk 4.0;
 
-template $GameGridItemWidget : Gtk.Box {
-  orientation: vertical;
-  spacing: 6;
-  hexpand: true;
-  vexpand: true;
+template $GameGridItemWidget : $ContextMenuBin {
+  child: Box {
+    orientation: vertical;
+    spacing: 6;
+    hexpand: true;
+    vexpand: true;
 
-  Overlay {
-    styles ["game-cover"]
+    Overlay {
+      styles ["game-cover"]
 
-    [overlay]
-    Image {
-      visible: bind template.show-placeholder;
-      icon-name: bind template.platform-icon-name;
-      icon-size: large;
-      halign: center;
-      valign: center;
-      styles ["empty"]
+      [overlay]
+      Image {
+        visible: bind template.show-placeholder;
+        icon-name: bind template.platform-icon-name;
+        icon-size: large;
+        halign: center;
+        valign: center;
+        styles ["empty"]
+      }
+
+      Picture {
+        file: bind template.cover;
+        width-request: 96;
+        height-request: 144;
+        hexpand: true;
+        vexpand: true;
+        can-shrink: true;
+        content-fit: cover;
+      }
     }
 
-    Picture {
-      file: bind template.cover;
-      width-request: 96;
-      height-request: 144;
-      hexpand: true;
-      vexpand: true;
-      can-shrink: true;
-      content-fit: cover;
+    Inscription {
+      text: bind template.title;
+      min-lines: 2;
+      text-overflow: ellipsize_end;
+      xalign: 0.5;
+      yalign: 0;
     }
-  }
-
-  Inscription {
-    text: bind template.title;
-    min-lines: 2;
-    text-overflow: ellipsize_end;
-    xalign: 0.5;
-    yalign: 0;
-  }
+  };
 }

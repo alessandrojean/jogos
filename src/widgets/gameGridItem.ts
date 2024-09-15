@@ -1,8 +1,8 @@
 import GObject from 'gi://GObject'
 import Gio from 'gi://Gio'
-import Gtk from 'gi://Gtk?version=4.0'
+import ContextMenuBin from './contextMenuBin.js'
 
-export default class GameGridItemWidget extends Gtk.Box {
+export default class GameGridItemWidget extends ContextMenuBin {
   showPlaceholder: boolean = true
 
   title!: string
@@ -49,7 +49,7 @@ export default class GameGridItemWidget extends Gtk.Box {
   }
 
   constructor(params: Partial<GameGridItemWidget>) {
-    super(params)
+    super()
     Object.assign(this, params)
 
     this.connect('notify::cover', () => {

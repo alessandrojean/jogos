@@ -18,6 +18,7 @@
     <file>utils/debugInfo.js</file>
     <file>utils/locale.js</file>
     <file>utils/validators.js</file>
+    <file>widgets/contextMenuBin.js</file>
     <file>widgets/createDialog.js</file>
     <file>widgets/detailsDialog.js</file>
     <file>widgets/editDialog.js</file>

@@ -11,6 +11,7 @@ sources = files(
   'model/gameCondition.ts',
   'model/platform.ts',
   'model/storageMedia.ts',
+  'widgets/contextMenuBin.ts',
   'widgets/createDialog.ts',
   'widgets/detailsDialog.ts',
   'widgets/editDialog.ts',

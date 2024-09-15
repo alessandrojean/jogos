@@ -8,6 +8,8 @@ import GamesRepository from './repositories/games.js'
 import { Settings } from './settings.js'
 import { createFolder } from './utils/createFolder.js'
 import { debugInfo } from './utils/debugInfo.js'
+import ContextMenuBin from './widgets/contextMenuBin.js'
+import GameGridItemWidget from './widgets/gameGridItem.js'
 import { GamesWidget } from './widgets/games.js'
 import PreferencesDialogWidget from './widgets/preferencesDialog.js'
 import { SidebarItemWidget } from './widgets/sidebarItem.js'
@@ -51,6 +53,8 @@ export class Application extends Adw.Application {
 
     GObject.type_ensure(GamesWidget.$gtype)
     GObject.type_ensure(SidebarItemWidget.$gtype)
+    GObject.type_ensure(ContextMenuBin.$gtype)
+    GObject.type_ensure(GameGridItemWidget.$gtype)
   }
 
   // When overriding virtual functions, the function name must be `vfunc_$funcname`.

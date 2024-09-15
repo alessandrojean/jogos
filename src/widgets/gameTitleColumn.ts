@@ -1,8 +1,8 @@
 import GObject from 'gi://GObject'
 import Gio from 'gi://Gio'
-import Gtk from 'gi://Gtk?version=4.0'
+import ContextMenuBin from './contextMenuBin.js'
 
-export default class GameTitleColumnWidget extends Gtk.Box {
+export default class GameTitleColumnWidget extends ContextMenuBin {
   visibleCover: 'placeholder' | 'cover' = 'placeholder'
 
   title!: string
@@ -48,7 +48,7 @@ export default class GameTitleColumnWidget extends Gtk.Box {
   }
 
   constructor(params: Partial<GameTitleColumnWidget>) {
-    super(params)
+    super()
     Object.assign(this, params)
 
     this.connect('notify::cover', () => {
