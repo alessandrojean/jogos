@@ -225,7 +225,7 @@ export class Window extends Adw.ApplicationWindow {
 
   private onShowList() {
     this._gamesWidget.showList()
-    this._viewAndSort.iconName = 'lucide-grid-2x2-symbolic'
+    this._viewAndSort.iconName = 'lucide-layout-grid-symbolic'
     this._viewAndSort.tooltipText = _!('View in grid')
     Application.settings.setValue('show-grid', false)
   }
