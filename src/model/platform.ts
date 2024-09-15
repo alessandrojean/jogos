@@ -7,6 +7,8 @@ export type PlatformId = 'PLAYSTATION_4' | 'PLAYSTATION_5' | 'XBOX_SERIES'
   | 'XBOX' | 'GAME_BOY_COLOR' | 'NINTENDO_64' | 'PLAYSTATION' | 'SATURN'
   | 'GAME_BOY' | 'MEGA_DRIVE' | 'SUPER_NINTENDO' | 'MASTER_SYSTEM' | 'NES'
   | 'ATARI_2600' | 'WINDOWS' | 'MAC_OS' | 'ATARI_7800' | 'ATARI_JAGUAR'
+  | 'ATARI_LYNX' | 'GAME_GEAR' | 'NEO_GEO_POCKET' | 'PC_ENGINE' | 'SG_1000'
+  | 'VIRTUAL_BOY' | 'WONDERSWAN'
 
 export class Platform extends GObject.Object {
   id!: PlatformId
@@ -81,23 +83,30 @@ export const platforms: Platform[] = [
   new Platform({ id: 'GAME_BOY_ADVANCE', name: 'Game Boy Advance', iconName: 'platform-nintendo-game-boy-advance-symbolic', generation: 6 }),
   new Platform({ id: 'GAMECUBE', name: 'GameCube', iconName: 'platform-gamecube-symbolic', generation: 6 }),
   new Platform({ id: 'PLAYSTATION_2', name: 'PlayStation 2', iconName: 'platform-playstation-symbolic', generation: 6 }),
+  new Platform({ id: 'WONDERSWAN', name: 'Wonderswan', iconName: 'platform-wonderswan-symbolic', generation: 6 }),
   new Platform({ id: 'XBOX', name: 'Xbox', iconName: 'platform-xbox-symbolic', generation: 6 }),
 
   new Platform({ id: 'ATARI_JAGUAR', name: 'Atari Jaguar', iconName: 'platform-atari-jaguar-symbolic', generation: 5 }),
   new Platform({ id: 'GAME_BOY_COLOR', name: 'Game Boy Color', iconName: 'platform-nintendo-game-boy-symbolic', generation: 5 }),
+  new Platform({ id: 'NEO_GEO_POCKET', name: 'Neo Geo Pocket', iconName: 'platform-neo-geo-pocket-symbolic', generation: 5 }),
   new Platform({ id: 'NINTENDO_64', name: 'Nintendo 64', iconName: 'platform-nintendo-64-symbolic', generation: 5 }),
   new Platform({ id: 'PLAYSTATION', name: 'PlayStation', iconName: 'platform-playstation-symbolic', generation: 5 }),
   new Platform({ id: 'SATURN', name: 'Saturn', iconName: 'platform-sega-saturn-symbolic', generation: 5 }),
+  new Platform({ id: 'VIRTUAL_BOY', name: 'Virtual Boy', iconName: 'platform-nintendo-virtual-boy-symbolic', generation: 5 }),
 
+  new Platform({ id: 'ATARI_LYNX', name: 'Atari Lynx', iconName: 'platform-atari-lynx-symbolic', generation: 4 }),
   new Platform({ id: 'GAME_BOY', name: 'Game Boy', iconName: 'platform-nintendo-game-boy-symbolic', generation: 4 }),
+  new Platform({ id: 'GAME_GEAR', name: 'Game Gear', iconName: 'platform-sega-game-gear-symbolic', generation: 4 }),
   new Platform({ id: 'MEGA_DRIVE', name: 'Mega Drive', iconName: 'platform-sega-mega-drive-symbolic', generation: 4 }),
+  new Platform({ id: 'PC_ENGINE', name: 'PC Engine', iconName: 'platform-pc-engine-symbolic', generation: 4 }),
   new Platform({ id: 'SUPER_NINTENDO', name: 'Super Nintendo', iconName: 'platform-snes-symbolic', generation: 4 }),
 
-  new Platform({ id: 'ATARI_7800', name: 'Atari 7800', iconName: 'platform-atari-symbolic', generation: 3 }),
+  new Platform({ id: 'ATARI_7800', name: 'Atari 7800', iconName: 'platform-atari-7800-symbolic', generation: 3 }),
   new Platform({ id: 'MASTER_SYSTEM', name: 'Master System', iconName: 'platform-sega-master-system-symbolic', generation: 3 }),
   new Platform({ id: 'NES', name: 'NES', iconName: 'platform-nes-symbolic', generation: 3 }),
+  new Platform({ id: 'SG_1000', name: 'SG 1000', iconName: 'platform-sega-sg-1000-symbolic', generation: 3 }),
 
-  new Platform({ id: 'ATARI_2600', name: 'Atari 2600', iconName: 'platform-atari-symbolic', generation: 2 }),
+  new Platform({ id: 'ATARI_2600', name: 'Atari 2600', iconName: 'platform-atari-2600-symbolic', generation: 2 }),
 ]
 
 const platformMap = Object.fromEntries(platforms.map(p => [p.id, p])) as Record<PlatformId, Platform>

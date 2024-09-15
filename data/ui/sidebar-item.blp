@@ -4,8 +4,11 @@ template $SidebarItemWidget : ListBoxRow {
   Box {
     orientation: horizontal;
     spacing: 12;
+    styles ["sidebar-item"]
 
-    Image itemIcon {}
+    Image itemIcon {
+      styles ["sidebar-icon"]
+    }
 
     Label itemLabel {}
   }

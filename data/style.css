@@ -75,6 +75,13 @@ textview.card {
 }
 
 /* Favorite */
+
 button.star:hover {
   opacity: 1;
+}
+
+/* Sidebar */
+
+.sidebar-icon {
+  opacity: .7;
 }
