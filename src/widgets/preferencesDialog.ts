@@ -6,21 +6,57 @@ import { Application } from '../application.js'
 import { currencies, Currency } from '../model/currency.js'
 
 export default class PreferencesDialogWidget extends Adw.PreferencesDialog {
+  private _followSystemLocale!: Gtk.Switch
+  private _dateFormat!: Adw.ComboRow
   private _preferredCurrency!: Adw.ComboRow
+  private _clock12!: Gtk.ToggleButton
+  private _clock24!: Gtk.ToggleButton
+
+  private dateFormats = [
+    'dd/mm/yyyy',
+    'mm/dd/yyyy',
+    'dd/mm/yy',
+    'mm/dd/yy',
+  ]
 
   static {
     GObject.registerClass({
       GTypeName: 'PreferencesDialogWidget',
       Template: 'resource:///io/github/alessandrojean/jogos/ui/preferences-dialog.ui',
-      InternalChildren: ['preferredCurrency']
+      InternalChildren: [
+        'followSystemLocale', 'preferredCurrency', 'dateFormat', 'clock24', 'clock12'
+      ]
     }, this)
   }
 
   constructor(params: Partial<PreferencesDialogWidget> = {}) {
     super(params)
 
+    this.initFollowSystemLocale()
     this.initPreferredCurrency()
+    this.initDateFormat()
+    this.initHourFormat()
     this.fillPreferences()
+  }
+
+  private initFollowSystemLocale() {
+    this._followSystemLocale.connect('notify::active', () => {
+      Application.settings.useSystemLocale = this._followSystemLocale.active
+    })
+  }
+
+  private initDateFormat() {
+    this._dateFormat.model = new Gtk.StringList({ strings: this.dateFormats })
+
+    this._dateFormat.connect('notify::selected', () => {
+      Application.settings.dateFormat = this.dateFormats[this._dateFormat.selected]
+    })
+  }
+
+  private initHourFormat() {
+    this._clock24.connect('toggled', () => {
+      Application.settings.use24HourClock = this._clock24.active
+    })
   }
 
   private initPreferredCurrency() {
@@ -35,9 +71,14 @@ export default class PreferencesDialogWidget extends Adw.PreferencesDialog {
     })
   }
 
-  private fillPreferences() {
-    const preferredCurrency = Application.settings.preferredCurrency
-    this._preferredCurrency.selected = currencies.indexOf(preferredCurrency)
+  private async fillPreferences() {
+    this._followSystemLocale.active = Application.settings.useSystemLocale
+    this._dateFormat.selected = this.dateFormats.indexOf(Application.settings.dateFormat)
+    this._clock24.active = Application.settings.use24HourClock
+    this._clock12.active = !this._clock24.active
+
+    const currency = Application.settings.preferredCurrency
+    this._preferredCurrency.selected = currencies.indexOf(currency)
   }
 
 }

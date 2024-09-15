@@ -5,9 +5,11 @@ import GObject from 'gi://GObject'
 import Graphene from 'gi://Graphene'
 import Gtk from 'gi://Gtk?version=4.0'
 
+import { Application } from '../application.js'
 import Game from '../model/game.js'
 import { getPlatform, PlatformId, platformName } from '../model/platform.js'
 import GamesRepository from '../repositories/games.js'
+import { localeOptions, LocaleOptions } from '../utils/locale.js'
 import GameGridItemWidget from './gameGridItem.js'
 import GameTitleColumnWidget from './gameTitleColumn.js'
 
@@ -49,6 +51,7 @@ export class GamesWidget extends Gtk.Stack {
   private _popoverMenu!: Gtk.PopoverMenu
 
   private viewGrid = true
+  private locale!: LocaleOptions
 
   private isWishlist = Gtk.ClosureExpression.new(
     GObject.TYPE_BOOLEAN,
@@ -98,11 +101,21 @@ export class GamesWidget extends Gtk.Stack {
   constructor() {
     super()
 
+    this.initLocale()
     this.initActions()
     this.initCommon()
     this.initColumnView()
     this.initGridView()
     this.loadItems()
+  }
+
+  private initLocale() {
+    this.locale = localeOptions()
+
+    Application.settings.connect('changed', () => {
+      this.locale = localeOptions()
+      this.loadItems()
+    })
   }
 
   private initActions() {
@@ -291,7 +304,7 @@ export class GamesWidget extends Gtk.Stack {
     factoryModification.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
       const label = listItem.get_child() as Gtk.Label
       const modelItem = listItem.get_item<GameItem>()
-      label.label = modelItem.game.modifiedAtDateTime.format(_!('%d/%m/%Y')) ?? _!('Unknown')
+      label.label = modelItem.game.modifiedAtDateTime.format(this.locale.dateFormat) ?? _!('Unknown')
     })
 
     const factoryFavorite = this._favoriteColumn.factory as Gtk.SignalListItemFactory

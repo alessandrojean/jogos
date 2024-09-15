@@ -23,6 +23,7 @@ sources = files(
   'utils/convertCover.ts',
   'utils/createFolder.ts',
   'utils/debugInfo.ts',
+  'utils/locale.ts',
   'utils/validators.ts',
   'repositories/games.ts',
 )

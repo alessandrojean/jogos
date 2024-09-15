@@ -8,6 +8,7 @@ import Game from '../model/game.js'
 import { getGameCondition } from '../model/gameCondition.js'
 import { getPlatform, platformName } from '../model/platform.js'
 import { getStorageMedia } from '../model/storageMedia.js'
+import { localeOptions, LocaleOptions } from '../utils/locale.js'
 
 export class DetailsDialogWidget extends Adw.Dialog {
   private _coverStack!: Gtk.Stack
@@ -29,6 +30,8 @@ export class DetailsDialogWidget extends Adw.Dialog {
   private _store!: Adw.ActionRow
   private _paidPrice!: Adw.ActionRow
   private _placeholderImage!: Gtk.Image
+
+  private locale!: LocaleOptions
 
   game!: Game
 
@@ -60,6 +63,7 @@ export class DetailsDialogWidget extends Adw.Dialog {
     super(params)
 
     this.game = game
+    this.locale = localeOptions()
 
     this.fillGameInformation()
   }
@@ -72,9 +76,9 @@ export class DetailsDialogWidget extends Adw.Dialog {
     this._story.subtitle = this.game.story.length > 0 ? this.game.story : _!('Not informed')
     this._developer.subtitle = this.game.developer
     this._publisher.subtitle = this.game.publisher
-    this._creationDate.subtitle = this.game.createdAtDateTime.format(_!('%d/%m/%Y %T')) ?? ''
-    this._modificationDate.subtitle = this.game.modifiedAtDateTime.format(_!('%d/%m/%Y %T')) ?? ''
-    this._boughtDate.subtitle = this.game.boughtAtDateTime?.format(_!('%d/%m/%Y')) ?? _!('Unknown')
+    this._creationDate.subtitle = this.game.createdAtDateTime.format(this.locale.dateTimeFormat) ?? ''
+    this._modificationDate.subtitle = this.game.modifiedAtDateTime.format(this.locale.dateTimeFormat) ?? ''
+    this._boughtDate.subtitle = this.game.boughtAtDateTime?.format(this.locale.dateFormat) ?? _!('Unknown')
     this._store.subtitle = this.game.store ?? _!('Unknown')
 
     const currency = getCurrency(this.game.paidPriceCurrency) ?? getCurrency('USD')!

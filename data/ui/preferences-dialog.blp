@@ -15,9 +15,49 @@ template $PreferencesDialogWidget : Adw.PreferencesDialog {
       title: _("Location");
       description: _("Change the location related preferences of the application");
 
-      Adw.ComboRow preferredCurrency {
-        title: _("Preferred currency");
-        enable-search: true;
+      Adw.ExpanderRow {
+        title: _("Use system location preferences");
+        enable-expansion: bind followSystemLocale.active inverted;
+        expanded: bind followSystemLocale.active inverted;
+
+        [suffix]
+        Gtk.Switch followSystemLocale {
+          valign: center;
+        }
+
+        Adw.ComboRow dateFormat {
+          title: _("Date format");
+          sensitive: bind followSystemLocale.active inverted;
+        }
+
+        Adw.ActionRow {
+          title: _("Hour format");
+          sensitive: bind followSystemLocale.active inverted;
+
+          [suffix]
+          Box {
+            styles ["linked"]
+
+            ToggleButton clock12 {
+              // sensitive: bind followSystemLocale.active inverted;
+              valign: center;
+              label: "12 hours";
+            }
+
+            ToggleButton clock24 {
+              // sensitive: bind followSystemLocale.active inverted;
+              valign: center;
+              group: clock12;
+              label: "24 hours";
+            }
+          }
+        }
+
+        Adw.ComboRow preferredCurrency {
+          title: _("Preferred currency");
+          sensitive: bind followSystemLocale.active inverted;
+          enable-search: true;
+        }
       }
     }
   }

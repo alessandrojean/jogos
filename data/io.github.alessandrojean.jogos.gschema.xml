@@ -26,10 +26,25 @@
       <summary>Show grid view</summary>
       <description>Grid view state</description>
     </key>
+    <key name="use-system-locale" type="b">
+      <default>true</default>
+      <summary>Use system locale options</summary>
+      <description>If enabled, will use Unix locale for date, time and monetary</description>
+    </key>
     <key name="preferred-currency" type="s">
       <default>'USD'</default>
       <summary>Preferred currency</summary>
       <description>The preferred currency for the games</description>
+    </key>
+    <key name="date-format" type="s">
+      <default>'dd/mm/yyyy'</default>
+      <summary>Date format</summary>
+      <description>The date format</description>
+    </key>
+    <key name="use-24-hour-clock" type="b">
+      <default>true</default>
+      <summary>Use 24-hour clock</summary>
+      <description>Wether to use 12 or 24-hour clock</description>
     </key>
 	</schema>
 </schemalist>

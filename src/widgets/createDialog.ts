@@ -4,15 +4,15 @@ import GLib from 'gi://GLib'
 import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
-import { Application } from '../application.js'
 import { Certification, certifications, certificationSystemName, certificationSystems } from '../model/certification.js'
-import { currencies, Currency } from '../model/currency.js'
+import { currencies, Currency, getCurrency } from '../model/currency.js'
 import Game from '../model/game.js'
 import { GameCondition, gameConditions } from '../model/gameCondition.js'
 import { getPlatform, Platform, PlatformId, platforms } from '../model/platform.js'
 import { StorageMedia, storageMedias } from '../model/storageMedia.js'
 import GamesRepository from '../repositories/games.js'
 import convertCover from '../utils/convertCover.js'
+import { localeOptions, LocaleOptions } from '../utils/locale.js'
 import { createValidator, integer, max, optional, real, required, setupEntryRow, validate, WidgetMap } from '../utils/validators.js'
 
 export class CreateDialogWidget extends Adw.Dialog {
@@ -39,6 +39,7 @@ export class CreateDialogWidget extends Adw.Dialog {
 
   private window?: Gtk.Widget | null = null
   private coverFile: Gio.File | null = null
+  private locale!: LocaleOptions
 
   private validator = createValidator({
     title: { required },
@@ -90,6 +91,8 @@ export class CreateDialogWidget extends Adw.Dialog {
 
   constructor(params: Partial<CreateDialogWidget> = {}) {
     super(params)
+
+    this.locale = localeOptions()
 
     this.initActions()
     this.initPlatforms(params.defaultPlatform ?? null)
@@ -238,9 +241,6 @@ export class CreateDialogWidget extends Adw.Dialog {
 
     this._currency.model = currencyModel
     this._currency.expression = Gtk.PropertyExpression.new(Currency.$gtype, null, 'iso')
-
-    const preferredCurrency = Application.settings.preferredCurrency
-    this._currency.selected = currencies.indexOf(preferredCurrency)
   }
 
   private initDates() {
@@ -248,11 +248,11 @@ export class CreateDialogWidget extends Adw.Dialog {
     this._releaseYear.value = now.get_year()
     this._releaseYear.adjustment.upper = now.get_year()
 
-    this._boughtDateLabel.label = now.format(_!('%d/%m/%Y')) ?? ''
+    this._boughtDateLabel.label = now.format(this.locale.dateFormat) ?? ''
     this._boughtDate.select_day(now)
 
     this._boughtDate.connect('day-selected', (self) => {
-      this._boughtDateLabel.label = self.get_date().format(_!('%d/%m/%Y')) ?? ''
+      this._boughtDateLabel.label = self.get_date().format(this.locale.dateFormat) ?? ''
     })
   }
 
@@ -272,6 +272,9 @@ export class CreateDialogWidget extends Adw.Dialog {
 
       this.onPaidPriceChanged(currency ?? 'USD', Number.isNaN(amount) ? 0.0 : amount)
     })
+
+    const preferredCurrency = getCurrency(this.locale.currencyIso) ?? getCurrency('USD')!
+    this._currency.selected = currencies.indexOf(preferredCurrency)
   }
 
   private initValidation() {

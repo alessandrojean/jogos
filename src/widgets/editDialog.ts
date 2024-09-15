@@ -12,6 +12,7 @@ import { getPlatform, Platform, platforms } from '../model/platform.js'
 import { getStorageMedia, StorageMedia, storageMedias } from '../model/storageMedia.js'
 import GamesRepository from '../repositories/games.js'
 import convertCover from '../utils/convertCover.js'
+import { localeOptions, LocaleOptions } from '../utils/locale.js'
 import { createValidator, integer, max, optional, real, required, setupEntryRow, touch, validate, WidgetMap } from '../utils/validators.js'
 
 export class EditDialogWidget extends Adw.Dialog {
@@ -38,6 +39,7 @@ export class EditDialogWidget extends Adw.Dialog {
 
   private window?: Gtk.Widget | null = null
   private coverFile: Gio.File | null = null
+  private locale!: LocaleOptions
 
   private validator = createValidator({
     title: { required },
@@ -83,6 +85,7 @@ export class EditDialogWidget extends Adw.Dialog {
     super(params)
 
     this.game = game
+    this.locale = localeOptions()
 
     this.initActions()
     this.initPlatforms()
@@ -233,11 +236,11 @@ export class EditDialogWidget extends Adw.Dialog {
     this._releaseYear.value = now.get_year()
     this._releaseYear.adjustment.upper = now.get_year()
 
-    this._boughtDateLabel.label = now.format(_!('%d/%m/%Y')) ?? ''
+    this._boughtDateLabel.label = now.format(this.locale.dateFormat) ?? ''
     this._boughtDate.select_day(now)
 
     this._boughtDate.connect('day-selected', (self) => {
-      this._boughtDateLabel.label = self.get_date().format(_!('%d/%m/%Y')) ?? ''
+      this._boughtDateLabel.label = self.get_date().format(this.locale.dateFormat) ?? ''
     })
   }
 
