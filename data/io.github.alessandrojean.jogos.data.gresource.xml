@@ -13,69 +13,67 @@
     <file>ui/sidebar-item.ui</file>
     <file>ui/window.ui</file>
     <file alias="gtk/help-overlay.ui">ui/help-overlay.ui</file>
-  </gresource>
-  <gresource prefix="/io/github/alessandrojean/jogos/icons/scalable/actions/">
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-search-symbolic.svg">icons/lucide-search-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-gamepad-2-symbolic.svg">icons/lucide-gamepad-2-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-plus-symbolic.svg">icons/lucide-plus-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-menu-symbolic.svg">icons/lucide-menu-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-panel-left-symbolic.svg">icons/lucide-panel-left-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-star-symbolic.svg">icons/lucide-star-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-star-solid-symbolic.svg">icons/lucide-star-solid-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-grid-2x2-symbolic.svg">icons/lucide-grid-2x2-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-layout-list-symbolic.svg">icons/lucide-layout-list-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-chevron-right-symbolic.svg">icons/lucide-chevron-right-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-pencil-symbolic.svg">icons/lucide-pencil-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-trash-2-symbolic.svg">icons/lucide-trash-2-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-folder-heart-symbolic.svg">icons/lucide-folder-heart-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-history-symbolic.svg">icons/lucide-history-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="lucide-settings-symbolic.svg">icons/lucide-settings-symbolic.svg</file>
 
-    <file compressed="true" preprocess="xml-stripblanks" alias="classind-livre.svg">certifications/classind-livre.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="classind-10-anos.svg">certifications/classind-10-anos.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="classind-12-anos.svg">certifications/classind-12-anos.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="classind-14-anos.svg">certifications/classind-14-anos.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="classind-16-anos.svg">certifications/classind-16-anos.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="classind-18-anos.svg">certifications/classind-18-anos.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="esrb-everyone.svg">certifications/esrb-everyone.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="esrb-everyone-10-plus.svg">certifications/esrb-everyone-10-plus.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="esrb-teen.svg">certifications/esrb-teen.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="esrb-mature.svg">certifications/esrb-mature.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="esrb-adults-only.svg">certifications/esrb-adults-only.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="pegi-3-years.svg">certifications/pegi-3-years.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="pegi-7-years.svg">certifications/pegi-7-years.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="pegi-12-years.svg">certifications/pegi-12-years.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="pegi-16-years.svg">certifications/pegi-16-years.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="pegi-18-years.svg">certifications/pegi-18-years.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="cero-a.svg">certifications/cero-a.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="cero-b.svg">certifications/cero-b.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="cero-c.svg">certifications/cero-c.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="cero-d.svg">certifications/cero-d.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="cero-z.svg">certifications/cero-z.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-search-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-gamepad-2-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-plus-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-menu-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-panel-left-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-star-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-star-solid-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-grid-2x2-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-layout-list-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-chevron-right-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-pencil-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-trash-2-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-folder-heart-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-history-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-settings-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="document-edit-symbolic.svg">icons/scalable/actions/lucide-pencil-symbolic.svg</file>
 
-    <file compressed="true" preprocess="xml-stripblanks" alias="document-edit-symbolic.svg">icons/lucide-pencil-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-playstation-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-nintendo-switch-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-xbox-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-wii-u-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-wii-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-gamecube-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-dreamcast-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-nintendo-3ds-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-nintendo-ds-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-sega-saturn-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-sega-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-sega-mega-drive-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-sega-master-system-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-nintendo-64-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-nintendo-game-boy-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-nintendo-game-boy-advance-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-snes-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-nes-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-atari-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-windows-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-mac-os-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-atari-jaguar-symbolic.svg</file>
 
-    <file compressed="true" preprocess="xml-stripblanks" alias="playstation-symbolic.svg">platforms/playstation-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-switch-symbolic.svg">platforms/nintendo-switch-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="xbox-symbolic.svg">platforms/xbox-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="wii-u-symbolic.svg">platforms/wii-u-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="wii-symbolic.svg">platforms/wii-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="gamecube-symbolic.svg">platforms/gamecube-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="dreamcast-symbolic.svg">platforms/dreamcast-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-3ds-symbolic.svg">platforms/nintendo-3ds-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-ds-symbolic.svg">platforms/nintendo-ds-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="sega-saturn-symbolic.svg">platforms/sega-saturn-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="sega-symbolic.svg">platforms/sega-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="sega-mega-drive-symbolic.svg">platforms/sega-mega-drive-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="sega-master-system-symbolic.svg">platforms/sega-master-system-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-64-symbolic.svg">platforms/nintendo-64-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-game-boy-symbolic.svg">platforms/nintendo-game-boy-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nintendo-game-boy-advance-symbolic.svg">platforms/nintendo-game-boy-advance-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="snes-symbolic.svg">platforms/snes-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="nes-symbolic.svg">platforms/nes-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="atari-symbolic.svg">platforms/atari-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="windows-symbolic.svg">platforms/windows-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="mac-os-symbolic.svg">platforms/mac-os-symbolic.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="atari-jaguar-symbolic.svg">platforms/atari-jaguar-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-classind-livre.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-classind-10-anos.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-classind-12-anos.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-classind-14-anos.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-classind-16-anos.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-classind-18-anos.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-esrb-everyone.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-esrb-everyone-10-plus.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-esrb-teen.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-esrb-mature.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-esrb-adults-only.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-pegi-3-years.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-pegi-7-years.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-pegi-12-years.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-pegi-16-years.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-pegi-18-years.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-cero-a.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-cero-b.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-cero-c.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-cero-d.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/certification-cero-z.svg</file>
   </gresource>
 </gresources>
