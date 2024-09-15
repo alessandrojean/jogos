@@ -105,9 +105,12 @@ export class Application extends Adw.Application {
         debugInfo: debugInfo(appDirectory),
       })
 
+      aboutDialog.add_link(_!('Sponsor'), 'https://github.com/sponsors/alessandrojean')
+
       aboutDialog.add_credit_section('Icons', [
         'Lucide https://lucide.dev',
-        'Simple Icons https://simpleicons.org'
+        'Highscore https://gitlab.gnome.org/World/highscore',
+        'Simple Icons https://simpleicons.org',
       ])
 
       aboutDialog.present(this.active_window)

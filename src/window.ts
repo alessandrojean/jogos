@@ -31,10 +31,10 @@ export class Window extends Adw.ApplicationWindow {
   private changeSortAction!: Gio.SimpleAction
 
   private sidebarItems: SidebarItem[] = [
-    { id: 'ALL_GAMES', label: _!('All games'), iconName: 'lucide-gamepad-2', section: 'top-pinned' },
-    { id: 'RECENTS', label: _!('Recents'), iconName: 'lucide-history', section: 'top-pinned' },
-    { id: 'FAVORITES', label: _!('Favorites'), iconName: 'lucide-star', section: 'top-pinned' },
-    { id: 'WISHLIST', label: _!('Wishlist'), iconName: 'lucide-folder-heart', section: 'top-pinned' },
+    { id: 'ALL_GAMES', label: _!('All games'), iconName: 'lucide-square-library-symbolic', section: 'top-pinned' },
+    { id: 'RECENTS', label: _!('Recents'), iconName: 'lucide-history-symbolic', section: 'top-pinned' },
+    { id: 'FAVORITES', label: _!('Favorites'), iconName: 'lucide-star-symbolic', section: 'top-pinned' },
+    { id: 'WISHLIST', label: _!('Wishlist'), iconName: 'lucide-folder-heart-symbolic', section: 'top-pinned' },
 
     ...platforms.map(platform => ({
       id: platform.id,

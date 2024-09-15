@@ -24,6 +24,7 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-grid-2x2-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-layout-list-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-layout-grid-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-square-library-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-chevron-right-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-pencil-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-trash-2-symbolic.svg</file>
