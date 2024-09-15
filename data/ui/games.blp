@@ -19,11 +19,6 @@ template $GamesWidget : Stack {
       trigger: "Delete";
       action: "action(games.delete)";
     }
-
-    Shortcut {
-      trigger: "Menu|<Shift>F10";
-      action: "action(context-menu.popup)";
-    }
   }
 
   ScrolledWindow items {
@@ -65,12 +60,6 @@ template $GamesWidget : Stack {
         ColumnViewColumn favoriteColumn {
           factory: SignalListItemFactory {};
         }
-      }
-
-      PopoverMenu popoverMenu {
-        menu-model: contextMenu;
-        has-arrow: false;
-        halign: start;
       }
     }
   }

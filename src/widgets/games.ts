@@ -37,17 +37,15 @@ export class GamesWidget extends Gtk.Stack {
 
   private _gridView!: Gtk.GridView
 
-  private dataModel!: Gio.ListStore<GameItem>
-  private sortModel!: Gtk.SortListModel<GameItem>
-  private filterModel!: Gtk.FilterListModel<GameItem>
-  private selectionModel!: Gtk.SingleSelection<GameItem>
+  private dataModel!: Gio.ListStore<Game>
+  private sortModel!: Gtk.SortListModel<Game>
+  private filterModel!: Gtk.FilterListModel<Game>
+  private selectionModel!: Gtk.SingleSelection<Game>
   private filter!: Gtk.EveryFilter
   private platformFilter!: Gtk.StringFilter
   private titleFilter!: Gtk.StringFilter
   private favoriteFilter!: Gtk.BoolFilter
   private wishlistFilter!: Gtk.BoolFilter
-
-  private _popoverMenu!: Gtk.PopoverMenu
 
   private viewGrid = true
   private locale!: LocaleOptions
@@ -55,13 +53,13 @@ export class GamesWidget extends Gtk.Stack {
 
   private isWishlist = Gtk.ClosureExpression.new(
     GObject.TYPE_BOOLEAN,
-    (g: GameItem) => g.game.wishlist,
+    (g: Game) => g.wishlist,
     null,
   )
 
   private isNotWishlist = Gtk.ClosureExpression.new(
     GObject.TYPE_BOOLEAN,
-    (g: GameItem) => !g.game.wishlist,
+    (g: Game) => !g.wishlist,
     null,
   )
 
@@ -72,7 +70,7 @@ export class GamesWidget extends Gtk.Stack {
       InternalChildren: [
         'items', 'noResultsFound', 'noGamesForPlatform', 'columnView',
         'titleColumn', 'platformColumn', 'developerColumn', 'yearColumn',
-        'noGames', 'grid', 'gridView', 'popoverMenu', 'noFavorites',
+        'noGames', 'grid', 'gridView', 'noFavorites',
         'noWishlist', 'modificationColumn', 'favoriteColumn',
       ],
       Signals: {
@@ -148,22 +146,16 @@ export class GamesWidget extends Gtk.Stack {
     const deleteAction = new Gio.SimpleAction({ name: 'delete' })
     deleteAction.connect('activate', () => this.onDeleteAction())
     gamesGroup.add_action(deleteAction)
-
-    // const popupMenuAction = new Gio.SimpleAction({ name: 'popup-menu' })
-    // popupMenuAction.connect('activate', () => this.onPopupMenuAction())
-    // gamesGroup.add_action(popupMenuAction)
   }
 
   private initCommon() {
-    const gameExpression = Gtk.PropertyExpression.new(GameItem.$gtype, null, 'game')
-
     this.platformFilter = new Gtk.StringFilter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpression, 'platform'),
+      expression: Gtk.PropertyExpression.new(Game.$gtype, null, 'platform'),
       matchMode: Gtk.StringFilterMatchMode.EXACT,
     })
 
     this.titleFilter = new Gtk.StringFilter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpression, 'title'),
+      expression: Gtk.PropertyExpression.new(Game.$gtype, null, 'title'),
       ignoreCase: true,
       matchMode: Gtk.StringFilterMatchMode.SUBSTRING,
     })
@@ -180,7 +172,7 @@ export class GamesWidget extends Gtk.Stack {
     this.filter.append(this.favoriteFilter)
     this.filter.append(this.wishlistFilter)
 
-    this.dataModel = new Gio.ListStore({ itemType: GameItem.$gtype })
+    this.dataModel = new Gio.ListStore({ itemType: Game.$gtype })
 
     this.sortModel = new Gtk.SortListModel({
       model: this.dataModel,
@@ -198,26 +190,24 @@ export class GamesWidget extends Gtk.Stack {
   }
 
   private initColumnView() {
-    const gameExpr = Gtk.PropertyExpression.new(GameItem.$gtype, null, 'game')
-
     this._titleColumn.sorter = new Gtk.StringSorter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'title'),
+      expression: Gtk.PropertyExpression.new(Game.$gtype, null, 'title'),
     })
 
     this._platformColumn.sorter = new Gtk.StringSorter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'platform'),
+      expression: Gtk.PropertyExpression.new(Game.$gtype, null, 'platform'),
     })
 
     this._developerColumn.sorter = new Gtk.StringSorter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'developer'),
+      expression: Gtk.PropertyExpression.new(Game.$gtype, null, 'developer'),
     })
 
     this._yearColumn.sorter = new Gtk.NumericSorter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'release-year')
+      expression: Gtk.PropertyExpression.new(Game.$gtype, null, 'release-year')
     })
 
     this._modificationColumn.sorter = new Gtk.NumericSorter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, gameExpr, 'modification-date'),
+      expression: Gtk.PropertyExpression.new(Game.$gtype, null, 'modification-date'),
     })
 
     // Factories
@@ -236,23 +226,12 @@ export class GamesWidget extends Gtk.Stack {
 
     factoryTitle.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
       const title = listItem.get_child() as GameTitleColumnWidget
-      const modelItem = listItem.get_item<GameItem>()
+      const modelItem = listItem.get_item<Game>()
 
-      title.title = modelItem.game.title
-      title.cover = modelItem.game.cover
-      title.platformIconName = getPlatform(modelItem.game.platform).iconName
-
-      // this.setupCell(title, listItem)
-      // modelItem.listUi = title
+      title.title = modelItem.title
+      title.cover = modelItem.cover
+      title.platformIconName = getPlatform(modelItem.platform).iconName
     })
-
-    // factoryTitle.connect('unbind', (_self, listItem: Gtk.ColumnViewCell) => {
-    //   const item = listItem.get_item<GameItem>()
-
-    //   if (item != null) {
-    //     item.listUi = null
-    //   }
-    // })
 
     const factoryPlatform = this._platformColumn.factory as Gtk.SignalListItemFactory
 
@@ -266,15 +245,14 @@ export class GamesWidget extends Gtk.Stack {
       const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
       contextMenuBin.child = label
 
-      // this.setupCell(label, listItem)
       listItem.child = contextMenuBin
     })
 
     factoryPlatform.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
       const label = (listItem.get_child() as ContextMenuBin).get_child() as Gtk.Label
-      const modelItem = listItem.get_item<GameItem>()
+      const modelItem = listItem.get_item<Game>()
 
-      label.label = platformName(modelItem.game.platform)
+      label.label = platformName(modelItem.platform)
     })
 
     const factoryDeveloper = this._developerColumn.factory as Gtk.SignalListItemFactory
@@ -289,15 +267,14 @@ export class GamesWidget extends Gtk.Stack {
       const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
       contextMenuBin.child = label
 
-      // this.setupCell(label, listItem)
       listItem.child = contextMenuBin
     })
 
     factoryDeveloper.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
       const label = (listItem.get_child() as ContextMenuBin).get_child() as Gtk.Label
-      const modelItem = listItem.get_item<GameItem>()
+      const modelItem = listItem.get_item<Game>()
 
-      label.label = modelItem.game.developer
+      label.label = modelItem.developer
     })
 
     const factoryYear = this._yearColumn.factory as Gtk.SignalListItemFactory
@@ -312,15 +289,14 @@ export class GamesWidget extends Gtk.Stack {
       const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
       contextMenuBin.child = label
 
-      // this.setupCell(label, listItem)
       listItem.child = contextMenuBin
     })
 
     factoryYear.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
       const label = (listItem.get_child() as ContextMenuBin).get_child() as Gtk.Label
-      const modelItem = listItem.get_item<GameItem>()
+      const modelItem = listItem.get_item<Game>()
 
-      label.label = modelItem.game.releaseYear.toString()
+      label.label = modelItem.releaseYear.toString()
     })
 
     const factoryModification = this._modificationColumn.factory as Gtk.SignalListItemFactory
@@ -335,15 +311,14 @@ export class GamesWidget extends Gtk.Stack {
       const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
       contextMenuBin.child = label
 
-      // this.setupCell(label, listItem)
       listItem.child = contextMenuBin
     })
 
     factoryModification.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
       const label = (listItem.get_child() as ContextMenuBin).get_child() as Gtk.Label
-      const modelItem = listItem.get_item<GameItem>()
+      const modelItem = listItem.get_item<Game>()
 
-      label.label = modelItem.game.modifiedAtDateTime.format(this.locale.dateFormat) ?? _!('Unknown')
+      label.label = modelItem.modifiedAtDateTime.format(this.locale.dateFormat) ?? _!('Unknown')
     })
 
     const factoryFavorite = this._favoriteColumn.factory as Gtk.SignalListItemFactory
@@ -357,25 +332,24 @@ export class GamesWidget extends Gtk.Stack {
       const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
       contextMenuBin.child = button
 
-      // this.setupCell(button, listItem)
       listItem.child = contextMenuBin
     })
 
     factoryFavorite.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
       const button = (listItem.get_child() as ContextMenuBin).get_child() as Gtk.Button
-      const modelItem = listItem.get_item<GameItem>()
+      const modelItem = listItem.get_item<Game>()
 
       button.connect('clicked', () => this.onFavoriteClicked(modelItem))
 
-      button.iconName = modelItem.game.favorite ? 'lucide-star-solid-symbolic' : 'lucide-star-symbolic'
-      button.tooltipText = modelItem.game.favorite ? _!('Unfavorite') : _!('Favorite')
+      button.iconName = modelItem.favorite ? 'lucide-star-solid-symbolic' : 'lucide-star-symbolic'
+      button.tooltipText = modelItem.favorite ? _!('Unfavorite') : _!('Favorite')
     })
 
     this._columnView.model = this.selectionModel
 
     this._columnView.connect('activate', (self, position) => {
-      const item = self.model.get_item(position) as GameItem
-      this.emit('game-activate', item.game)
+      const item = self.model.get_item(position) as Game
+      this.emit('game-activate', item)
     })
 
     this._columnView.sorter.connect('changed', (sorter: Gtk.ColumnViewSorter) => {
@@ -393,41 +367,30 @@ export class GamesWidget extends Gtk.Stack {
         menuModel: this.menuModel,
       })
 
-      // this.setupCell(gridItem, listItem)
       listItem.child = gridItem
     })
 
     factory.connect('bind', (_self, listItem: Gtk.ListItem) => {
       const gridItem = listItem.get_child() as GameGridItemWidget
-      const modelItem = listItem.get_item<GameItem>()
+      const modelItem = listItem.get_item<Game>()
 
-      gridItem.title = modelItem.game.title
-      gridItem.cover = modelItem.game.cover
-      gridItem.platformIconName = getPlatform(modelItem.game.platform).iconName
-
-      // modelItem.gridUi = gridItem
+      gridItem.title = modelItem.title
+      gridItem.cover = modelItem.cover
+      gridItem.platformIconName = getPlatform(modelItem.platform).iconName
     })
-
-    // factory.connect('unbind', (_self, listItem: Gtk.ListItem) => {
-    //   const item = listItem.get_item<GameItem>()
-
-    //   if (item != null) {
-    //     item.gridUi = null
-    //   }
-    // })
 
     this._gridView.model = this.selectionModel
 
     this._gridView.connect('activate', (self, position) => {
-      const item = self.model.get_item(position) as GameItem
-      this.emit('game-activate', item.game)
+      const item = self.model.get_item(position) as Game
+      this.emit('game-activate', item)
     })
   }
 
   loadItems() {
     const allGames = GamesRepository.instance.list()
 
-    this.dataModel.splice(0, this.dataModel.nItems, allGames.map(game => new GameItem({ game })))
+    this.dataModel.splice(0, this.dataModel.nItems, allGames)
     this.changeVisibleChild()
   }
 
@@ -435,7 +398,7 @@ export class GamesWidget extends Gtk.Stack {
     this.selectPlatform(null)
     this.favoriteFilter.expression = Gtk.ClosureExpression.new(
       GObject.TYPE_BOOLEAN,
-      (g: GameItem) => g.game.favorite,
+      (g: Game) => g.favorite,
       null
     )
 
@@ -486,7 +449,7 @@ export class GamesWidget extends Gtk.Stack {
     let position = -1
 
     for (let i = 0; i < this.dataModel.nItems; i++) {
-      if (this.dataModel.get_item(i)?.game.id === game.id) {
+      if (this.dataModel.get_item(i)?.id === game.id) {
         position = i
         break
       }
@@ -519,29 +482,6 @@ export class GamesWidget extends Gtk.Stack {
     this._columnView.sort_by_column(map[property] ?? null, sortType)
   }
 
-  // private setupCell(widget: Gtk.Widget, item: Gtk.ListItem) {
-  //   const rightClickEvent = new Gtk.GestureClick({
-  //     propagationPhase: Gtk.PropagationPhase.BUBBLE,
-  //     button: Gdk.BUTTON_SECONDARY,
-  //   })
-
-  //   rightClickEvent.connect('pressed', (source, nPress, x, y) => {
-  //     if (nPress === 1) {
-  //       this.selectionModel.select_item(item.get_position(), true)
-
-  //       const point = new Graphene.Point({ x, y })
-  //       const [, targetPoint] = widget.compute_point(this._items, point)
-  //       const position = new Gdk.Rectangle({ x: targetPoint.x, y: targetPoint.y })
-  //       this._popoverMenu.pointingTo = position
-  //       this._popoverMenu.popup()
-
-  //       source.set_state(Gtk.EventSequenceState.CLAIMED)
-  //     }
-  //   })
-
-  //   widget.add_controller(rightClickEvent)
-  // }
-
   private changeVisibleChild() {
     const query = this.titleFilter.search ?? ''
     const nItems = this.filterModel.get_n_items()
@@ -565,21 +505,18 @@ export class GamesWidget extends Gtk.Stack {
     }
   }
 
-  private onFavoriteClicked(gameItem: GameItem) {
-    GamesRepository.instance.toggleFavorite(gameItem.game)
-    const updatedGame = GamesRepository.instance.get(gameItem.game.id)
+  private onFavoriteClicked(game: Game) {
+    GamesRepository.instance.toggleFavorite(game)
+    const updatedGame = GamesRepository.instance.get(game.id)
 
-    // this.loadItems()
-    const [found, position] = this.dataModel.find(gameItem)
+    const [found, position] = this.dataModel.find(game)
 
     if (found && updatedGame) {
-      this.dataModel.splice(position, 1, [
-        new GameItem({ game: updatedGame, listUi: gameItem.listUi, gridUi: gameItem.gridUi })
-      ])
+      this.dataModel.splice(position, 1, [updatedGame])
 
       this.changeVisibleChild()
 
-      if (gameItem.game.favorite) {
+      if (game.favorite) {
         this.emit('game-unfavorited', updatedGame)
       } else {
         this.emit('game-favorited', updatedGame)
@@ -609,13 +546,13 @@ export class GamesWidget extends Gtk.Stack {
   }
 
   private onDetailsAction() {
-    const gameItem = this.selectionModel.get_selected_item<GameItem>()
-    this.emit('game-activate', gameItem.game)
+    const game = this.selectionModel.get_selected_item<Game>()
+    this.emit('game-activate', game)
   }
 
   private onEditAction() {
-    const gameItem = this.selectionModel.get_selected_item<GameItem>()
-    this.emit('game-edit', gameItem.game)
+    const game = this.selectionModel.get_selected_item<Game>()
+    this.emit('game-edit', game)
   }
 
   private async onDeleteAction() {
@@ -635,81 +572,11 @@ export class GamesWidget extends Gtk.Stack {
     const response = await (dialog.choose(this.root, null) as unknown as Promise<string>)
 
     if (response === 'delete') {
-      const gameItem = this.selectionModel.get_selected_item<GameItem>()
-      this.emit('game-delete', gameItem.game)
+      const game = this.selectionModel.get_selected_item<Game>()
+      this.emit('game-delete', game)
 
-      GamesRepository.instance.delete(gameItem.game)
+      GamesRepository.instance.delete(game)
       this.loadItems()
     }
-  }
-
-  // private onPopupMenuAction() {
-  //   const selectedItem = this.selectionModel.get_selected_item<GameItem>()
-  //   const row = this.viewGrid ? selectedItem.gridUi : selectedItem.listUi
-
-  //   if (!row) {
-  //     return
-  //   }
-
-  //   const [, bounds] = row.compute_bounds(this._items)
-  //   const bottomLeft = bounds.get_bottom_left()
-  //   const position = new Gdk.Rectangle({
-  //     x: bottomLeft.x,
-  //     y: bottomLeft.y + 12
-  //   })
-
-  //   this._popoverMenu.pointingTo = position
-  //   this._popoverMenu.popup()
-  //   this._popoverMenu.grab_focus()
-  // }
-}
-
-/**
- * Used to hold the game and its UI item to show the context menu.
- *
- * Inspired by the Nautilus solution on this.
- */
-class GameItem extends GObject.Object {
-  game!: Game
-  listUi: Gtk.Widget | null = null
-  gridUi: Gtk.Widget | null = null
-
-  static {
-    GObject.registerClass({
-      Properties: {
-        game: GObject.ParamSpec.object(
-          'game',
-          '',
-          '',
-          // @ts-ignore
-          GObject.ParamFlags.READWRITE,
-          Game.$gtype,
-        ),
-        listUi: GObject.ParamSpec.object(
-          'list-ui',
-          '',
-          '',
-          // @ts-ignore
-          GObject.ParamFlags.READWRITE,
-          Gtk.Widget.$gtype,
-        ),
-        gridUi: GObject.ParamSpec.object(
-          'grid-ui',
-          '',
-          '',
-          // @ts-ignore
-          GObject.ParamFlags.READWRITE,
-          Gtk.Widget.$gtype,
-        )
-      }
-    }, this)
-  }
-
-  constructor(params: Partial<GameItem>) {
-    super()
-
-    this.game = params.game!
-    this.listUi = params.listUi ?? null
-    this.gridUi = params.gridUi ?? null
   }
 }
