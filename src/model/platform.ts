@@ -84,7 +84,7 @@ export const platforms: Platform[] = [
   new Platform({ id: 'GAMECUBE', name: 'GameCube', iconName: 'platform-gamecube-symbolic', generation: 6 }),
   new Platform({ id: 'PLAYSTATION_2', name: 'PlayStation 2', iconName: 'platform-playstation-symbolic', generation: 6 }),
   new Platform({ id: 'WONDERSWAN', name: 'Wonderswan', iconName: 'platform-wonderswan-symbolic', generation: 6 }),
-  new Platform({ id: 'XBOX', name: 'Xbox', iconName: 'platform-xbox-symbolic', generation: 6 }),
+  new Platform({ id: 'XBOX', name: 'Xbox', iconName: 'platform-xbox-original-symbolic', generation: 6 }),
 
   new Platform({ id: 'ATARI_JAGUAR', name: 'Atari Jaguar', iconName: 'platform-atari-jaguar-symbolic', generation: 5 }),
   new Platform({ id: 'GAME_BOY_COLOR', name: 'Game Boy Color', iconName: 'platform-nintendo-game-boy-symbolic', generation: 5 }),

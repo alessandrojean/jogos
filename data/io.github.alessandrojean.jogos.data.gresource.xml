@@ -61,6 +61,7 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-playstation-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-wonderswan-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-xbox-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-xbox-original-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-wii-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-wii-u-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-windows-symbolic.svg</file>
