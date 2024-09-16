@@ -20,14 +20,23 @@ template $GameGridItemWidget : $ContextMenuBin {
         styles ["empty"]
       }
 
-      Picture {
-        file: bind template.cover;
-        width-request: 96;
-        height-request: 144;
-        hexpand: true;
+      AspectFrame {
         vexpand: true;
-        can-shrink: true;
-        content-fit: cover;
+        valign: fill;
+        ratio: 0.75;
+        obey-child: false;
+
+        Picture {
+          file: bind template.cover;
+          width-request: 160;
+          height-request: 213;
+          halign: fill;
+          valign: fill;
+          // hexpand: true;
+          // vexpand: true;
+          can-shrink: true;
+          content-fit: cover;
+        }
       }
     }
 

@@ -68,18 +68,18 @@ template $GamesWidget : Stack {
     hscrollbar-policy: never;
     propagate-natural-height: true;
 
-    Adw.Clamp {
-      maximum-size: 1600;
-      tightening-threshold: 200;
+    // Adw.Clamp {
+    //   maximum-size: 1600;
+    //   tightening-threshold: 200;
 
       GridView gridView {
         vscroll-policy: natural;
         orientation: vertical;
-        min-columns: 1;
-        max-columns: 6;
+        min-columns: 2;
+        max-columns: 999;
         factory: SignalListItemFactory {};
       }
-    }
+    // }
   }
 
   Adw.StatusPage noResultsFound {

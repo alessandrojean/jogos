@@ -58,6 +58,7 @@ game-title-column .game-cover {
 }
 
 game-grid-item .game-cover picture {
+  min-width: 160px;
   border-radius: 8px;
 }
 
