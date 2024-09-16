@@ -31,7 +31,7 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-folder-heart-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-history-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-settings-symbolic.svg</file>
-    <file preprocess="xml-stripblanks" alias="document-edit-symbolic.svg">icons/scalable/actions/lucide-pencil-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="icons/scalable/actions/document-edit-symbolic.svg">icons/scalable/actions/lucide-pencil-symbolic.svg</file>
 
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-atari-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-atari-2600-symbolic.svg</file>
