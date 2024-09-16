@@ -8,7 +8,7 @@ export type PlatformId = 'PLAYSTATION_4' | 'PLAYSTATION_5' | 'XBOX_SERIES'
   | 'GAME_BOY' | 'MEGA_DRIVE' | 'SUPER_NINTENDO' | 'MASTER_SYSTEM' | 'NES'
   | 'ATARI_2600' | 'WINDOWS' | 'MAC_OS' | 'ATARI_7800' | 'ATARI_JAGUAR'
   | 'ATARI_LYNX' | 'GAME_GEAR' | 'NEO_GEO_POCKET' | 'PC_ENGINE' | 'SG_1000'
-  | 'VIRTUAL_BOY' | 'WONDERSWAN'
+  | 'VIRTUAL_BOY' | 'WONDERSWAN' | 'APPLE_PIPPIN'
 
 export class Platform extends GObject.Object {
   id!: PlatformId
@@ -86,6 +86,7 @@ export const platforms: Platform[] = [
   new Platform({ id: 'WONDERSWAN', name: 'Wonderswan', iconName: 'platform-wonderswan-symbolic', generation: 6 }),
   new Platform({ id: 'XBOX', name: 'Xbox', iconName: 'platform-xbox-symbolic', generation: 6 }),
 
+  new Platform({ id: 'APPLE_PIPPIN', name: 'Apple Pippin', iconName: 'platform-apple-pippin-symbolic', generation: 5 }),
   new Platform({ id: 'ATARI_JAGUAR', name: 'Atari Jaguar', iconName: 'platform-atari-jaguar-symbolic', generation: 5 }),
   new Platform({ id: 'GAME_BOY_COLOR', name: 'Game Boy Color', iconName: 'platform-nintendo-game-boy-symbolic', generation: 5 }),
   new Platform({ id: 'NEO_GEO_POCKET', name: 'Neo Geo Pocket', iconName: 'platform-neo-geo-pocket-symbolic', generation: 5 }),
