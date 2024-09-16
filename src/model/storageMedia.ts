@@ -1,6 +1,6 @@
 import GObject from 'gi://GObject'
 
-export type StorageMediaId = 'CARTRIDGE' | 'CD' | 'DVD' | 'BLURAY' | 'FLOPPY_DISK'
+export type StorageMediaId = 'CARTRIDGE' | 'CD' | 'DVD' | 'BLURAY' | 'FLOPPY_DISK' | 'UMD'
 
 export class StorageMedia extends GObject.Object {
   id!: StorageMediaId
@@ -37,6 +37,7 @@ export const storageMedias: StorageMedia[] = [
   new StorageMedia({ id: 'BLURAY', name: _!('Blu-ray') }),
   new StorageMedia({ id: 'DVD', name: _!('DVD') }),
   new StorageMedia({ id: 'CD', name: _!('CD') }),
+  new StorageMedia({ id: 'UMD', name: _!('UMD') }),
   new StorageMedia({ id: 'FLOPPY_DISK', name: _!('Floppy disk') }),
   new StorageMedia({ id: 'CARTRIDGE', name: _!('Cartridge') }),
 ]
