@@ -448,14 +448,14 @@ export class GamesWidget extends Gtk.Stack {
     // Doing the search manually as find_with_equal_func is not working.
     let position = -1
 
-    for (let i = 0; i < this.dataModel.nItems; i++) {
-      if (this.dataModel.get_item(i)?.id === game.id) {
+    for (let i = 0; i < this.selectionModel.nItems; i++) {
+      if (this.selectionModel.get_item(i)?.id === game.id) {
         position = i
         break
       }
     }
 
-    if (position >= 0) {
+    if (position >= 0 && position < this.selectionModel.nItems) {
       this.selectionModel.set_selected(position)
 
       if (this.viewGrid) {
