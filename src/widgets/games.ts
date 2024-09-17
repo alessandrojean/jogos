@@ -221,6 +221,8 @@ export class GamesWidget extends Gtk.Stack {
         menuModel: this.menuModel,
       })
 
+      title.connect('setup-menu', () => this.onSetupMenu(listItem))
+
       listItem.child = title
     })
 
@@ -243,6 +245,7 @@ export class GamesWidget extends Gtk.Stack {
       })
 
       const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
+      contextMenuBin.connect('setup-menu', () => this.onSetupMenu(listItem))
       contextMenuBin.child = label
 
       listItem.child = contextMenuBin
@@ -265,6 +268,7 @@ export class GamesWidget extends Gtk.Stack {
       })
 
       const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
+      contextMenuBin.connect('setup-menu', () => this.onSetupMenu(listItem))
       contextMenuBin.child = label
 
       listItem.child = contextMenuBin
@@ -287,6 +291,7 @@ export class GamesWidget extends Gtk.Stack {
       })
 
       const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
+      contextMenuBin.connect('setup-menu', () => this.onSetupMenu(listItem))
       contextMenuBin.child = label
 
       listItem.child = contextMenuBin
@@ -309,6 +314,7 @@ export class GamesWidget extends Gtk.Stack {
       })
 
       const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
+      contextMenuBin.connect('setup-menu', () => this.onSetupMenu(listItem))
       contextMenuBin.child = label
 
       listItem.child = contextMenuBin
@@ -330,6 +336,7 @@ export class GamesWidget extends Gtk.Stack {
       })
 
       const contextMenuBin = new ContextMenuBin({ menuModel: this.menuModel })
+      contextMenuBin.connect('setup-menu', () => this.onSetupMenu(listItem))
       contextMenuBin.child = button
 
       listItem.child = contextMenuBin
@@ -366,6 +373,8 @@ export class GamesWidget extends Gtk.Stack {
         cover: null,
         menuModel: this.menuModel,
       })
+
+      gridItem.connect('setup-menu', () => this.onSetupMenu(listItem))
 
       listItem.child = gridItem
     })
@@ -543,6 +552,11 @@ export class GamesWidget extends Gtk.Stack {
     } else if (column === this._modificationColumn) {
       this.emit('sort-changed', Gtk.StringObject.new(`modification_${order}`))
     }
+  }
+
+  private onSetupMenu(listItem: Gtk.ListItem) {
+    const item = listItem.get_item<Game>()
+    this.selectGame(item)
   }
 
   private onDetailsAction() {
