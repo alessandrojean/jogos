@@ -132,6 +132,7 @@ template $EditDialogWidget : Adw.Dialog {
           title: _("Story");
 
           Gtk.TextView story {
+            accepts-tab: false;
             wrap-mode: word;
             styles ["card"]
           }
