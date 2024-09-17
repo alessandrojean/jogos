@@ -107,10 +107,14 @@ export class Application extends Adw.Application {
 
       aboutDialog.add_link(_!('Sponsor'), 'https://github.com/sponsors/alessandrojean')
 
-      aboutDialog.add_credit_section('Icons', [
+      aboutDialog.add_credit_section(_!('Icons'), [
         'Lucide https://lucide.dev',
         'Highscore https://gitlab.gnome.org/World/highscore',
         'Simple Icons https://simpleicons.org',
+      ])
+
+      aboutDialog.add_acknowledgement_section(_!('Inspiration'), [
+        'GNOME Highscore https://gitlab.gnome.org/World/highscore'
       ])
 
       aboutDialog.present(this.active_window)
