@@ -2,6 +2,7 @@ import Gda from 'gi://Gda'
 import GLib from 'gi://GLib'
 import { appDirectory } from '../application.js'
 import Game from '../model/game.js'
+import { getPlatform, Platform, PlatformId } from '../model/platform.js'
 
 export default class GamesRepository {
   private connection!: Gda.Connection
@@ -87,6 +88,27 @@ export default class GamesRepository {
     }
 
     return games
+  }
+
+  listPlatforms() {
+    const request = this.connection.execute_select_command(/* sql */`
+      SELECT DISTINCT platform FROM game WHERE wishlist = 0;
+    `)
+
+    const iterator = request.create_iter()
+    const platforms: Platform[] = []
+
+    while (iterator.move_next()) {
+      const id = iterator.get_value_for_field('platform') as unknown as PlatformId
+      const platform = getPlatform(id)
+
+      platforms.push(platform)
+    }
+
+    // Sort here as some consoles like NES have different names depending
+    // on the region and translation. Sorting by id would be inaccurate.
+
+    return platforms.sort((a, b) => a.name.localeCompare(b.name))
   }
 
   get(id: number) {

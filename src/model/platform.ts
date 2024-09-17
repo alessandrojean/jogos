@@ -59,7 +59,7 @@ export class Platform extends GObject.Object {
   }
 }
 
-export const platforms: Platform[] = [
+const platformsByGeneration: Platform[] = [
   new Platform({ id: 'MAC_OS', name: 'macOS', iconName: 'platform-mac-os-symbolic', generation: -1 }),
   new Platform({ id: 'WINDOWS', name: 'Windows', iconName: 'platform-windows-symbolic', generation: -1 }),
 
@@ -113,6 +113,8 @@ export const platforms: Platform[] = [
 
   new Platform({ id: 'ATARI_2600', name: 'Atari 2600', iconName: 'platform-atari-2600-symbolic', generation: 2 }),
 ]
+
+export const platforms = platformsByGeneration.sort((a, b) => a.name.localeCompare(b.name))
 
 const platformMap = Object.fromEntries(platforms.map(p => [p.id, p])) as Record<PlatformId, Platform>
 

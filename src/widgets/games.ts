@@ -569,28 +569,8 @@ export class GamesWidget extends Gtk.Stack {
     this.emit('game-edit', game)
   }
 
-  private async onDeleteAction() {
-    const dialog = new Adw.AlertDialog({
-      heading: _!('Delete this game?'),
-      body: _!('After the deletion, it can not be recovered.'),
-      close_response: 'cancel'
-    })
-
-    dialog.add_response('cancel', _!('Cancel'))
-    dialog.add_response('delete', _!('Delete'))
-    dialog.set_default_response('cancel')
-    dialog.set_response_appearance('delete', Adw.ResponseAppearance.DESTRUCTIVE)
-
-    // TODO: Remove the Promise cast when ts-for-gir fixes this.
-    // https://github.com/gjsify/ts-for-gir/issues/171
-    const response = await (dialog.choose(this.root, null) as unknown as Promise<string>)
-
-    if (response === 'delete') {
-      const game = this.selectionModel.get_selected_item<Game>()
-      this.emit('game-delete', game)
-
-      GamesRepository.instance.delete(game)
-      this.loadItems()
-    }
+  private onDeleteAction() {
+    const game = this.selectionModel.get_selected_item<Game>()
+    this.emit('game-delete', game)
   }
 }

@@ -6,7 +6,8 @@ import Gtk from 'gi://Gtk?version=4.0'
 
 import { Application } from './application.js'
 import Game from './model/game.js'
-import { PlatformId, platforms } from './model/platform.js'
+import { PlatformId } from './model/platform.js'
+import GamesRepository from './repositories/games.js'
 import { CreateDialogWidget } from './widgets/createDialog.js'
 import { DetailsDialogWidget } from './widgets/detailsDialog.js'
 import { EditDialogWidget } from './widgets/editDialog.js'
@@ -30,19 +31,14 @@ export class Window extends Adw.ApplicationWindow {
 
   private changeSortAction!: Gio.SimpleAction
 
-  private sidebarItems: SidebarItem[] = [
+  private pinnedSidebarItems: SidebarItem[] = [
     { id: 'ALL_GAMES', label: _!('All games'), iconName: 'lucide-square-library-symbolic', section: 'top-pinned' },
     { id: 'RECENTS', label: _!('Recents'), iconName: 'lucide-history-symbolic', section: 'top-pinned' },
     { id: 'FAVORITES', label: _!('Favorites'), iconName: 'lucide-star-symbolic', section: 'top-pinned' },
     { id: 'WISHLIST', label: _!('Wishlist'), iconName: 'lucide-folder-heart-symbolic', section: 'top-pinned' },
-
-    ...platforms.map(platform => ({
-      id: platform.id,
-      label: platform.name,
-      iconName: platform.iconName,
-      section: `generation-${platform.generation}`
-    }))
   ]
+
+  private sidebarItems: SidebarItem[] = []
 
   static {
     GObject.registerClass({
@@ -132,8 +128,8 @@ export class Window extends Adw.ApplicationWindow {
       detailsDialog.present(this)
     })
 
-    this._gamesWidget.connect('game-edit', (_self, game: Game) => this.onGameEdit(game))
-    this._gamesWidget.connect('game-delete', (_self, game: Game) => this.onGameDelete(game))
+    this._gamesWidget.connect('game-edit', (_self, game: Game) => this.onGameEditAction(game))
+    this._gamesWidget.connect('game-delete', (_self, game: Game) => this.onGameDeleteAction(game))
     this._gamesWidget.connect('game-favorited', (_self, game: Game) => this.onGameFavorited(game))
     this._gamesWidget.connect('game-unfavorited', (_self, game: Game) => this.onGameUnfavorited(game))
 
@@ -143,9 +139,7 @@ export class Window extends Adw.ApplicationWindow {
   }
 
   private initSidebar() {
-    for (const item of this.sidebarItems) {
-      this._sidebarList.append(new SidebarItemWidget(item))
-    }
+    this.updateSidebarItems()
 
     this._sidebarList.set_header_func((row, before) => {
       if (row instanceof SidebarItemWidget && before instanceof SidebarItemWidget) {
@@ -159,14 +153,16 @@ export class Window extends Adw.ApplicationWindow {
 
     const lastItemId = Application.settings.get<string>('last-sidebar-item')
     const lastItemIndex = this.sidebarItems.findIndex(p => p.id === lastItemId)
-    const lastItem = this.sidebarItems[lastItemIndex]
+    const lastItem = this.sidebarItems[Math.max(lastItemIndex, 0)]
     const itemRow = this._sidebarList.get_row_at_index(Math.max(0, lastItemIndex))
 
     this._sidebarList.select_row(itemRow)
-    this.onSidebarItemSelected(lastItem.id ?? this.sidebarItems[0].id)
+    this.onSidebarRowSelected(lastItem.id ?? this.sidebarItems[0].id)
 
-    this._sidebarList.connect('row-activated', (_source, row) => {
-      this.onSidebarItemSelected((row as SidebarItemWidget).id)
+    this._sidebarList.connect('row-selected', (_source, row) => {
+      if (row) {
+        this.onSidebarRowSelected((row as SidebarItemWidget).id)
+      }
     })
   }
 
@@ -211,6 +207,28 @@ export class Window extends Adw.ApplicationWindow {
 
     viewOptionsMenu.append_section(_!('Sort by'), sortMenu)
     this._viewAndSort.menuModel = viewOptionsMenu
+  }
+
+  private updateSidebarItems() {
+    this.sidebarItems = []
+    this._sidebarList.remove_all()
+
+    this.sidebarItems.push(...this.pinnedSidebarItems)
+
+    const existingPlatforms = GamesRepository.instance.listPlatforms()
+
+    for (const platform of existingPlatforms) {
+      this.sidebarItems.push({
+        id: platform.id,
+        label: platform.name,
+        iconName: platform.iconName,
+        section: 'platform'
+      })
+    }
+
+    for (const item of this.sidebarItems) {
+      this._sidebarList.append(new SidebarItemWidget(item))
+    }
   }
 
   private onChangeView() {
@@ -280,7 +298,14 @@ export class Window extends Adw.ApplicationWindow {
 
   }
 
-  private onSidebarItemSelected(itemId: string) {
+  private selectSidebarRow(id: string) {
+    const index = this.sidebarItems.findIndex(s => s.id === id)
+    const row = this._sidebarList.get_row_at_index(Math.max(index, 0))
+
+    this._sidebarList.select_row(row)
+  }
+
+  private onSidebarRowSelected(itemId: string) {
     const item = this.sidebarItems.find(item => item.id === itemId)
 
     if (!item) {
@@ -317,8 +342,8 @@ export class Window extends Adw.ApplicationWindow {
 
     this._gamesWidget.selectPlatform(itemId as PlatformId)
 
-    if (this._splitView.get_collapsed()) {
-      this._splitView.set_show_content(true)
+    if (this._splitView.collapsed) {
+      this._splitView.showContent = true
     }
 
   }
@@ -339,15 +364,11 @@ export class Window extends Adw.ApplicationWindow {
     })
 
     createDialog.connect('game-created', (_self, game: Game) => {
-      this._gamesWidget.search('')
-
-      if (game.wishlist) {
-        this._gamesWidget.showWishlist()
-      } else {
-        this._gamesWidget.selectPlatform(game.platform)
-      }
+      this.updateSidebarItems()
+      this.selectSidebarRow(game.wishlist ? 'WISHLIST' : game.platform)
 
       this._gamesWidget.loadItems()
+      this._gamesWidget.search('')
       this._gamesWidget.selectGame(game)
 
       const toast = new Adw.Toast({
@@ -361,23 +382,19 @@ export class Window extends Adw.ApplicationWindow {
     createDialog.present(this)
   }
 
-  private onGameEdit(game: Game) {
+  private onGameEditAction(game: Game) {
     const editDialog = new EditDialogWidget(game)
 
     editDialog.connect('game-updated', (_self, updatedGame) => {
-      this._gamesWidget.search('')
-
-      if (game.wishlist) {
-        this._gamesWidget.showWishlist()
-      } else {
-        this._gamesWidget.selectPlatform(game.platform)
-      }
+      this.updateSidebarItems()
+      this.selectSidebarRow(updatedGame.wishlist ? 'WISHLIST' : updatedGame.platform)
 
       this._gamesWidget.loadItems()
+      this._gamesWidget.search('')
       this._gamesWidget.selectGame(updatedGame)
 
       const toast = new Adw.Toast({
-        title: _!('"%s" was updated').format(game.title),
+        title: _!('"%s" was updated').format(updatedGame.title),
         timeout: 3,
       })
 
@@ -387,13 +404,47 @@ export class Window extends Adw.ApplicationWindow {
     editDialog.present(this)
   }
 
-  private onGameDelete(game: Game) {
-    const toast = new Adw.Toast({
-      title: _!('"%s" was deleted').format(game.title),
-      timeout: 3,
+  private async onGameDeleteAction(game: Game) {
+    const dialog = new Adw.AlertDialog({
+      heading: _!('Delete this game?'),
+      body: _!('After the deletion, it can not be recovered.'),
+      close_response: 'cancel'
     })
 
-    this._toastOverlay.add_toast(toast)
+    dialog.add_response('cancel', _!('Cancel'))
+    dialog.add_response('delete', _!('Delete'))
+    dialog.set_default_response('cancel')
+    dialog.set_response_appearance('delete', Adw.ResponseAppearance.DESTRUCTIVE)
+
+    // TODO: Remove the Promise cast when ts-for-gir fixes this.
+    // https://github.com/gjsify/ts-for-gir/issues/171
+    const response = await (dialog.choose(this.root, null) as unknown as Promise<string>)
+
+    if (response === 'delete') {
+      GamesRepository.instance.delete(game)
+
+      // Handle the case where the game might be the last one on its platform.
+      // In this case it's better to select the all games sidebar item.
+      const platforms = GamesRepository.instance.listPlatforms()
+      const platformHasGames = platforms.findIndex(p => p.id === game.platform) >= 0
+      const selectedRow = this._sidebarList.get_selected_row() as SidebarItemWidget
+
+      this.updateSidebarItems()
+
+      if (!platformHasGames && selectedRow.id === game.platform) {
+        this.selectSidebarRow('ALL_GAMES')
+      }
+
+      this._gamesWidget.loadItems()
+
+      const toast = new Adw.Toast({
+        title: _!('"%s" was deleted').format(game.title),
+        timeout: 3,
+      })
+
+      this._toastOverlay.add_toast(toast)
+    }
+
   }
 
   private onGameFavorited(game: Game) {
