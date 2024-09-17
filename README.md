@@ -21,7 +21,7 @@ A simple physical game collection manager, created with GTK 4 and Libadwaita.
 The following items are the major features aimed to be added to Jogos on the
 initial releases.
 
-- Import games from IGDB.com;
+- Import games from IGDB.com and OpenVGDB;
 - Custom game creation;
 - Statistics of the collection;
 
@@ -96,6 +96,17 @@ at the top of this file.
 
 After your initial build, you can use the "Flatpak: Build and Run" action
 from the command palette to do both steps at once.
+
+## Acknowledgements
+
+Some icons and design decisions were inspired by the awesome work of
+[Alice Mikhaylenko] in the [Highscore] application. Other icons are
+from the icon packs [Lucide] and [Simple Icons].
+
+[Alice Mikhaylenko]: https://gitlab.gnome.org/alicem
+[Highscore]: https://gitlab.gnome.org/World/highscore
+[Lucide]: https://lucide.dev
+[Simple Icons]: https://simpleicons.org
 
 ## License
 
