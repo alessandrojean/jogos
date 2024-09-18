@@ -13,7 +13,7 @@ import { Settings } from './settings.js'
 import { createFolder } from './utils/createFolder.js'
 import { debugInfo } from './utils/debugInfo.js'
 import ContextMenuBin from './widgets/contextMenuBin.js'
-import PreferencesDialogWidget from './widgets/preferencesDialog.js'
+import { PreferencesDialog } from './widgets/preferencesDialog.js'
 import { SidebarItem } from './widgets/sidebarItem.js'
 import { Window } from './window.js'
 
@@ -134,7 +134,7 @@ export class Application extends Adw.Application {
   }
 
   private onPreferencesAction() {
-    const preferencesDialog = new PreferencesDialogWidget()
+    const preferencesDialog = new PreferencesDialog()
     preferencesDialog.present(this.window)
   }
 }

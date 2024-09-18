@@ -7,7 +7,7 @@ import { IgdbApi } from '../igdb/api.js'
 import { currencies, Currency } from '../model/currency.js'
 import { Settings } from '../settings.js'
 
-export default class PreferencesDialogWidget extends Adw.PreferencesDialog {
+export class PreferencesDialog extends Adw.PreferencesDialog {
   private _followSystemLocale!: Gtk.Switch
   private _dateFormat!: Adw.ComboRow
   private _preferredCurrency!: Adw.ComboRow
@@ -30,7 +30,7 @@ export default class PreferencesDialogWidget extends Adw.PreferencesDialog {
 
   static {
     GObject.registerClass({
-      GTypeName: 'PreferencesDialogWidget',
+      GTypeName: 'PreferencesDialog',
       Template: 'resource:///io/github/alessandrojean/jogos/ui/preferences-dialog.ui',
       InternalChildren: [
         'followSystemLocale', 'preferredCurrency', 'dateFormat', 'clock24', 'clock12',
@@ -39,7 +39,7 @@ export default class PreferencesDialogWidget extends Adw.PreferencesDialog {
     }, this)
   }
 
-  constructor(params: Partial<PreferencesDialogWidget> = {}) {
+  constructor(params: Partial<PreferencesDialog> = {}) {
     super(params)
 
     this.settings = Application.settings
