@@ -8,7 +8,7 @@ export type PlatformId = 'PLAYSTATION_4' | 'PLAYSTATION_5' | 'XBOX_SERIES'
   | 'GAME_BOY' | 'MEGA_DRIVE' | 'SUPER_NINTENDO' | 'MASTER_SYSTEM' | 'NES'
   | 'ATARI_2600' | 'WINDOWS' | 'MAC_OS' | 'ATARI_7800' | 'ATARI_JAGUAR'
   | 'ATARI_LYNX' | 'GAME_GEAR' | 'NEO_GEO_POCKET' | 'PC_ENGINE' | 'SG_1000'
-  | 'VIRTUAL_BOY' | 'WONDERSWAN' | 'APPLE_PIPPIN'
+  | 'VIRTUAL_BOY' | 'WONDERSWAN' | 'APPLE_PIPPIN' | 'NEO_GEO_CD'
 
 export class Platform extends GObject.Object {
   id!: PlatformId
@@ -110,6 +110,7 @@ const platformsByGeneration: Platform[] = [
   new Platform({ id: 'GAME_GEAR', name: 'Game Gear', iconName: 'platform-sega-game-gear-symbolic', generation: 4, igdbId: 35 }),
   // Translators: Use 'Mega Drive' or 'Genesis' depending on the name adopted in the region.
   new Platform({ id: 'MEGA_DRIVE', name: _!('Mega Drive'), iconName: 'platform-sega-mega-drive-symbolic', generation: 4, igdbId: 29 }),
+  new Platform({ id: 'NEO_GEO_CD', name: 'Neo Geo CD', iconName: 'platform-neo-geo-cd-symbolic', generation: 4, igdbId: 136 }),
   // Translators: Use 'PC Engine' or 'TurboGrafx-16' depdning on the name adopted in the region.
   new Platform({ id: 'PC_ENGINE', name: _!('PC Engine'), iconName: 'platform-pc-engine-symbolic', generation: 4, igdbId: 86 }),
   // Translators: Use 'Super Nintendo' or 'Super Famicom' depending on the name adopted in the region.

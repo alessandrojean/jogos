@@ -45,6 +45,7 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-dreamcast-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-gamecube-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-mac-os-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/platform-neo-geo-cd-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-neo-geo-pocket-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-nes-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-nintendo-3ds-symbolic.svg</file>
