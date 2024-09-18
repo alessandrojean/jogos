@@ -1,0 +1,51 @@
+using Gtk 4.0;
+
+template $OnlineGameResult :Gtk.Box {
+  margin-bottom: 8;
+  margin-top: 8;
+  margin-start: 8;
+  margin-end: 8;
+  orientation: horizontal;
+  spacing: 12;
+
+  Overlay {
+    styles ["game-cover"]
+
+    [overlay]
+    Gtk.Image placeholder {
+      icon-name: "lucide-image-symbolic";
+      halign: fill;
+      styles ["empty"]
+    }
+
+    AspectFrame {
+      Picture coverPicture {
+        width-request: 42;
+        height-request: 56;
+        can-shrink: true;
+        content-fit: cover;
+      }
+    }
+  }
+
+  Box {
+    orientation: vertical;
+    spacing: 6;
+
+    Label title {
+      label: bind template.title;
+      lines: 1;
+      ellipsize: end;
+      xalign: 0;
+      styles ["heading"]
+    }
+
+    Label details {
+      label: bind template.details;
+      lines: 1;
+      ellipsize: end;
+      xalign: 0;
+      styles ["dim-label", "caption"]
+    }
+  }
+}

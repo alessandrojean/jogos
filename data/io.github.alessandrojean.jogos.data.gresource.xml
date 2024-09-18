@@ -9,28 +9,31 @@
     <file>ui/game-grid-item.ui</file>
     <file>ui/game-title-column.ui</file>
     <file>ui/games.ui</file>
+    <file>ui/online-game-result.ui</file>
     <file>ui/preferences-dialog.ui</file>
     <file>ui/sidebar-item.ui</file>
     <file>ui/window.ui</file>
     <file alias="gtk/help-overlay.ui">ui/help-overlay.ui</file>
 
-    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-search-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-cable-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-chevron-right-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-folder-heart-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-gamepad-2-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-plus-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-menu-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-panel-left-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-star-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-star-solid-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-grid-2x2-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-history-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-image-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-layout-list-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-layout-grid-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-square-library-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-chevron-right-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-menu-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-panel-left-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-pencil-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-trash-2-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-folder-heart-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-history-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-plus-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-search-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-settings-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-square-library-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-star-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-star-solid-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-trash-2-symbolic.svg</file>
     <file preprocess="xml-stripblanks" alias="icons/scalable/actions/document-edit-symbolic.svg">icons/scalable/actions/lucide-pencil-symbolic.svg</file>
 
     <file preprocess="xml-stripblanks">icons/scalable/actions/platform-apple-pippin-symbolic.svg</file>

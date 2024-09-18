@@ -61,4 +61,36 @@ template $PreferencesDialogWidget : Adw.PreferencesDialog {
       }
     }
   }
+
+  Adw.PreferencesPage {
+    title: _("Integrations");
+    icon-name: "lucide-cable-symbolic";
+
+    Adw.PreferencesGroup {
+      Adw.ExpanderRow {
+        title: "IGDB";
+        enable-expansion: bind enableIgdbIntegration.active;
+
+        [suffix]
+        Gtk.Switch enableIgdbIntegration {
+          valign: center;
+        }
+
+        Adw.EntryRow igdbClientId {
+          title: "Client ID";
+          sensitive: bind enableIgdbIntegration.active;
+          show-apply-button: true;
+          styles ["monospace"]
+        }
+
+        Adw.EntryRow igdbClientSecret {
+          title: "Client secret";
+          sensitive: bind enableIgdbIntegration.active;
+          show-apply-button: true;
+          styles ["monospace"]
+        }
+      }
+    }
+
+  }
 }

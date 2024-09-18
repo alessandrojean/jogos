@@ -53,7 +53,8 @@ gridview {
 }
 
 game-grid-item .game-cover picture,
-game-title-column .game-cover {
+game-title-column .game-cover,
+online-game-result .game-cover picture {
   background: color-mix(in srgb, currentColor 20%, transparent);
 }
 
@@ -62,12 +63,14 @@ game-grid-item .game-cover picture {
   border-radius: 8px;
 }
 
-game-title-column .game-cover {
+game-title-column .game-cover,
+online-game-result .game-cover picture {
   border-radius: 5px;
 }
 
 game-grid-item .game-cover image.empty,
-game-title-column .game-cover image.empty {
+game-title-column .game-cover image.empty,
+online-game-result .game-cover image.empty {
   color: color-mix(in srgb, currentColor 50%, transparent);
 }
 

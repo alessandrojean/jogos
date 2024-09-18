@@ -4,6 +4,7 @@ import Soup from 'gi://Soup'
 
 interface FetchOptions {
   url: string
+  query?: Record<string, string>
   method?: 'GET' | 'POST'
   headers?: Record<string, string>
   body?: string | object
@@ -12,11 +13,32 @@ interface FetchOptions {
 Gio._promisify(Soup.Session.prototype, 'send_async', 'send_finish')
 Gio._promisify(Gio.MemoryOutputStream.prototype, 'splice_async', 'splice_finish')
 
-export default async function fetch(options: FetchOptions) {
+export default async function fetch<T>(options: FetchOptions) {
   const session = new Soup.Session()
   const method = options.method ?? 'GET'
 
-  const uri = GLib.Uri.parse(options.url, GLib.UriFlags.NONE)
+  const uriBase = GLib.Uri.parse(options.url, GLib.UriFlags.NONE)
+
+  let query = uriBase.get_query()
+
+  if (options.query) {
+    const newQuery = Object.entries(options.query)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&')
+
+    query = newQuery.length > 0 ? newQuery : null
+  }
+
+  const uri = GLib.Uri.build(
+    GLib.UriFlags.NONE,
+    uriBase.get_scheme(),
+    uriBase.get_userinfo(),
+    uriBase.get_host(),
+    uriBase.get_port(),
+    uriBase.get_path(),
+    query,
+    uriBase.get_fragment(),
+  )
 
   const message = new Soup.Message({
     method,
@@ -38,7 +60,7 @@ export default async function fetch(options: FetchOptions) {
     message.set_request_body_from_bytes(null, new GLib.Bytes(body))
   }
 
-  print(`Fetching ${options.url}`)
+  print(`Fetching ${uri.to_string()}`)
 
   // TODO: Remove the Promise cast when ts-for-gir fixes this.
   // https://github.com/gjsify/ts-for-gir/issues/171
@@ -54,7 +76,7 @@ export default async function fetch(options: FetchOptions) {
     type: 'basic',
     async json() {
       const text = await this.text()
-      return JSON.parse(text)
+      return JSON.parse(text) as T
     },
     async text() {
       const gBytes = await this.gBytes()

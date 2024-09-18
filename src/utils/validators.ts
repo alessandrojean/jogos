@@ -52,6 +52,19 @@ export function touch<Key extends string>(validator: Validator<Key>, widgetMap: 
   }
 }
 
+export function clear<Key extends string>(validator: Validator<Key>, widgetMap: WidgetMap<Key>) {
+  const fields = Object.entries(validator) as [Key, Field][]
+
+  for (const [key, field] of fields) {
+    const editable = widgetMap[key]
+
+    field.dirty = false
+    field.error = field.validators.some(fn => !fn(editable.text))
+
+    editable.remove_css_class('error')
+  }
+}
+
 export function setupEntryRow<Key extends string>(validator: Validator<Key>, entryRow: Adw.EntryRow, item: Key) {
   validator[item].error = entryRow.textLength === 0
 

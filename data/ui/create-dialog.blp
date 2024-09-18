@@ -25,214 +25,278 @@ template $CreateDialogWidget : Adw.Dialog {
       }
     }
 
-    ScrolledWindow {
-      Box {
-        orientation: vertical;
-        margin-start: 20;
-        margin-end: 20;
-        margin-top: 24;
-        margin-bottom: 20;
-        spacing: 24;
+    [bottom]
+    Adw.ViewSwitcherBar viewSwitcher {
+      stack: stack;
+    }
 
-        Adw.PreferencesGroup {
-          margin-bottom: 12;
+    Adw.ViewStack stack {
+      Adw.ViewStackPage pageSearch {
+        title: _("Online search");
+        icon-name: "lucide-search-symbolic";
+        name: "search";
+        child: Box {
+          orientation: vertical;
 
-          Adw.Clamp {
-            maximum-size: 160;
+          SearchEntry {
+            margin-top: 24;
+            margin-bottom: 10;
+            margin-start: 20;
+            margin-end: 20;
+            placeholder-text: _("Search by the game title...");
+            search-delay: 500;
+            search-changed => $onSearchChanged();
+          }
 
-            Overlay {
-              halign: center;
-              valign: center;
+          Gtk.Stack searchStack {
+            Gtk.StackPage {
+              name: "results";
+              child: ScrolledWindow {
+                propagate-natural-height: true;
+                overflow: visible;
 
-              [overlay]
-              Button coverButtonEdit {
-                icon-name: "lucide-pencil-symbolic";
-                tooltip-text: _("New cover");
-                halign: end;
-                valign: end;
-                margin-bottom: 6;
-                margin-end: 6;
-                action-name: "create-dialog.new-cover";
+                ListBox resultsList {
+                  styles ["boxed-list-separate"]
+                  margin-start: 20;
+                  margin-end: 20;
+                  margin-top: 10;
+                  margin-bottom: 20;
+                  selection-mode: none;
+                  overflow: visible;
 
-                styles ["circular", "osd"]
-              }
+                  row-activated => $onOnlineGameActivated();
+                }
+              };
+            }
 
-              [overlay]
-              Revealer deleteRevealer {
-                transition-type: crossfade;
-                margin-end: 40;
+            Gtk.StackPage {
+              name: "empty";
+              child: Adw.StatusPage {
+                title: _("No results found");
+                description: _("Try a different search");
+                icon-name: "lucide-search-symbolic";
+                vexpand: true;
+                styles ["compact"]
+              };
+            }
+          }
+        };
+      }
 
-                Button coverButtonDelete {
-                  icon-name: "lucide-trash-2-symbolic";
-                  tooltip-text: _("Delete cover");
-                  halign: end;
-                  valign: end;
-                  margin-bottom: 6;
-                  margin-end: 6;
-                  action-name: "create-dialog.remove-cover";
+      Adw.ViewStackPage pageForm {
+        title: _("Game details");
+        name: "form";
+        icon-name: "lucide-gamepad-2-symbolic";
+        child: ScrolledWindow {
+          Box {
+            orientation: vertical;
+            margin-start: 20;
+            margin-end: 20;
+            margin-top: 24;
+            margin-bottom: 20;
+            spacing: 24;
 
-                  styles ["circular", "osd"]
+            Adw.PreferencesGroup {
+              margin-bottom: 12;
+
+              Adw.Clamp {
+                maximum-size: 160;
+
+                Overlay {
+                  halign: center;
+                  valign: center;
+
+                  [overlay]
+                  Button coverButtonEdit {
+                    icon-name: "lucide-pencil-symbolic";
+                    tooltip-text: _("New cover");
+                    halign: end;
+                    valign: end;
+                    margin-bottom: 6;
+                    margin-end: 6;
+                    action-name: "create-dialog.new-cover";
+
+                    styles ["circular", "osd"]
+                  }
+
+                  [overlay]
+                  Revealer deleteRevealer {
+                    transition-type: crossfade;
+                    margin-end: 40;
+
+                    Button coverButtonDelete {
+                      icon-name: "lucide-trash-2-symbolic";
+                      tooltip-text: _("Delete cover");
+                      halign: end;
+                      valign: end;
+                      margin-bottom: 6;
+                      margin-end: 6;
+                      action-name: "create-dialog.remove-cover";
+
+                      styles ["circular", "osd"]
+                    }
+                  }
+
+                  Picture cover {
+                    width-request: 160;
+                    height-request: 213;
+                    can-shrink: true;
+                    content-fit: cover;
+
+                    styles ["card"]
+                  }
                 }
               }
+            }
 
-              Picture cover {
-                width-request: 160;
-                height-request: 213;
-                can-shrink: true;
-                content-fit: cover;
+            Adw.PreferencesGroup {
+              Adw.EntryRow title {
+                title: _("Title");
+              }
 
+              Adw.ComboRow platform {
+                title: _("Platform");
+                factory: SignalListItemFactory {};
+                enable-search: true;
+              }
+            }
+
+            Adw.PreferencesGroup {
+              title: _("Details");
+
+              Adw.EntryRow developer {
+                title: _("Developer");
+              }
+
+              Adw.EntryRow publisher {
+                title: _("Publisher");
+              }
+
+              Adw.SpinRow releaseYear {
+                title: _("Release year");
+                numeric: true;
+                adjustment: Adjustment {
+                  lower: 1900;
+                  upper: 2024;
+                  page-increment: 10;
+                  step-increment: 1;
+                };
+              }
+
+              Adw.ComboRow certification {
+                title: _("Certification");
+                factory: SignalListItemFactory {};
+                enable-search: true;
+              }
+            }
+
+            Adw.PreferencesGroup {
+              title: _("Story");
+
+              Gtk.TextView story {
+                accepts-tab: false;
+                wrap-mode: word;
                 styles ["card"]
               }
             }
-          }
-        }
 
-        Adw.PreferencesGroup {
-          Adw.EntryRow title {
-            title: _("Title");
-          }
+            Adw.PreferencesGroup {
+              title: _("Storage");
 
-          Adw.ComboRow platform {
-            title: _("Platform");
-            factory: SignalListItemFactory {};
-            enable-search: true;
-          }
-        }
+              Adw.EntryRow barcode {
+                title: _("Barcode");
 
-        Adw.PreferencesGroup {
-          title: _("Details");
-
-          Adw.EntryRow developer {
-            title: _("Developer");
-          }
-
-          Adw.EntryRow publisher {
-            title: _("Publisher");
-          }
-
-          Adw.SpinRow releaseYear {
-            title: _("Release year");
-            numeric: true;
-            adjustment: Adjustment {
-              lower: 1900;
-              upper: 2024;
-              page-increment: 10;
-              step-increment: 1;
-            };
-          }
-
-          Adw.ComboRow certification {
-            title: _("Certification");
-            factory: SignalListItemFactory {};
-            enable-search: true;
-          }
-        }
-
-        Adw.PreferencesGroup {
-          title: _("Story");
-
-          Gtk.TextView story {
-            accepts-tab: false;
-            wrap-mode: word;
-            styles ["card"]
-          }
-        }
-
-        Adw.PreferencesGroup {
-          title: _("Storage");
-
-          Adw.EntryRow barcode {
-            title: _("Barcode");
-
-            styles ["monospace"]
-          }
-
-          Adw.ComboRow storageMedia {
-            title: _("Media");
-          }
-
-          Adw.ComboRow condition {
-            title: _("Condition");
-          }
-        }
-
-        Adw.PreferencesGroup {
-          title: _("Wishlist");
-
-          Adw.SwitchRow wishlist {
-            title: _("Add to wishlist");
-          }
-        }
-
-        Adw.PreferencesGroup {
-          title: _("Store");
-          visible: bind wishlist.active inverted;
-
-          Adw.ExpanderRow {
-            title: _("Bought date");
-
-            [suffix]
-            Label boughtDateLabel {}
-
-            Adw.Clamp {
-              margin-top: 16;
-              margin-bottom: 16;
-              maximum-size: 250;
-
-              Box {
-                orientation: vertical;
-                spacing: 16;
-
-                Calendar boughtDate {
-                  show-week-numbers: true;
-                  styles ["card"]
-                }
-
-                Box {
-                  spacing: 10;
-                  halign: center;
-
-                  Button {
-                    label: _("Today");
-                    halign: center;
-                    styles ["raised"]
-                  }
-
-                  Button {
-                    label: _("Unknown");
-                    halign: center;
-                    styles ["raised"]
-                  }
-                }
-
+                styles ["monospace"]
               }
 
+              Adw.ComboRow storageMedia {
+                title: _("Media");
+              }
+
+              Adw.ComboRow condition {
+                title: _("Condition");
+              }
+            }
+
+            Adw.PreferencesGroup {
+              title: _("Wishlist");
+
+              Adw.SwitchRow wishlist {
+                title: _("Add to wishlist");
+              }
+            }
+
+            Adw.PreferencesGroup {
+              title: _("Store");
+              visible: bind wishlist.active inverted;
+
+              Adw.ExpanderRow {
+                title: _("Bought date");
+
+                [suffix]
+                Label boughtDateLabel {}
+
+                Adw.Clamp {
+                  margin-top: 16;
+                  margin-bottom: 16;
+                  maximum-size: 250;
+
+                  Box {
+                    orientation: vertical;
+                    spacing: 16;
+
+                    Calendar boughtDate {
+                      show-week-numbers: true;
+                      styles ["card"]
+                    }
+
+                    Box {
+                      spacing: 10;
+                      halign: center;
+
+                      Button {
+                        label: _("Today");
+                        halign: center;
+                        styles ["raised"]
+                      }
+
+                      Button {
+                        label: _("Unknown");
+                        halign: center;
+                        styles ["raised"]
+                      }
+                    }
+
+                  }
+
+                }
+              }
+
+              Adw.EntryRow store {
+                title: _("Location");
+              }
+
+              Adw.ExpanderRow {
+                title: _("Paid price");
+                expanded: true;
+
+                [suffix]
+                Label paidPriceLabel {
+                  label: "USD 0.00";
+                }
+
+                Adw.ComboRow currency {
+                  title: _("Currency");
+                  enable-search: true;
+                }
+
+                Adw.EntryRow amount {
+                  title: _("Amount");
+                }
+              }
             }
           }
-
-          Adw.EntryRow store {
-            title: _("Location");
-          }
-
-          Adw.ExpanderRow {
-            title: _("Paid price");
-            expanded: true;
-
-            [suffix]
-            Label paidPriceLabel {
-              label: "USD 0.00";
-            }
-
-            Adw.ComboRow currency {
-              title: _("Currency");
-              enable-search: true;
-            }
-
-            Adw.EntryRow amount {
-              title: _("Amount");
-            }
-          }
-        }
+        };
       }
     }
   }

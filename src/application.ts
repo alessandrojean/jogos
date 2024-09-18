@@ -4,6 +4,8 @@ import GLib from 'gi://GLib'
 import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
+import Soup from 'gi://Soup'
+import { IgdbApi } from './igdb/api.js'
 import GamesRepository from './repositories/games.js'
 import { Settings } from './settings.js'
 import { createFolder } from './utils/createFolder.js'
@@ -22,6 +24,7 @@ export class Application extends Adw.Application {
   private window?: Window
 
   static settings: Settings
+  static igdb: IgdbApi
 
   static {
     GObject.registerClass(this)
@@ -42,8 +45,10 @@ export class Application extends Adw.Application {
     Gio._promisify(Gtk.FileDialog.prototype, 'open', 'open_finish')
     Gio._promisify(Gio.Subprocess.prototype, 'communicate_utf8_async')
     Gio._promisify(Gio.Subprocess.prototype, 'wait_async')
+    Gio._promisify(Soup.Session.prototype, 'send_and_read_async', 'send_and_read_finish')
 
     Application.settings = new Settings({ schema: pkg.name })
+    Application.igdb = new IgdbApi(Application.settings)
 
     GamesRepository.instance.connect()
   }

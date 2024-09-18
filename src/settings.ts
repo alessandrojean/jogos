@@ -5,7 +5,8 @@ import { Currency, getCurrency } from './model/currency.js'
 
 type PreferenceKey = 'window-size' | 'window-position' | 'window-maximized'
   | 'last-sidebar-item' | 'show-grid' | 'preferred-currency' | 'use-system-locale'
-  | 'date-format' | 'use-24-hour-clock'
+  | 'date-format' | 'use-24-hour-clock' | 'igdb-client-id' | 'igdb-client-secret'
+  | 'igdb-active' | 'igdb-access-token' | 'igdb-access-token-expiration'
 
 export class Settings extends Gio.Settings {
   private keyTypes: Record<string, string>
@@ -61,5 +62,48 @@ export class Settings extends Gio.Settings {
 
   set use24HourClock(value: boolean) {
     this.setValue('use-24-hour-clock', value)
+  }
+
+  get igdbActive(): boolean {
+    return this.get<boolean>('igdb-active')
+  }
+
+  set igdbActive(value: boolean) {
+    this.setValue('igdb-active', value)
+  }
+
+  get igdbClientId(): string | null {
+    const value = this.get<string>('igdb-client-id')
+    return value.length > 0 ? value : null
+  }
+
+  set igdbClientId(value: string | null) {
+    this.setValue('igdb-client-id', value ?? '')
+  }
+
+  get igdbClientSecret(): string | null {
+    const value = this.get<string>('igdb-client-secret')
+    return value.length > 0 ? value : null
+  }
+
+  set igdbClientSecret(value: string | null) {
+    this.setValue('igdb-client-secret', value ?? '')
+  }
+
+  get igdbAccessToken(): string | null {
+    const value = this.get<string>('igdb-access-token')
+    return value.length > 0 ? value : null
+  }
+
+  set igdbAccessToken(value: string | null) {
+    this.setValue('igdb-access-token', value ?? '')
+  }
+
+  get igdbAccessTokenExpiration(): number {
+    return this.get<number>('igdb-access-token-expiration')
+  }
+
+  set igdbAccessTokenExpiration(value: number) {
+    this.setValue('igdb-access-token-expiration', value ?? '')
   }
 }

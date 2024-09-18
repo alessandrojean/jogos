@@ -5,6 +5,8 @@
     <file>application.js</file>
     <file>window.js</file>
     <file>settings.js</file>
+    <file>games/onlineGameResult.js</file>
+    <file>igdb/api.js</file>
     <file>lib/fetch.js</file>
     <file>model/certification.js</file>
     <file>model/currency.js</file>
@@ -13,7 +15,7 @@
     <file>model/platform.js</file>
     <file>model/storageMedia.js</file>
     <file>repositories/games.js</file>
-    <file>utils/convertCover.js</file>
+    <file>utils/cover.js</file>
     <file>utils/createFolder.js</file>
     <file>utils/debugInfo.js</file>
     <file>utils/locale.js</file>

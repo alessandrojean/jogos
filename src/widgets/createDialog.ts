@@ -4,16 +4,19 @@ import GLib from 'gi://GLib'
 import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
+import { Application } from '../application.js'
+import OnlineGameResult from '../games/onlineGameResult.js'
+import { igdbCoverUrl, IgdbGame } from '../igdb/api.js'
 import { Certification, certifications, certificationSystemName, certificationSystems } from '../model/certification.js'
 import { currencies, Currency, getCurrency } from '../model/currency.js'
 import Game from '../model/game.js'
 import { GameCondition, gameConditions } from '../model/gameCondition.js'
-import { getPlatform, Platform, PlatformId, platforms } from '../model/platform.js'
+import { getPlatform, Platform, platformFromIgdb, PlatformId, platforms } from '../model/platform.js'
 import { StorageMedia, storageMedias } from '../model/storageMedia.js'
 import GamesRepository from '../repositories/games.js'
-import convertCover from '../utils/convertCover.js'
+import { convertCover, downloadCover } from '../utils/cover.js'
 import { localeOptions, LocaleOptions } from '../utils/locale.js'
-import { createValidator, integer, max, optional, real, required, setupEntryRow, validate, WidgetMap } from '../utils/validators.js'
+import { clear, createValidator, integer, max, optional, real, required, setupEntryRow, validate, WidgetMap } from '../utils/validators.js'
 
 export class CreateDialogWidget extends Adw.Dialog {
   private _cover!: Gtk.Picture
@@ -34,12 +37,18 @@ export class CreateDialogWidget extends Adw.Dialog {
   private _store!: Adw.EntryRow
   private _certification!: Adw.ComboRow
   private _wishlist!: Adw.SwitchRow
-
+  private _resultsList!: Gtk.ListBox
   private _deleteRevealer!: Gtk.Revealer
+
+  private _stack!: Adw.ViewStack
+  private _viewSwitcher!: Adw.ViewSwitcherBar
+  private _searchStack!: Gtk.Stack
 
   private window?: Gtk.Widget | null = null
   private coverFile: Gio.File | null = null
   private locale!: LocaleOptions
+  private onlineGame?: IgdbGame
+  private onlineGamePlatforms: Platform[] = []
 
   private validator = createValidator({
     title: { required },
@@ -50,6 +59,7 @@ export class CreateDialogWidget extends Adw.Dialog {
   })
 
   private widgetMap!: WidgetMap<keyof CreateDialogWidget['validator']>
+  private onlineResults: IgdbGame[] = []
 
   game!: Game
   defaultPlatform: PlatformId | null = null
@@ -79,7 +89,8 @@ export class CreateDialogWidget extends Adw.Dialog {
         'cover', 'title', 'barcode', 'developer', 'publisher', 'releaseYear',
         'platform', 'story', 'deleteRevealer', 'condition', 'storageMedia',
         'boughtDateLabel', 'boughtDate', 'paidPriceLabel', 'currency', 'amount',
-        'story', 'store', 'certification', 'wishlist'
+        'story', 'store', 'certification', 'wishlist', 'resultsList',
+        'stack', 'viewSwitcher', 'searchStack'
       ],
       Signals: {
         'game-created': {
@@ -93,9 +104,11 @@ export class CreateDialogWidget extends Adw.Dialog {
     super(params)
 
     this.locale = localeOptions()
+    this.defaultPlatform = params.defaultPlatform ?? null
+    this.defaultWishlist = params.defaultWishlist ?? false
 
     this.initActions()
-    this.initPlatforms(params.defaultPlatform ?? null)
+    this.initPlatforms()
     this.initConditions()
     this.initCertifications()
     this.initMedias()
@@ -103,8 +116,9 @@ export class CreateDialogWidget extends Adw.Dialog {
     this.initDates()
     this.initPaidPrice()
     this.initValidation()
+    this.initStack()
 
-    this._wishlist.active = params.defaultWishlist ?? false
+    this._wishlist.active = this.defaultWishlist
   }
 
   private initActions() {
@@ -124,15 +138,20 @@ export class CreateDialogWidget extends Adw.Dialog {
     actionGroup.add_action(createAction)
   }
 
-  private initPlatforms(selected: PlatformId | null) {
+  private initPlatforms() {
     const platformModel = new Gio.ListStore({ itemType: Platform.$gtype })
     platformModel.splice(0, 0, platforms)
 
-    this._platform.model = platformModel
+    const platformFilterModel = new Gtk.FilterListModel({
+      model: platformModel,
+      filter: Gtk.BoolFilter.new(Gtk.ConstantExpression.new_for_value(true))
+    })
+
+    this._platform.model = platformFilterModel
     this._platform.expression = Gtk.PropertyExpression.new(Platform.$gtype, null, 'name')
 
-    if (selected) {
-      this._platform.selected = platforms.indexOf(getPlatform(selected))
+    if (this.defaultPlatform) {
+      this._platform.selected = platforms.indexOf(getPlatform(this.defaultPlatform))
     }
 
     const factory = this._platform.factory as Gtk.SignalListItemFactory
@@ -265,7 +284,7 @@ export class CreateDialogWidget extends Adw.Dialog {
       this.onPaidPriceChanged(currency ?? 'USD', Number.isNaN(amount) ? 0.0 : amount)
     })
 
-    this._currency.connect('notify::selected-item', () => {
+    this._currency.connect('notify::selected', () => {
       const currency = (this._currency.selectedItem as Gtk.StringObject).string
       const amountText = this._amount.text.replace(',', '.')
       const amount = Number.parseFloat(amountText.length === 0 ? '0' : amountText)
@@ -293,6 +312,13 @@ export class CreateDialogWidget extends Adw.Dialog {
         key as keyof CreateDialogWidget['widgetMap']
       )
     }
+  }
+
+  private initStack() {
+    const igdbActive = Application.settings.igdbActive
+
+    this._stack.visibleChildName = igdbActive ? 'search' : 'form'
+    this._viewSwitcher.reveal = igdbActive
   }
 
   private async onNewCoverAction() {
@@ -339,22 +365,22 @@ export class CreateDialogWidget extends Adw.Dialog {
     const amount = Number.parseFloat(this._amount.text.replace(',', '.'))
 
     const game = new Game({
-      title: this._title.text,
+      title: this._title.text.trim(),
       platform: (this._platform.selectedItem as Platform).id,
-      developer: this._developer.text,
-      publisher: this._publisher.text,
+      developer: this._developer.text.trim(),
+      publisher: this._publisher.text.trim(),
       releaseYear: this._releaseYear.value,
       certification: (this._certification.selectedItem as Certification).id,
       story: this._story.buffer.get_text(
         this._story.buffer.get_start_iter(),
         this._story.buffer.get_end_iter(),
         false
-      ),
-      barcode: this._barcode.text,
+      ).trim(),
+      barcode: this._barcode.text.trim(),
       storageMedia: (this._storageMedia.selectedItem as StorageMedia).id,
       condition: (this._condition.selectedItem as GameCondition).id,
       boughtDate: this._boughtDate.get_date().to_unix(),
-      store: this._store.text,
+      store: this._store.text.trim(),
       wishlist: this._wishlist.active,
       paidPriceAmount: Number.isNaN(amount) ? 0.0 : amount,
       paidPriceCurrency: (this._currency.selectedItem as Currency).iso
@@ -378,6 +404,120 @@ export class CreateDialogWidget extends Adw.Dialog {
 
   private onPaidPriceChanged(currency: string, amount: number) {
     this._paidPriceLabel.label = `${currency} %.2f`.format(amount)
+  }
+
+  private async onSearchChanged(search: Gtk.SearchEntry) {
+    this._resultsList.remove_all()
+
+    if (search.text.length === 0) {
+      this.clear()
+      return
+    }
+
+    try {
+      const platform = this.defaultPlatform
+        ? getPlatform(this.defaultPlatform).igdbId
+        : undefined
+
+      this.onlineResults = await Application.igdb.search(search.text, { platform })
+
+      for (const item of this.onlineResults) {
+        this._resultsList.append(new OnlineGameResult({
+          title: `${item.name} (${GLib.DateTime.new_from_unix_utc(item.first_release_date).get_year()})`,
+          cover: igdbCoverUrl(item.cover?.image_id, 'cover_small'),
+          details: (item.involved_companies ?? [])
+            .filter(ic => ic.developer)
+            .map(ic => ic.company.name)
+            .join(', '),
+        }))
+      }
+
+      this._searchStack.visibleChildName = this.onlineResults.length === 0
+        ? 'empty' : 'results'
+    } catch (e: any) {
+      console.error(e)
+    }
+  }
+
+  private clear() {
+    const platformModel = this._platform.model as Gtk.FilterListModel
+    platformModel.filter = Gtk.BoolFilter.new(Gtk.ConstantExpression.new_for_value(true))
+
+    this._title.text = ''
+    this._platform.selected = platforms.findIndex(p => p.id === this.defaultPlatform)
+    this._developer.text = ''
+    this._publisher.text = ''
+    this._releaseYear.value = GLib.DateTime.new_now_local().get_year()
+    this._certification.selected = 0
+    this._story.buffer.text = ''
+    this._cover.set_paintable(null)
+    this.coverFile = null
+    this.onlineGame = undefined
+    this.onlineGamePlatforms = []
+
+    clear(this.validator, this.widgetMap)
+  }
+
+  private async onOnlineGameActivated(_list: Gtk.ListBox, row: Gtk.ListBoxRow) {
+    const onlineGame = this.onlineResults[row.get_index()]
+    const firstPlatform = platformFromIgdb(onlineGame.platforms?.[0] ?? -1)
+
+    // Only let the user select the actual platforms the game was released for
+    this.onlineGame = onlineGame
+    this.onlineGamePlatforms = (onlineGame.platforms ?? [])
+      .map(p => platformFromIgdb(p))
+      .filter(p => p !== undefined)
+
+    const platformModel = this._platform.model as Gtk.FilterListModel
+
+    if (this.onlineGamePlatforms.length > 0) {
+      platformModel.filter = Gtk.CustomFilter.new((item) => {
+        const platform = item as Platform
+        return this.onlineGamePlatforms.includes(platform)
+      })
+    } else {
+      platformModel.filter = Gtk.BoolFilter.new(Gtk.ConstantExpression.new_for_value(true))
+    }
+
+    let platformToSelect = this.defaultPlatform
+      ? platforms.findIndex(p => this.defaultPlatform === p.id)
+      : 0
+
+    if (firstPlatform && !this.defaultPlatform) {
+      for (let i = 0; i < platformModel.nItems; i++) {
+        if (platformModel.get_item(i) === firstPlatform) {
+          platformToSelect = i
+          break
+        }
+      }
+    }
+
+    this._title.text = onlineGame.name
+    this._platform.selected = Math.max(platformToSelect, 0)
+    this._developer.text = onlineGame.involved_companies
+      .filter(ic => ic.developer)
+      .map(ic => ic.company.name)
+      .join(', ')
+    this._publisher.text = onlineGame.involved_companies
+      .filter(ic => ic.publisher)
+      .map(ic => ic.company.name)
+      .join(', ')
+    this._releaseYear.value = GLib.DateTime.new_from_unix_utc(onlineGame.first_release_date).get_year()
+    this._story.buffer.text = onlineGame.summary
+
+    if (onlineGame.cover) {
+      const downloadedCover = await downloadCover(
+        `${onlineGame.cover.image_id}.jpg`,
+        igdbCoverUrl(onlineGame.cover.image_id, 'cover_big')!,
+      )
+
+      if (downloadedCover) {
+        this.coverFile = downloadedCover
+        this._cover.file = downloadedCover
+      }
+    }
+
+    this._stack.visibleChildName = 'form'
   }
 
   present(parent?: Gtk.Widget | null): void {

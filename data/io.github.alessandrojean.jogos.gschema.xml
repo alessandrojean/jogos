@@ -46,5 +46,30 @@
       <summary>Use 24-hour clock</summary>
       <description>Wether to use 12 or 24-hour clock</description>
     </key>
+    <key name="igdb-active" type="b">
+      <default>false</default>
+      <summary>Enable IGDB integration</summary>
+      <description>If the IGDB integration is active</description>
+    </key>
+    <key name="igdb-client-id" type="s">
+      <default>''</default>
+      <summary>IGDB Client ID</summary>
+      <description>The Twitch Application Client ID to the IGDB integration</description>
+    </key>
+    <key name="igdb-client-secret" type="s">
+      <default>''</default>
+      <summary>IGDB Client Secret</summary>
+      <description>The Twitch Application Client Secret to the IGDB integration</description>
+    </key>
+    <key name="igdb-access-token" type="s">
+      <default>''</default>
+      <summary>IGDB Access Token</summary>
+      <description>The IGDB granted access token</description>
+    </key>
+    <key name="igdb-access-token-expiration" type="i">
+      <default>0</default>
+      <summary>IGDB Access Token Expiration</summary>
+      <description>The Epoch local date time of the access token expiration</description>
+    </key>
 	</schema>
 </schemalist>

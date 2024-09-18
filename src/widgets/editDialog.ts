@@ -11,7 +11,7 @@ import { GameCondition, gameConditions, getGameCondition } from '../model/gameCo
 import { getPlatform, Platform, platforms } from '../model/platform.js'
 import { getStorageMedia, StorageMedia, storageMedias } from '../model/storageMedia.js'
 import GamesRepository from '../repositories/games.js'
-import convertCover from '../utils/convertCover.js'
+import { convertCover } from '../utils/cover.js'
 import { localeOptions, LocaleOptions } from '../utils/locale.js'
 import { createValidator, integer, max, optional, real, required, setupEntryRow, touch, validate, WidgetMap } from '../utils/validators.js'
 
@@ -358,22 +358,22 @@ export class EditDialogWidget extends Adw.Dialog {
 
     const game = new Game({
       id: this.game.id,
-      title: this._title.text,
+      title: this._title.text.trim(),
       platform: (this._platform.selectedItem as Platform).id,
-      developer: this._developer.text,
-      publisher: this._publisher.text,
+      developer: this._developer.text.trim(),
+      publisher: this._publisher.text.trim(),
       releaseYear: this._releaseYear.value,
       certification: (this._certification.selectedItem as Certification).id,
       story: this._story.buffer.get_text(
         this._story.buffer.get_start_iter(),
         this._story.buffer.get_end_iter(),
         false
-      ),
-      barcode: this._barcode.text,
+      ).trim(),
+      barcode: this._barcode.text.trim(),
       storageMedia: (this._storageMedia.selectedItem as StorageMedia).id,
       condition: (this._condition.selectedItem as GameCondition).id,
       boughtDate: this._boughtDate.get_date().to_unix(),
-      store: this._store.text,
+      store: this._store.text.trim(),
       wishlist: this._wishlist.active,
       paidPriceAmount: Number.isNaN(amount) ? 0.0 : amount,
       paidPriceCurrency: (this._currency.selectedItem as Currency).iso
