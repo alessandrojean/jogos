@@ -277,23 +277,24 @@ export class CreateDialogWidget extends Adw.Dialog {
 
   private initPaidPrice() {
     this._amount.connect('notify::text', () => {
-      const currency = (this._currency.selectedItem as Gtk.StringObject).string
+      const currency = this._currency.selectedItem as Currency
       const amountText = this._amount.text.replace(',', '.')
       const amount = Number.parseFloat(amountText.length === 0 ? '0' : amountText)
 
-      this.onPaidPriceChanged(currency ?? 'USD', Number.isNaN(amount) ? 0.0 : amount)
+      this.onPaidPriceChanged(currency ?? getCurrency('USD')!, Number.isNaN(amount) ? 0.0 : amount)
     })
 
-    this._currency.connect('notify::selected', () => {
-      const currency = (this._currency.selectedItem as Gtk.StringObject).string
+    this._currency.connect('notify::selected-item', () => {
+      const currency = this._currency.selectedItem as Currency
       const amountText = this._amount.text.replace(',', '.')
       const amount = Number.parseFloat(amountText.length === 0 ? '0' : amountText)
 
-      this.onPaidPriceChanged(currency ?? 'USD', Number.isNaN(amount) ? 0.0 : amount)
+      this.onPaidPriceChanged(currency ?? getCurrency('USD'), Number.isNaN(amount) ? 0.0 : amount)
     })
 
     const preferredCurrency = getCurrency(this.locale.currencyIso) ?? getCurrency('USD')!
     this._currency.selected = currencies.indexOf(preferredCurrency)
+    this.onPaidPriceChanged(preferredCurrency, 0.0)
   }
 
   private initValidation() {
@@ -402,8 +403,8 @@ export class CreateDialogWidget extends Adw.Dialog {
     this.coverFile = image
   }
 
-  private onPaidPriceChanged(currency: string, amount: number) {
-    this._paidPriceLabel.label = `${currency} %.2f`.format(amount)
+  private onPaidPriceChanged(currency: Currency, amount: number) {
+    this._paidPriceLabel.label = `${currency.symbol} %.2f`.format(amount)
   }
 
   private async onSearchChanged(search: Gtk.SearchEntry) {
