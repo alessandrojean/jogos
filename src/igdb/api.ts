@@ -15,7 +15,7 @@ export interface IgdbGame {
   id: number
   cover?: { image_id: string, url: string }
   first_release_date: number
-  involved_companies: IgdbInvolvedCompany[]
+  involved_companies?: IgdbInvolvedCompany[]
   name: string
   platforms?: number[]
   slug: string

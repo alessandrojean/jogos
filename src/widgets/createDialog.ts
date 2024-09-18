@@ -495,11 +495,11 @@ export class CreateDialogWidget extends Adw.Dialog {
 
     this._title.text = onlineGame.name
     this._platform.selected = Math.max(platformToSelect, 0)
-    this._developer.text = onlineGame.involved_companies
+    this._developer.text = (onlineGame.involved_companies ?? [])
       .filter(ic => ic.developer)
       .map(ic => ic.company.name)
       .join(', ')
-    this._publisher.text = onlineGame.involved_companies
+    this._publisher.text = (onlineGame.involved_companies ?? [])
       .filter(ic => ic.publisher)
       .map(ic => ic.company.name)
       .join(', ')
