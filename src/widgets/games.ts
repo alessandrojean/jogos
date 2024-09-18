@@ -5,12 +5,12 @@ import Gtk from 'gi://Gtk?version=4.0'
 
 import { Application } from '../application.js'
 import GameGridItem from '../games/gameGridItem.js'
+import GameTitleColumn from '../games/gameTitleColumn.js'
 import Game from '../model/game.js'
 import { getPlatform, PlatformId, platformName } from '../model/platform.js'
 import GamesRepository from '../repositories/games.js'
 import { localeOptions, LocaleOptions } from '../utils/locale.js'
 import ContextMenuBin from './contextMenuBin.js'
-import GameTitleColumnWidget from './gameTitleColumn.js'
 
 export type SortProperty = 'title_asc' | 'title_desc'
   | 'modification_date_desc' | 'modification_date_asc'
@@ -215,7 +215,7 @@ export class GamesWidget extends Gtk.Stack {
     const factoryTitle = this._titleColumn.factory as Gtk.SignalListItemFactory
 
     factoryTitle.connect('setup', (_self, listItem: Gtk.ColumnViewCell) => {
-      const title = new GameTitleColumnWidget({
+      const title = new GameTitleColumn({
         title: '',
         cover: null,
         menuModel: this.menuModel,
@@ -227,7 +227,7 @@ export class GamesWidget extends Gtk.Stack {
     })
 
     factoryTitle.connect('bind', (_self, listItem: Gtk.ColumnViewCell) => {
-      const title = listItem.get_child() as GameTitleColumnWidget
+      const title = listItem.get_child() as GameTitleColumn
       const modelItem = listItem.get_item<Game>()
 
       title.title = modelItem.title

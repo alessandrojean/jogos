@@ -1,8 +1,8 @@
 import GObject from 'gi://GObject'
 import Gio from 'gi://Gio'
-import ContextMenuBin from './contextMenuBin.js'
+import ContextMenuBin from '../widgets/contextMenuBin.js'
 
-export default class GameTitleColumnWidget extends ContextMenuBin {
+export default class GameTitleColumn extends ContextMenuBin {
   visibleCover: 'placeholder' | 'cover' = 'placeholder'
 
   title!: string
@@ -11,7 +11,7 @@ export default class GameTitleColumnWidget extends ContextMenuBin {
 
   static {
     GObject.registerClass({
-      GTypeName: 'GameTitleColumnWidget',
+      GTypeName: 'GameTitleColumn',
       CssName: 'game-title-column',
       Template: 'resource:///io/github/alessandrojean/jogos/ui/game-title-column.ui',
       Properties: {
@@ -48,7 +48,7 @@ export default class GameTitleColumnWidget extends ContextMenuBin {
     }, this)
   }
 
-  constructor(params: Partial<GameTitleColumnWidget>) {
+  constructor(params: Partial<GameTitleColumn>) {
     super()
     Object.assign(this, params)
 
