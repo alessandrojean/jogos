@@ -5,7 +5,7 @@ import Gdk from 'gi://Gdk'
 import Gio from 'gi://Gio'
 import Gtk from 'gi://Gtk?version=4.0'
 
-export default class ContextMenuBin extends Adw.Bin {
+export class ContextMenuBin extends Adw.Bin {
 
   private popover?: Gtk.PopoverMenu
 

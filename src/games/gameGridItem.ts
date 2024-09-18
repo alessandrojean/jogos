@@ -1,8 +1,8 @@
 import GObject from 'gi://GObject'
 import Gio from 'gi://Gio'
-import ContextMenuBin from '../widgets/contextMenuBin.js'
+import { ContextMenuBin } from '../widgets/contextMenuBin.js'
 
-export default class GameGridItem extends ContextMenuBin {
+export class GameGridItem extends ContextMenuBin {
   showPlaceholder: boolean = true
 
   title!: string

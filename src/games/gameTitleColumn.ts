@@ -1,8 +1,8 @@
 import GObject from 'gi://GObject'
 import Gio from 'gi://Gio'
-import ContextMenuBin from '../widgets/contextMenuBin.js'
+import { ContextMenuBin } from '../widgets/contextMenuBin.js'
 
-export default class GameTitleColumn extends ContextMenuBin {
+export class GameTitleColumn extends ContextMenuBin {
   visibleCover: 'placeholder' | 'cover' = 'placeholder'
 
   title!: string
