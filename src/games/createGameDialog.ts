@@ -18,7 +18,7 @@ import { convertCover, downloadCover } from '../utils/cover.js'
 import { localeOptions, LocaleOptions } from '../utils/locale.js'
 import { clear, createValidator, integer, max, optional, real, required, setupEntryRow, validate, WidgetMap } from '../utils/validators.js'
 
-export class CreateDialogWidget extends Adw.Dialog {
+export class CreateGameDialog extends Adw.Dialog {
   private _cover!: Gtk.Picture
   private _title!: Adw.EntryRow
   private _barcode!: Adw.EntryRow
@@ -58,7 +58,7 @@ export class CreateDialogWidget extends Adw.Dialog {
     amount: { number: optional(real) }
   })
 
-  private widgetMap!: WidgetMap<keyof CreateDialogWidget['validator']>
+  private widgetMap!: WidgetMap<keyof CreateGameDialog['validator']>
   private onlineResults: IgdbGame[] = []
 
   game!: Game
@@ -67,8 +67,8 @@ export class CreateDialogWidget extends Adw.Dialog {
 
   static {
     GObject.registerClass({
-      GTypeName: 'CreateDialogWidget',
-      Template: 'resource:///io/github/alessandrojean/jogos/ui/create-dialog.ui',
+      GTypeName: 'CreateGameDialog',
+      Template: 'resource:///io/github/alessandrojean/jogos/ui/create-game-dialog.ui',
       Properties: {
         defaultPlatform: GObject.ParamSpec.string(
           'default-platform',
@@ -100,7 +100,7 @@ export class CreateDialogWidget extends Adw.Dialog {
     }, this)
   }
 
-  constructor(params: Partial<CreateDialogWidget> = {}) {
+  constructor(params: Partial<CreateGameDialog> = {}) {
     super(params)
 
     this.locale = localeOptions()
@@ -123,7 +123,7 @@ export class CreateDialogWidget extends Adw.Dialog {
 
   private initActions() {
     const actionGroup = new Gio.SimpleActionGroup()
-    this.insert_action_group('create-dialog', actionGroup)
+    this.insert_action_group('create-game-dialog', actionGroup)
 
     const newCoverAction = new Gio.SimpleAction({ name: 'new-cover' })
     newCoverAction.connect('activate', () => this.onNewCoverAction())
@@ -310,7 +310,7 @@ export class CreateDialogWidget extends Adw.Dialog {
       setupEntryRow(
         this.validator,
         editable as Adw.EntryRow,
-        key as keyof CreateDialogWidget['widgetMap']
+        key as keyof CreateGameDialog['widgetMap']
       )
     }
   }

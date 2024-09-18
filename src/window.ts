@@ -5,10 +5,10 @@ import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
 import { Application } from './application.js'
+import { CreateGameDialog } from './games/createGameDialog.js'
 import Game from './model/game.js'
 import { PlatformId } from './model/platform.js'
 import GamesRepository from './repositories/games.js'
-import { CreateDialogWidget } from './widgets/createDialog.js'
 import { DetailsDialogWidget } from './widgets/detailsDialog.js'
 import { EditDialogWidget } from './widgets/editDialog.js'
 import { GamesWidget, SortProperty } from './widgets/games.js'
@@ -358,12 +358,12 @@ export class Window extends Adw.ApplicationWindow {
       ? this.sidebarItems[selected].id as PlatformId
       : null
 
-    const createDialog = new CreateDialogWidget({
+    const createGameDialog = new CreateGameDialog({
       defaultPlatform: platform,
       defaultWishlist: this.sidebarItems[selected].id === 'WISHLIST'
     })
 
-    createDialog.connect('game-created', (_self, game: Game) => {
+    createGameDialog.connect('game-created', (_self, game: Game) => {
       this.updateSidebarItems()
       this.selectSidebarRow(game.wishlist ? 'WISHLIST' : game.platform)
 
@@ -379,7 +379,7 @@ export class Window extends Adw.ApplicationWindow {
       this._toastOverlay.add_toast(toast)
     })
 
-    createDialog.present(this)
+    createGameDialog.present(this)
   }
 
   private onGameEditAction(game: Game) {

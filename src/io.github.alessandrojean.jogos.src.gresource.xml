@@ -5,6 +5,7 @@
     <file>application.js</file>
     <file>window.js</file>
     <file>settings.js</file>
+    <file>games/createGameDialog.js</file>
     <file>games/onlineGameResult.js</file>
     <file>igdb/api.js</file>
     <file>lib/fetch.js</file>
@@ -21,7 +22,6 @@
     <file>utils/locale.js</file>
     <file>utils/validators.js</file>
     <file>widgets/contextMenuBin.js</file>
-    <file>widgets/createDialog.js</file>
     <file>widgets/detailsDialog.js</file>
     <file>widgets/editDialog.js</file>
     <file>widgets/gameGridItem.js</file>

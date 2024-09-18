@@ -1,7 +1,7 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $CreateDialogWidget : Adw.Dialog {
+template $CreateGameDialog : Adw.Dialog {
   content-width: 500;
   content-height: 700;
 
@@ -20,7 +20,7 @@ template $CreateDialogWidget : Adw.Dialog {
       [end]
       Button createButton {
         label: _("Create");
-        action-name: "create-dialog.create";
+        action-name: "create-game-dialog.create";
         styles ["suggested-action"]
       }
     }
@@ -114,7 +114,7 @@ template $CreateDialogWidget : Adw.Dialog {
                     valign: end;
                     margin-bottom: 6;
                     margin-end: 6;
-                    action-name: "create-dialog.new-cover";
+                    action-name: "create-game-dialog.new-cover";
 
                     styles ["circular", "osd"]
                   }
@@ -131,7 +131,7 @@ template $CreateDialogWidget : Adw.Dialog {
                       valign: end;
                       margin-bottom: 6;
                       margin-end: 6;
-                      action-name: "create-dialog.remove-cover";
+                      action-name: "create-game-dialog.remove-cover";
 
                       styles ["circular", "osd"]
                     }
