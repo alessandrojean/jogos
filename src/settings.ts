@@ -7,6 +7,7 @@ type PreferenceKey = 'window-size' | 'window-position' | 'window-maximized'
   | 'last-sidebar-item' | 'show-grid' | 'preferred-currency' | 'use-system-locale'
   | 'date-format' | 'use-24-hour-clock' | 'igdb-client-id' | 'igdb-client-secret'
   | 'igdb-active' | 'igdb-access-token' | 'igdb-access-token-expiration'
+  | 'database-version'
 
 export class Settings extends Gio.Settings {
   private keyTypes: Record<string, string>
@@ -105,5 +106,13 @@ export class Settings extends Gio.Settings {
 
   set igdbAccessTokenExpiration(value: number) {
     this.setValue('igdb-access-token-expiration', value ?? '')
+  }
+
+  get databaseVersion(): number {
+    return this.get('database-version')
+  }
+
+  set databaseVersion(value: number) {
+    this.setValue('database-version', value)
   }
 }

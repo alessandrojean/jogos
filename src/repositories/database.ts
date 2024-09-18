@@ -1,8 +1,9 @@
 import Gda from 'gi://Gda'
-import { appDirectory } from '../application.js'
+import { appDirectory, Application } from '../application.js'
 
 export class Database {
   private static _instance: Database
+  private EXPECTED_VERSION = 2 as const
 
   connection!: Gda.Connection
 
@@ -25,6 +26,7 @@ export class Database {
     this.connection.open()
 
     this.createTables()
+    this.runMigrations()
   }
 
   disconnect() {
@@ -55,5 +57,21 @@ export class Database {
         updated_at INTEGER NOT NULL
       );
     `)
+  }
+
+  private runMigrations() {
+    const databaseVersion = Application.settings.databaseVersion
+
+    if (databaseVersion === this.EXPECTED_VERSION) {
+      return
+    }
+
+    if (databaseVersion === 1) {
+      this.connection.execute_non_select_command(/* sql */`
+        ALTER TABLE game ADD COLUMN igdb_id INTEGER DEFAULT NULL;
+      `)
+    }
+
+    Application.settings.databaseVersion = this.EXPECTED_VERSION
   }
 }

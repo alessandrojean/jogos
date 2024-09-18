@@ -71,5 +71,9 @@
       <summary>IGDB Access Token Expiration</summary>
       <description>The Epoch local date time of the access token expiration</description>
     </key>
+    <key name="database-version" type="i">
+      <default>1</default>
+      <summary>The database version for migrations</summary>
+    </key>
 	</schema>
 </schemalist>

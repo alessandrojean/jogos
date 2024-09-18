@@ -28,6 +28,8 @@ export default class Game extends GObject.Object {
   paidPriceCurrency: string = 'USD'
   paidPriceAmount: number = 0.0
 
+  igdbId: number | null = null
+
   creationDate: number = GLib.DateTime.new_now_local().to_unix()
   modificationDate: number = GLib.DateTime.new_now_local().to_unix()
 
@@ -160,6 +162,15 @@ export default class Game extends GObject.Object {
           Number.MIN_SAFE_INTEGER,
           Number.MAX_SAFE_INTEGER,
           0.0
+        ),
+        igdbId: GObject.ParamSpec.int64(
+          'igdb-id',
+          '',
+          '',
+          GObject.ParamFlags.READWRITE,
+          Number.MIN_SAFE_INTEGER,
+          Number.MAX_SAFE_INTEGER,
+          0,
         ),
         creationDate: GObject.ParamSpec.long(
           'creation-date',
