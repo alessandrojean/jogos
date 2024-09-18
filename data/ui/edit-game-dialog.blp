@@ -1,7 +1,7 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $EditDialogWidget : Adw.Dialog {
+template $EditGameDialog : Adw.Dialog {
   content-width: 500;
   content-height: 700;
 
@@ -20,7 +20,7 @@ template $EditDialogWidget : Adw.Dialog {
       [end]
       Button saveButton {
         label: _("Save");
-        action-name: "edit-dialog.save";
+        action-name: "edit-game-dialog.save";
         styles ["suggested-action"]
       }
     }
@@ -52,7 +52,7 @@ template $EditDialogWidget : Adw.Dialog {
                 valign: end;
                 margin-bottom: 6;
                 margin-end: 6;
-                action-name: "edit-dialog.new-cover";
+                action-name: "edit-game-dialog.new-cover";
 
                 styles ["circular", "osd"]
               }
@@ -69,7 +69,7 @@ template $EditDialogWidget : Adw.Dialog {
                   valign: end;
                   margin-bottom: 6;
                   margin-end: 6;
-                  action-name: "edit-dialog.remove-cover";
+                  action-name: "edit-game-dialog.remove-cover";
 
                   styles ["circular", "osd"]
                 }

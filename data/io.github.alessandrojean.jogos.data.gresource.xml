@@ -4,7 +4,7 @@
     <file>style.css</file>
     <file>style-hc.css</file>
     <file>ui/create-game-dialog.ui</file>
-    <file>ui/edit-dialog.ui</file>
+    <file>ui/edit-game-dialog.ui</file>
     <file>ui/game-details-dialog.ui</file>
     <file>ui/game-grid-item.ui</file>
     <file>ui/game-title-column.ui</file>

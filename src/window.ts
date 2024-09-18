@@ -6,11 +6,11 @@ import Gtk from 'gi://Gtk?version=4.0'
 
 import { Application } from './application.js'
 import { CreateGameDialog } from './games/createGameDialog.js'
+import { EditGameDialog } from './games/editGameDialog.js'
 import { GameDetailsDialog } from './games/gameDetailsDialog.js'
 import Game from './model/game.js'
 import { PlatformId } from './model/platform.js'
 import GamesRepository from './repositories/games.js'
-import { EditDialogWidget } from './widgets/editDialog.js'
 import { GamesWidget, SortProperty } from './widgets/games.js'
 import type { SidebarItem } from './widgets/sidebarItem.js'
 import { SidebarItemWidget } from './widgets/sidebarItem.js'
@@ -383,9 +383,9 @@ export class Window extends Adw.ApplicationWindow {
   }
 
   private onGameEditAction(game: Game) {
-    const editDialog = new EditDialogWidget(game)
+    const editGameDialog = new EditGameDialog(game)
 
-    editDialog.connect('game-updated', (_self, updatedGame) => {
+    editGameDialog.connect('game-updated', (_self, updatedGame) => {
       this.updateSidebarItems()
       this.selectSidebarRow(updatedGame.wishlist ? 'WISHLIST' : updatedGame.platform)
 
@@ -401,7 +401,7 @@ export class Window extends Adw.ApplicationWindow {
       this._toastOverlay.add_toast(toast)
     })
 
-    editDialog.present(this)
+    editGameDialog.present(this)
   }
 
   private async onGameDeleteAction(game: Game) {

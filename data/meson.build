@@ -55,7 +55,7 @@ endif
 blueprints = custom_target('blueprints',
   input: files(
     'ui/create-game-dialog.blp',
-    'ui/edit-dialog.blp',
+    'ui/edit-game-dialog.blp',
     'ui/game-details-dialog.blp',
     'ui/game-grid-item.blp',
     'ui/game-title-column.blp',

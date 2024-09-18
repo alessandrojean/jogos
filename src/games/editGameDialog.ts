@@ -15,7 +15,7 @@ import { convertCover } from '../utils/cover.js'
 import { localeOptions, LocaleOptions } from '../utils/locale.js'
 import { createValidator, integer, max, optional, real, required, setupEntryRow, touch, validate, WidgetMap } from '../utils/validators.js'
 
-export class EditDialogWidget extends Adw.Dialog {
+export class EditGameDialog extends Adw.Dialog {
   private _cover!: Gtk.Picture
   private _title!: Adw.EntryRow
   private _barcode!: Adw.EntryRow
@@ -49,14 +49,14 @@ export class EditDialogWidget extends Adw.Dialog {
     amount: { number: optional(real) }
   })
 
-  private widgetMap!: WidgetMap<keyof EditDialogWidget['validator']>
+  private widgetMap!: WidgetMap<keyof EditGameDialog['validator']>
 
   game!: Game
 
   static {
     GObject.registerClass({
-      GTypeName: 'EditDialogWidget',
-      Template: 'resource:///io/github/alessandrojean/jogos/ui/edit-dialog.ui',
+      GTypeName: 'EditGameDialog',
+      Template: 'resource:///io/github/alessandrojean/jogos/ui/edit-game-dialog.ui',
       Properties: {
         game: GObject.ParamSpec.object(
           'game',
@@ -81,7 +81,7 @@ export class EditDialogWidget extends Adw.Dialog {
     }, this)
   }
 
-  constructor(game: Game, params: Partial<EditDialogWidget> = {}) {
+  constructor(game: Game, params: Partial<EditGameDialog> = {}) {
     super(params)
 
     this.game = game
@@ -101,7 +101,7 @@ export class EditDialogWidget extends Adw.Dialog {
 
   private initActions() {
     const actionGroup = new Gio.SimpleActionGroup()
-    this.insert_action_group('edit-dialog', actionGroup)
+    this.insert_action_group('edit-game-dialog', actionGroup)
 
     const newCoverAction = new Gio.SimpleAction({ name: 'new-cover' })
     newCoverAction.connect('activate', () => this.onNewCoverAction())
@@ -306,7 +306,7 @@ export class EditDialogWidget extends Adw.Dialog {
       setupEntryRow(
         this.validator,
         editable as Adw.EntryRow,
-        key as keyof EditDialogWidget['widgetMap']
+        key as keyof EditGameDialog['widgetMap']
       )
     }
 
