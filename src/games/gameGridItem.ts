@@ -1,8 +1,8 @@
 import GObject from 'gi://GObject'
 import Gio from 'gi://Gio'
-import ContextMenuBin from './contextMenuBin.js'
+import ContextMenuBin from '../widgets/contextMenuBin.js'
 
-export default class GameGridItemWidget extends ContextMenuBin {
+export default class GameGridItem extends ContextMenuBin {
   showPlaceholder: boolean = true
 
   title!: string
@@ -11,7 +11,7 @@ export default class GameGridItemWidget extends ContextMenuBin {
 
   static {
     GObject.registerClass({
-      GTypeName: 'GameGridItemWidget',
+      GTypeName: 'GameGridItem',
       CssName: 'game-grid-item',
       Template: 'resource:///io/github/alessandrojean/jogos/ui/game-grid-item.ui',
       Properties: {
@@ -48,7 +48,7 @@ export default class GameGridItemWidget extends ContextMenuBin {
     }, this)
   }
 
-  constructor(params: Partial<GameGridItemWidget>) {
+  constructor(params: Partial<GameGridItem>) {
     super()
     Object.assign(this, params)
 

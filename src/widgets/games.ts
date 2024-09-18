@@ -4,12 +4,12 @@ import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
 import { Application } from '../application.js'
+import GameGridItem from '../games/gameGridItem.js'
 import Game from '../model/game.js'
 import { getPlatform, PlatformId, platformName } from '../model/platform.js'
 import GamesRepository from '../repositories/games.js'
 import { localeOptions, LocaleOptions } from '../utils/locale.js'
 import ContextMenuBin from './contextMenuBin.js'
-import GameGridItemWidget from './gameGridItem.js'
 import GameTitleColumnWidget from './gameTitleColumn.js'
 
 export type SortProperty = 'title_asc' | 'title_desc'
@@ -368,7 +368,7 @@ export class GamesWidget extends Gtk.Stack {
     const factory = this._gridView.factory as Gtk.SignalListItemFactory
 
     factory.connect('setup', (_self, listItem: Gtk.ListItem) => {
-      const gridItem = new GameGridItemWidget({
+      const gridItem = new GameGridItem({
         title: '',
         cover: null,
         menuModel: this.menuModel,
@@ -380,7 +380,7 @@ export class GamesWidget extends Gtk.Stack {
     })
 
     factory.connect('bind', (_self, listItem: Gtk.ListItem) => {
-      const gridItem = listItem.get_child() as GameGridItemWidget
+      const gridItem = listItem.get_child() as GameGridItem
       const modelItem = listItem.get_item<Game>()
 
       gridItem.title = modelItem.title

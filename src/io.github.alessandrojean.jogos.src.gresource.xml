@@ -8,6 +8,7 @@
     <file>games/createGameDialog.js</file>
     <file>games/editGameDialog.js</file>
     <file>games/gameDetailsDialog.js</file>
+    <file>games/gameGridItem.js</file>
     <file>games/onlineGameResult.js</file>
     <file>igdb/api.js</file>
     <file>lib/fetch.js</file>
@@ -24,7 +25,6 @@
     <file>utils/locale.js</file>
     <file>utils/validators.js</file>
     <file>widgets/contextMenuBin.js</file>
-    <file>widgets/gameGridItem.js</file>
     <file>widgets/gameTitleColumn.js</file>
     <file>widgets/games.js</file>
     <file>widgets/preferencesDialog.js</file>
