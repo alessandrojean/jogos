@@ -1,66 +1,27 @@
 import Gda from 'gi://Gda'
 import GLib from 'gi://GLib'
-import { appDirectory } from '../application.js'
 import Game from '../model/game.js'
 import { getPlatform, Platform, PlatformId } from '../model/platform.js'
+import { Database } from './database.js'
 
 export default class GamesRepository {
-  private connection!: Gda.Connection
+  private database!: Database
   private static _instance: GamesRepository
 
-  private constructor() {}
+  private constructor(database: Database) {
+    this.database = database
+  }
 
   static get instance(): GamesRepository {
     if (!GamesRepository._instance) {
-      GamesRepository._instance = new GamesRepository()
+      GamesRepository._instance = new GamesRepository(Database.instance)
     }
 
     return GamesRepository._instance
   }
 
-  connect() {
-    this.connection = new Gda.Connection({
-      provider: Gda.Config.get_provider('SQLite'),
-      cncString: `DB_DIR=${appDirectory};DB_NAME=jogos`,
-    })
-
-    this.connection.open()
-
-    this.createTables()
-  }
-
-  disconnect() {
-    this.connection.close()
-  }
-
-  private createTables() {
-    this.connection.execute_non_select_command(/* sql */`
-      CREATE TABLE IF NOT EXISTS game (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        developer TEXT NOT NULL,
-        publisher TEXT NOT NULL,
-        release_year INTEGER NOT NULL,
-        barcode TEXT,
-        platform TEXT NOT NULL,
-        story TEXT NOT NULL,
-        certification TEXT NOT NULL,
-        storage_media TEXT NOT NULL,
-        condition TEXT NOT NULL,
-        favorite INTEGER NOT NULL DEFAULT 0,
-        wishlist INTEGER NOT NULL DEFAULT 0,
-        bought_at INTEGER DEFAULT NULL,
-        store TEXT DEFAULT NULL,
-        paid_price_currency TEXT NOT NULL,
-        paid_price_amount REAL NOT NULL DEFAULT 0.0,
-        created_at INTEGER NOT NULL,
-        updated_at INTEGER NOT NULL
-      );
-    `)
-  }
-
   count() {
-    const request = this.connection.execute_select_command(/* sql */`
+    const request = this.database.connection.execute_select_command(/* sql */`
       SELECT COUNT(id) FROM game;
     `)
 
@@ -68,7 +29,7 @@ export default class GamesRepository {
   }
 
   lastId() {
-    const request = this.connection.execute_select_command(/* sql */`
+    const request = this.database.connection.execute_select_command(/* sql */`
       SELECT MAX(id) from game;
     `)
 
@@ -76,7 +37,7 @@ export default class GamesRepository {
   }
 
   list() {
-    const request = this.connection.execute_select_command(/* sql */`
+    const request = this.database.connection.execute_select_command(/* sql */`
       SELECT * FROM game ORDER BY title ASC;
     `)
 
@@ -91,7 +52,7 @@ export default class GamesRepository {
   }
 
   listPlatforms() {
-    const request = this.connection.execute_select_command(/* sql */`
+    const request = this.database.connection.execute_select_command(/* sql */`
       SELECT DISTINCT platform FROM game WHERE wishlist = 0;
     `)
 
@@ -112,7 +73,7 @@ export default class GamesRepository {
   }
 
   get(id: number) {
-    const request = this.connection.execute_select_command(/* sql */`
+    const request = this.database.connection.execute_select_command(/* sql */`
       SELECT * FROM game WHERE id = ${id};
     `)
 
@@ -153,7 +114,7 @@ export default class GamesRepository {
     builder.add_field_value_as_gvalue('created_at', now as any)
     builder.add_field_value_as_gvalue('updated_at', now as any)
 
-    this.connection.statement_execute_non_select(builder.get_statement(), null)
+    this.database.connection.statement_execute_non_select(builder.get_statement(), null)
 
     game.id = this.lastId()
 
@@ -180,7 +141,7 @@ export default class GamesRepository {
       )
     )
 
-    this.connection.statement_execute_non_select(builder.get_statement(), null)
+    this.database.connection.statement_execute_non_select(builder.get_statement(), null)
   }
 
   update(game: Game) {
@@ -218,7 +179,7 @@ export default class GamesRepository {
       )
     )
 
-    this.connection.statement_execute_non_select(builder.get_statement(), null)
+    this.database.connection.statement_execute_non_select(builder.get_statement(), null)
   }
 
   delete(game: Game) {
@@ -237,7 +198,7 @@ export default class GamesRepository {
       )
     )
 
-    this.connection.statement_execute_non_select(builder.get_statement(), null)
+    this.database.connection.statement_execute_non_select(builder.get_statement(), null)
 
     const cover = game.cover
 

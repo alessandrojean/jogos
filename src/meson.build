@@ -28,6 +28,7 @@ sources = files(
   'utils/debugInfo.ts',
   'utils/locale.ts',
   'utils/validators.ts',
+  'repositories/database.ts',
   'repositories/games.ts',
 )
 

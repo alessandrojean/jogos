@@ -20,6 +20,7 @@
     <file>model/gameCondition.js</file>
     <file>model/platform.js</file>
     <file>model/storageMedia.js</file>
+    <file>repositories/database.js</file>
     <file>repositories/games.js</file>
     <file>utils/cover.js</file>
     <file>utils/createFolder.js</file>

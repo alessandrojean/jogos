@@ -8,7 +8,7 @@ import Soup from 'gi://Soup'
 import { GameGridItem } from './games/gameGridItem.js'
 import { GamesView } from './games/gamesView.js'
 import { IgdbApi } from './igdb/api.js'
-import GamesRepository from './repositories/games.js'
+import { Database } from './repositories/database.js'
 import { Settings } from './settings.js'
 import { createFolder } from './utils/createFolder.js'
 import { debugInfo } from './utils/debugInfo.js'
@@ -50,7 +50,7 @@ export class Application extends Adw.Application {
     Application.settings = new Settings({ schema: pkg.name })
     Application.igdb = new IgdbApi(Application.settings)
 
-    GamesRepository.instance.connect()
+    Database.instance.connect()
   }
 
   public vfunc_startup(): void {
@@ -72,10 +72,10 @@ export class Application extends Adw.Application {
   }
 
   public vfunc_shutdown(): void {
-    GamesRepository.instance.disconnect()
-
     this.window?.run_dispose()
     this.window = undefined
+
+    Database.instance.disconnect()
 
     super.vfunc_shutdown()
   }
