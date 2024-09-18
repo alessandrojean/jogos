@@ -1,14 +1,14 @@
 import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
-export interface SidebarItem {
+export interface SidebarItemProps {
   id: string
   iconName: string
   label: string
   section: string
 }
 
-export class SidebarItemWidget extends Gtk.ListBoxRow {
+export class SidebarItem extends Gtk.ListBoxRow {
   private _itemIcon!: Gtk.Image
   private _itemLabel!: Gtk.Label
 
@@ -19,7 +19,7 @@ export class SidebarItemWidget extends Gtk.ListBoxRow {
 
   static {
     GObject.registerClass({
-      GTypeName: 'SidebarItemWidget',
+      GTypeName: 'SidebarItem',
       Template: 'resource:///io/github/alessandrojean/jogos/ui/sidebar-item.ui',
       InternalChildren: ['itemIcon', 'itemLabel'],
       Properties: {
@@ -55,7 +55,7 @@ export class SidebarItemWidget extends Gtk.ListBoxRow {
     }, this)
   }
 
-  constructor(params: Partial<SidebarItemWidget>) {
+  constructor(params: Partial<SidebarItem>) {
     super(params)
 
     this.id = params.id ?? ''

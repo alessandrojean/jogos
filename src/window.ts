@@ -12,8 +12,8 @@ import { GamesView, SortProperty } from './games/gamesView.js'
 import Game from './model/game.js'
 import { PlatformId } from './model/platform.js'
 import GamesRepository from './repositories/games.js'
-import type { SidebarItem } from './widgets/sidebarItem.js'
-import { SidebarItemWidget } from './widgets/sidebarItem.js'
+import type { SidebarItemProps } from './widgets/sidebarItem.js'
+import { SidebarItem } from './widgets/sidebarItem.js'
 
 const CONFIGURE_ID_TIMEOUT = 100
 
@@ -31,14 +31,14 @@ export class Window extends Adw.ApplicationWindow {
 
   private changeSortAction!: Gio.SimpleAction
 
-  private pinnedSidebarItems: SidebarItem[] = [
+  private pinnedSidebarItems: SidebarItemProps[] = [
     { id: 'ALL_GAMES', label: _!('All games'), iconName: 'lucide-square-library-symbolic', section: 'top-pinned' },
     { id: 'RECENTS', label: _!('Recents'), iconName: 'lucide-history-symbolic', section: 'top-pinned' },
     { id: 'FAVORITES', label: _!('Favorites'), iconName: 'lucide-star-symbolic', section: 'top-pinned' },
     { id: 'WISHLIST', label: _!('Wishlist'), iconName: 'lucide-folder-heart-symbolic', section: 'top-pinned' },
   ]
 
-  private sidebarItems: SidebarItem[] = []
+  private sidebarItems: SidebarItemProps[] = []
 
   static {
     GObject.registerClass({
@@ -142,7 +142,7 @@ export class Window extends Adw.ApplicationWindow {
     this.updateSidebarItems()
 
     this._sidebarList.set_header_func((row, before) => {
-      if (row instanceof SidebarItemWidget && before instanceof SidebarItemWidget) {
+      if (row instanceof SidebarItem && before instanceof SidebarItem) {
         if (before.section !== row.section) {
           row.set_header(new Gtk.Separator({ orientation: Gtk.Orientation.HORIZONTAL }))
         }
@@ -161,7 +161,7 @@ export class Window extends Adw.ApplicationWindow {
 
     this._sidebarList.connect('row-selected', (_source, row) => {
       if (row) {
-        this.onSidebarRowSelected((row as SidebarItemWidget).id)
+        this.onSidebarRowSelected((row as SidebarItem).id)
       }
     })
   }
@@ -227,7 +227,7 @@ export class Window extends Adw.ApplicationWindow {
     }
 
     for (const item of this.sidebarItems) {
-      this._sidebarList.append(new SidebarItemWidget(item))
+      this._sidebarList.append(new SidebarItem(item))
     }
   }
 
@@ -427,7 +427,7 @@ export class Window extends Adw.ApplicationWindow {
       // In this case it's better to select the all games sidebar item.
       const platforms = GamesRepository.instance.listPlatforms()
       const platformHasGames = platforms.findIndex(p => p.id === game.platform) >= 0
-      const selectedRow = this._sidebarList.get_selected_row() as SidebarItemWidget
+      const selectedRow = this._sidebarList.get_selected_row() as SidebarItem
 
       this.updateSidebarItems()
 

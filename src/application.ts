@@ -14,7 +14,7 @@ import { createFolder } from './utils/createFolder.js'
 import { debugInfo } from './utils/debugInfo.js'
 import ContextMenuBin from './widgets/contextMenuBin.js'
 import PreferencesDialogWidget from './widgets/preferencesDialog.js'
-import { SidebarItemWidget } from './widgets/sidebarItem.js'
+import { SidebarItem } from './widgets/sidebarItem.js'
 import { Window } from './window.js'
 
 export const appDirectory = GLib.build_filenamev([GLib.get_user_data_dir(), 'jogos'])
@@ -57,7 +57,7 @@ export class Application extends Adw.Application {
     super.vfunc_startup()
 
     GObject.type_ensure(GamesView.$gtype)
-    GObject.type_ensure(SidebarItemWidget.$gtype)
+    GObject.type_ensure(SidebarItem.$gtype)
     GObject.type_ensure(ContextMenuBin.$gtype)
     GObject.type_ensure(GameGridItem.$gtype)
   }
