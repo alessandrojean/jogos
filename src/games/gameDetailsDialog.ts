@@ -10,7 +10,7 @@ import { getPlatform, platformName } from '../model/platform.js'
 import { getStorageMedia } from '../model/storageMedia.js'
 import { localeOptions, LocaleOptions } from '../utils/locale.js'
 
-export class DetailsDialogWidget extends Adw.Dialog {
+export class GameDetailsDialog extends Adw.Dialog {
   private _coverStack!: Gtk.Stack
   private _cover!: Gtk.Picture
   private _title!: Gtk.Label
@@ -37,8 +37,8 @@ export class DetailsDialogWidget extends Adw.Dialog {
 
   static {
     GObject.registerClass({
-      GTypeName: 'DetailsDialogWidget',
-      Template: 'resource:///io/github/alessandrojean/jogos/ui/details-dialog.ui',
+      GTypeName: 'GameDetailsDialog',
+      Template: 'resource:///io/github/alessandrojean/jogos/ui/game-details-dialog.ui',
       Properties: {
         game: GObject.ParamSpec.object(
           'game',
@@ -59,7 +59,7 @@ export class DetailsDialogWidget extends Adw.Dialog {
     }, this)
   }
 
-  constructor(game: Game, params: Partial<DetailsDialogWidget> = {}) {
+  constructor(game: Game, params: Partial<GameDetailsDialog> = {}) {
     super(params)
 
     this.game = game
@@ -79,7 +79,7 @@ export class DetailsDialogWidget extends Adw.Dialog {
     this._creationDate.subtitle = this.game.createdAtDateTime.format(this.locale.dateTimeFormat) ?? ''
     this._modificationDate.subtitle = this.game.modifiedAtDateTime.format(this.locale.dateTimeFormat) ?? ''
     this._boughtDate.subtitle = this.game.boughtAtDateTime?.format(this.locale.dateFormat) ?? _!('Unknown')
-    this._store.subtitle = this.game.store ?? _!('Unknown')
+    this._store.subtitle = this.game.store?.length ? this.game.store : _!('Unknown')
 
     const currency = getCurrency(this.game.paidPriceCurrency) ?? getCurrency('USD')!
     this._paidPrice.subtitle = `${currency.symbol} %.2f`.format(this.game.paidPriceAmount)
