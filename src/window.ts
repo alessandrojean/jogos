@@ -8,10 +8,10 @@ import { Application } from './application.js'
 import { CreateGameDialog } from './games/createGameDialog.js'
 import { EditGameDialog } from './games/editGameDialog.js'
 import { GameDetailsDialog } from './games/gameDetailsDialog.js'
+import { GamesView, SortProperty } from './games/gamesView.js'
 import Game from './model/game.js'
 import { PlatformId } from './model/platform.js'
 import GamesRepository from './repositories/games.js'
-import { GamesWidget, SortProperty } from './widgets/games.js'
 import type { SidebarItem } from './widgets/sidebarItem.js'
 import { SidebarItemWidget } from './widgets/sidebarItem.js'
 
@@ -23,7 +23,7 @@ export class Window extends Adw.ApplicationWindow {
   private _splitView!: Adw.NavigationSplitView
   private _sidebarList!: Gtk.ListBox
   private _content!: Adw.NavigationPage
-  private _gamesWidget!: GamesWidget
+  private _gamesView!: GamesView
   private _searchBar!: Gtk.SearchBar
   private _searchEntry!: Gtk.SearchEntry
   private _viewAndSort!: Adw.SplitButton
@@ -45,7 +45,7 @@ export class Window extends Adw.ApplicationWindow {
       GTypeName: 'JogosWindow',
       Template: 'resource:///io/github/alessandrojean/jogos/ui/window.ui',
       InternalChildren: [
-        'splitView', 'sidebarList', 'content', 'gamesWidget',
+        'splitView', 'sidebarList', 'content', 'gamesView',
         'searchBar', 'searchEntry', 'viewAndSort', 'toastOverlay'
       ],
     }, this)
@@ -123,17 +123,17 @@ export class Window extends Adw.ApplicationWindow {
     this.connect('notify::default-height', () => this.onSizeChanged())
     this.connect('notify::maximized', () => this.onMaximizedChanged())
 
-    this._gamesWidget.connect('game-activate', (_self, game: Game) => {
+    this._gamesView.connect('game-activate', (_self, game: Game) => {
       const gameDetailsDialog = new GameDetailsDialog(game)
       gameDetailsDialog.present(this)
     })
 
-    this._gamesWidget.connect('game-edit', (_self, game: Game) => this.onGameEditAction(game))
-    this._gamesWidget.connect('game-delete', (_self, game: Game) => this.onGameDeleteAction(game))
-    this._gamesWidget.connect('game-favorited', (_self, game: Game) => this.onGameFavorited(game))
-    this._gamesWidget.connect('game-unfavorited', (_self, game: Game) => this.onGameUnfavorited(game))
+    this._gamesView.connect('game-edit', (_self, game: Game) => this.onGameEditAction(game))
+    this._gamesView.connect('game-delete', (_self, game: Game) => this.onGameDeleteAction(game))
+    this._gamesView.connect('game-favorited', (_self, game: Game) => this.onGameFavorited(game))
+    this._gamesView.connect('game-unfavorited', (_self, game: Game) => this.onGameUnfavorited(game))
 
-    this._gamesWidget.connect('sort-changed', (_self, property: Gtk.StringObject) => {
+    this._gamesView.connect('sort-changed', (_self, property: Gtk.StringObject) => {
       this.changeSortAction.state = GLib.Variant.new_string(property.string)
     })
   }
@@ -168,7 +168,7 @@ export class Window extends Adw.ApplicationWindow {
 
   private initSearchBar() {
     this._searchEntry.connect('search-changed', () => {
-      this._gamesWidget.search(this._searchEntry.text)
+      this._gamesView.search(this._searchEntry.text)
     })
   }
 
@@ -242,14 +242,14 @@ export class Window extends Adw.ApplicationWindow {
   }
 
   private onShowList() {
-    this._gamesWidget.showList()
+    this._gamesView.showList()
     this._viewAndSort.iconName = 'lucide-layout-grid-symbolic'
     this._viewAndSort.tooltipText = _!('View in grid')
     Application.settings.setValue('show-grid', false)
   }
 
   private onShowGrid() {
-    this._gamesWidget.showGrid()
+    this._gamesView.showGrid()
     this._viewAndSort.iconName = 'lucide-layout-list-symbolic'
     this._viewAndSort.tooltipText = _!('View in list')
     Application.settings.setValue('show-grid', true)
@@ -317,30 +317,30 @@ export class Window extends Adw.ApplicationWindow {
     this._content.set_title(item.label)
 
     if (itemId === 'ALL_GAMES') {
-      this._gamesWidget.selectPlatform(null)
-      this._gamesWidget.sortBy('title_asc')
+      this._gamesView.selectPlatform(null)
+      this._gamesView.sortBy('title_asc')
       return
     }
 
     if (itemId === 'FAVORITES') {
-      this._gamesWidget.showFavorites()
+      this._gamesView.showFavorites()
       return
     }
 
     if (itemId === 'WISHLIST') {
-      this._gamesWidget.showWishlist()
+      this._gamesView.showWishlist()
       return
     }
 
     if (itemId === 'RECENTS') {
-      this._gamesWidget.selectPlatform(null)
-      this._gamesWidget.sortBy('modification_date_desc')
+      this._gamesView.selectPlatform(null)
+      this._gamesView.sortBy('modification_date_desc')
       return
     }
 
     // It's a platform
 
-    this._gamesWidget.selectPlatform(itemId as PlatformId)
+    this._gamesView.selectPlatform(itemId as PlatformId)
 
     if (this._splitView.collapsed) {
       this._splitView.showContent = true
@@ -349,7 +349,7 @@ export class Window extends Adw.ApplicationWindow {
   }
 
   private onChangeSortAction(sort: string) {
-    this._gamesWidget.sortBy(sort as SortProperty)
+    this._gamesView.sortBy(sort as SortProperty)
   }
 
   private onCreateNewGameAction() {
@@ -367,9 +367,9 @@ export class Window extends Adw.ApplicationWindow {
       this.updateSidebarItems()
       this.selectSidebarRow(game.wishlist ? 'WISHLIST' : game.platform)
 
-      this._gamesWidget.loadItems()
-      this._gamesWidget.search('')
-      this._gamesWidget.selectGame(game)
+      this._gamesView.loadItems()
+      this._gamesView.search('')
+      this._gamesView.selectGame(game)
 
       const toast = new Adw.Toast({
         title: _!('"%s" was created').format(game.title),
@@ -389,9 +389,9 @@ export class Window extends Adw.ApplicationWindow {
       this.updateSidebarItems()
       this.selectSidebarRow(updatedGame.wishlist ? 'WISHLIST' : updatedGame.platform)
 
-      this._gamesWidget.loadItems()
-      this._gamesWidget.search('')
-      this._gamesWidget.selectGame(updatedGame)
+      this._gamesView.loadItems()
+      this._gamesView.search('')
+      this._gamesView.selectGame(updatedGame)
 
       const toast = new Adw.Toast({
         title: _!('"%s" was updated').format(updatedGame.title),
@@ -435,7 +435,7 @@ export class Window extends Adw.ApplicationWindow {
         this.selectSidebarRow('ALL_GAMES')
       }
 
-      this._gamesWidget.loadItems()
+      this._gamesView.loadItems()
 
       const toast = new Adw.Toast({
         title: _!('"%s" was deleted').format(game.title),

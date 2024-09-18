@@ -10,6 +10,7 @@
     <file>games/gameDetailsDialog.js</file>
     <file>games/gameGridItem.js</file>
     <file>games/gameTitleColumn.js</file>
+    <file>games/gamesView.js</file>
     <file>games/onlineGameResult.js</file>
     <file>igdb/api.js</file>
     <file>lib/fetch.js</file>
@@ -26,7 +27,6 @@
     <file>utils/locale.js</file>
     <file>utils/validators.js</file>
     <file>widgets/contextMenuBin.js</file>
-    <file>widgets/games.js</file>
     <file>widgets/preferencesDialog.js</file>
     <file>widgets/sidebarItem.js</file>
   </gresource>

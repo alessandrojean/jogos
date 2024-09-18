@@ -4,13 +4,13 @@ import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
 import { Application } from '../application.js'
-import GameGridItem from '../games/gameGridItem.js'
-import GameTitleColumn from '../games/gameTitleColumn.js'
 import Game from '../model/game.js'
 import { getPlatform, PlatformId, platformName } from '../model/platform.js'
 import GamesRepository from '../repositories/games.js'
 import { localeOptions, LocaleOptions } from '../utils/locale.js'
-import ContextMenuBin from './contextMenuBin.js'
+import ContextMenuBin from '../widgets/contextMenuBin.js'
+import GameGridItem from './gameGridItem.js'
+import GameTitleColumn from './gameTitleColumn.js'
 
 export type SortProperty = 'title_asc' | 'title_desc'
   | 'modification_date_desc' | 'modification_date_asc'
@@ -18,7 +18,7 @@ export type SortProperty = 'title_asc' | 'title_desc'
   | 'developer_asc' | 'developer_desc'
   | 'year_asc' | 'year_desc'
 
-export class GamesWidget extends Gtk.Stack {
+export class GamesView extends Gtk.Stack {
   private _items!: Gtk.ScrolledWindow
   private _grid!: Gtk.ScrolledWindow
   private _noResultsFound!: Adw.StatusPage
@@ -65,8 +65,8 @@ export class GamesWidget extends Gtk.Stack {
 
   static {
     GObject.registerClass({
-      GTypeName: 'GamesWidget',
-      Template: 'resource:///io/github/alessandrojean/jogos/ui/games.ui',
+      GTypeName: 'GamesView',
+      Template: 'resource:///io/github/alessandrojean/jogos/ui/games-view.ui',
       InternalChildren: [
         'items', 'noResultsFound', 'noGamesForPlatform', 'columnView',
         'titleColumn', 'platformColumn', 'developerColumn', 'yearColumn',

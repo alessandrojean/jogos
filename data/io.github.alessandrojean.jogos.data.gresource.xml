@@ -8,7 +8,7 @@
     <file>ui/game-details-dialog.ui</file>
     <file>ui/game-grid-item.ui</file>
     <file>ui/game-title-column.ui</file>
-    <file>ui/games.ui</file>
+    <file>ui/games-view.ui</file>
     <file>ui/online-game-result.ui</file>
     <file>ui/preferences-dialog.ui</file>
     <file>ui/sidebar-item.ui</file>
