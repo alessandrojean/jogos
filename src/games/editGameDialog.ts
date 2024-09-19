@@ -376,7 +376,8 @@ export class EditGameDialog extends Adw.Dialog {
       store: this._store.text.trim(),
       wishlist: this._wishlist.active,
       paidPriceAmount: Number.isNaN(amount) ? 0.0 : amount,
-      paidPriceCurrency: (this._currency.selectedItem as Currency).iso
+      paidPriceCurrency: (this._currency.selectedItem as Currency).iso,
+      igdbId: this.game.igdbId,
     })
 
     GamesRepository.instance.update(game)
