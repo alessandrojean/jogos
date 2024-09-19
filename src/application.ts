@@ -106,7 +106,7 @@ export class Application extends Adw.Application {
         copyright: '© 2024 Alessandro Jean',
         website: 'https://alessandrojean.github.io/jogos',
         issueUrl: 'https://github.com/alessandrojean/jogos/issues/new/choose',
-        licenseType: Gtk.License.MIT_X11,
+        licenseType: Gtk.License.GPL_3_0,
         debugInfo: debugInfo(appDirectory),
       })
 

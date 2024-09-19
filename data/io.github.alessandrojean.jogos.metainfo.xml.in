@@ -6,7 +6,7 @@
   <summary>Use this template to build your GNOME + Typescript application</summary>
   <!-- IMPORTANT: Change these to match the actual license of your app-->
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>MIT</project_license>
+  <project_license>GPL-3.0-or-later</project_license>
   <developer_name>Alessandro Jean</developer_name>
   <update_contact>14254807+alessandrojean@users.noreply.github.com</update_contact>
   <description>

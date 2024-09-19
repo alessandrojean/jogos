@@ -112,4 +112,4 @@ from the icon packs [Lucide] and [Simple Icons].
 
 > You can check out the full license [here](LICENSE).
 
-This repository is licensed under the terms of the **MIT** license.
+This repository is licensed under the terms of the **GPL v3.0 or later** license.
