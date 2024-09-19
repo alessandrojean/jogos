@@ -83,11 +83,133 @@ template $JogosWindow : Adw.ApplicationWindow {
                 search-delay: 100;
                 placeholder-text: _("Search the collection...");
                 width-request: 400;
+
+                search-changed => $onSearchChanged();
               }
             }
           }
 
-          content: $GamesView gamesView {};
+          content: Stack stack {
+            StackPage {
+              name: "games-view";
+              child: $GamesView gamesView {};
+            }
+
+            StackPage {
+              name: "no-results";
+              child: Adw.StatusPage noResultsFound {
+                title: _("No results found");
+                description: _("Try a different search");
+                icon-name: "lucide-search-symbolic";
+                vexpand: true;
+              };
+            }
+
+            StackPage {
+              name: "no-favorites";
+              child: Adw.StatusPage noFavorites {
+                title: _("No favorites");
+                description: _("You haven't marked any game as favorite");
+                icon-name: "lucide-star-symbolic";
+                vexpand: true;
+              };
+            }
+
+            StackPage {
+              name: "no-wishlist";
+              child: Adw.StatusPage noWishlist {
+                title: _("No games in wishlist");
+                description: _("You haven't created any game in the wishlist");
+                icon-name: "lucide-folder-heart-symbolic";
+                vexpand: true;
+
+                Box {
+                  margin-top: 18;
+                  orientation: vertical;
+                  halign: center;
+
+                  Button {
+                    action-name: "win.create-new-game";
+
+                    Adw.ButtonContent {
+                      icon-name: "lucide-plus-symbolic";
+                      label: _("New game");
+                    }
+
+                    styles [
+                      "suggested-action",
+                      "pill"
+                    ]
+                  }
+                }
+              };
+            }
+
+            StackPage {
+              name: "no-games-platform";
+              child: Adw.StatusPage noGamesForPlatform {
+                title: _("No games found");
+                description: _("You haven't created any game for this platform");
+                icon-name: "lucide-gamepad-2-symbolic";
+                vexpand: true;
+
+                Box {
+                  margin-top: 18;
+                  orientation: vertical;
+                  halign: center;
+
+                  Button {
+                    action-name: "win.create-new-game";
+
+                    Adw.ButtonContent {
+                      icon-name: "lucide-plus-symbolic";
+                      label: _("New game");
+                    }
+
+                    styles [
+                      "suggested-action",
+                      "pill"
+                    ]
+                  }
+                }
+              };
+            }
+
+            StackPage {
+              name: "no-games";
+              child: Adw.StatusPage noGames {
+                title: _("No games found");
+                description: _("You haven't created any game yet");
+                icon-name: "lucide-gamepad-2-symbolic";
+                vexpand: true;
+
+                Box {
+                  margin-top: 18;
+                  orientation: vertical;
+                  halign: center;
+
+                  Button {
+                    action-name: "win.create-new-game";
+
+                    Adw.ButtonContent {
+                      icon-name: "lucide-plus-symbolic";
+                      label: _("New game");
+                    }
+
+                    styles [
+                      "suggested-action",
+                      "pill"
+                    ]
+                  }
+                }
+              };
+            }
+
+            StackPage {
+              name: "loading";
+              child: Adw.Bin {};
+            }
+          };
 
           styles [
             "view"

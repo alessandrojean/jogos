@@ -36,9 +36,77 @@ export default class GamesRepository {
     return request.get_value_at(0, 0) as any as number ?? 1
   }
 
-  list() {
+  async list() {
     const request = this.database.connection.execute_select_command(/* sql */`
-      SELECT * FROM game ORDER BY title ASC;
+      SELECT * FROM game WHERE wishlist = 0 ORDER BY title ASC;
+    `)
+
+    const a = Gda.SqlBuilder.new(Gda.SqlStatementType.SELECT)
+
+
+    const iterator = request.create_iter()
+    const games: Game[] = []
+
+    while (iterator.move_next()) {
+      games.push(Game.fromIterator(iterator))
+    }
+
+    return games
+  }
+
+  async listByPlatform(platform: PlatformId) {
+    const [statement, params] = this.database.connection.parse_sql_string(/* sql */`
+      SELECT * FROM game WHERE platform = ##platform::string AND wishlist = 0 ORDER BY title;
+    `)
+
+    // @ts-ignore
+    params!.get_holder('platform').set_value(platform)
+
+    const request = this.database.connection.statement_execute_select(statement, params)
+
+    const iterator = request.create_iter()
+    const games: Game[] = []
+
+    while (iterator.move_next()) {
+      games.push(Game.fromIterator(iterator))
+    }
+
+    return games
+  }
+
+  async listFavorites() {
+    const request = this.database.connection.execute_select_command(/* sql */`
+      SELECT * FROM game WHERE favorite = 1 ORDER BY title ASC;
+    `)
+
+    const iterator = request.create_iter()
+    const games: Game[] = []
+
+    while (iterator.move_next()) {
+      games.push(Game.fromIterator(iterator))
+    }
+
+    return games
+  }
+
+  async listWishlist() {
+    const request = this.database.connection.execute_select_command(/* sql */`
+      SELECT * FROM game WHERE wishlist = 1 ORDER BY title ASC;
+    `)
+
+    const iterator = request.create_iter()
+    const games: Game[] = []
+
+    while (iterator.move_next()) {
+      games.push(Game.fromIterator(iterator))
+    }
+
+    return games
+  }
+
+  async listRecents() {
+    const request = this.database.connection.execute_select_command(/* sql */`
+      SELECT * FROM game WHERE wishlist = 0 ORDER BY updated_at DESC LIMIT 30;
     `)
 
     const iterator = request.create_iter()
@@ -73,9 +141,14 @@ export default class GamesRepository {
   }
 
   get(id: number) {
-    const request = this.database.connection.execute_select_command(/* sql */`
-      SELECT * FROM game WHERE id = ${id};
+    const [statement, params] = this.database.connection.parse_sql_string(/* sql */`
+      SELECT * FROM game WHERE id = ##id::gint;
     `)
+
+    // @ts-expect-error
+    params!.get_holder('id').set_value(id)
+
+    const request = this.database.connection.statement_execute_select(statement, params)
 
     const iterator = request.create_iter()
     let game: Game | null = null

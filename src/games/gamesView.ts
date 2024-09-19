@@ -1,16 +1,16 @@
-import Adw from 'gi://Adw'
 import Gio from 'gi://Gio'
 import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
 import { Application } from '../application.js'
 import Game from '../model/game.js'
-import { getPlatform, PlatformId, platformName } from '../model/platform.js'
-import GamesRepository from '../repositories/games.js'
+import { getPlatform, platformName } from '../model/platform.js'
 import { localeOptions, LocaleOptions } from '../utils/locale.js'
 import { ContextMenuBin } from '../widgets/contextMenuBin.js'
 import { GameGridItem } from './gameGridItem.js'
 import { GameTitleColumn } from './gameTitleColumn.js'
+
+type ColumnId = 'title' | 'year' | 'platform' | 'developer' | 'modification' | 'favorite'
 
 export type SortProperty = 'title_asc' | 'title_desc'
   | 'modification_date_desc' | 'modification_date_asc'
@@ -21,11 +21,6 @@ export type SortProperty = 'title_asc' | 'title_desc'
 export class GamesView extends Gtk.Stack {
   private _items!: Gtk.ScrolledWindow
   private _grid!: Gtk.ScrolledWindow
-  private _noResultsFound!: Adw.StatusPage
-  private _noGamesForPlatform!: Adw.StatusPage
-  private _noGames!: Adw.StatusPage
-  private _noFavorites!: Adw.StatusPage
-  private _noWishlist!: Adw.StatusPage
 
   private _columnView!: Gtk.ColumnView
   private _titleColumn!: Gtk.ColumnViewColumn
@@ -38,41 +33,27 @@ export class GamesView extends Gtk.Stack {
   private _gridView!: Gtk.GridView
 
   private dataModel!: Gio.ListStore<Game>
-  private sortModel!: Gtk.SortListModel<Game>
-  private filterModel!: Gtk.FilterListModel<Game>
-  private selectionModel!: Gtk.SingleSelection<Game>
-  private filter!: Gtk.EveryFilter
-  private platformFilter!: Gtk.StringFilter
   private titleFilter!: Gtk.StringFilter
-  private favoriteFilter!: Gtk.BoolFilter
-  private wishlistFilter!: Gtk.BoolFilter
 
   private viewGrid = true
   private locale!: LocaleOptions
   private menuModel!: Gio.Menu
-
-  private isWishlist = Gtk.ClosureExpression.new(
-    GObject.TYPE_BOOLEAN,
-    (g: Game) => g.wishlist,
-    null,
-  )
-
-  private isNotWishlist = Gtk.ClosureExpression.new(
-    GObject.TYPE_BOOLEAN,
-    (g: Game) => !g.wishlist,
-    null,
-  )
+  private selectionModel!: Gtk.SingleSelection<Game>
 
   static {
     GObject.registerClass({
       GTypeName: 'GamesView',
       Template: 'resource:///io/github/alessandrojean/jogos/ui/games-view.ui',
       InternalChildren: [
-        'items', 'noResultsFound', 'noGamesForPlatform', 'columnView',
+        'items', 'columnView',
         'titleColumn', 'platformColumn', 'developerColumn', 'yearColumn',
-        'noGames', 'grid', 'gridView', 'noFavorites',
-        'noWishlist', 'modificationColumn', 'favoriteColumn',
+        'grid', 'gridView',
+        'modificationColumn', 'favoriteColumn',
       ],
+      Properties: {
+        // @ts-expect-error
+        dataModel: GObject.ParamSpec.object('data-model', '', '', GObject.ParamFlags.READWRITE, Gio.ListStore.$gtype),
+      },
       Signals: {
         'game-activate': {
           param_types: [Game.$gtype],
@@ -91,6 +72,9 @@ export class GamesView extends Gtk.Stack {
         },
         'sort-changed': {
           param_types: [Gtk.StringObject.$gtype]
+        },
+        'context-menu': {
+          param_types: [Game.$gtype]
         }
       }
     }, this)
@@ -105,7 +89,6 @@ export class GamesView extends Gtk.Stack {
     this.initCommon()
     this.initColumnView()
     this.initGridView()
-    this.loadItems()
   }
 
   private initLocale() {
@@ -113,7 +96,6 @@ export class GamesView extends Gtk.Stack {
 
     Application.settings.connect('changed', () => {
       this.locale = localeOptions()
-      this.loadItems()
     })
   }
 
@@ -149,43 +131,22 @@ export class GamesView extends Gtk.Stack {
   }
 
   private initCommon() {
-    this.platformFilter = new Gtk.StringFilter({
-      expression: Gtk.PropertyExpression.new(Game.$gtype, null, 'platform'),
-      matchMode: Gtk.StringFilterMatchMode.EXACT,
-    })
-
     this.titleFilter = new Gtk.StringFilter({
       expression: Gtk.PropertyExpression.new(Game.$gtype, null, 'title'),
       ignoreCase: true,
       matchMode: Gtk.StringFilterMatchMode.SUBSTRING,
     })
 
-    this.favoriteFilter = new Gtk.BoolFilter({
-      expression: Gtk.ConstantExpression.new_for_value(true),
-    })
-
-    this.wishlistFilter = new Gtk.BoolFilter({ expression: this.isNotWishlist })
-
-    this.filter = new Gtk.EveryFilter()
-    this.filter.append(this.platformFilter)
-    this.filter.append(this.titleFilter)
-    this.filter.append(this.favoriteFilter)
-    this.filter.append(this.wishlistFilter)
-
     this.dataModel = new Gio.ListStore({ itemType: Game.$gtype })
 
-    this.sortModel = new Gtk.SortListModel({
-      model: this.dataModel,
-      sorter: this._columnView.sorter,
-    })
-
-    this.filterModel = new Gtk.FilterListModel({
-      model: this.sortModel,
-      filter: this.filter,
-    })
-
     this.selectionModel = new Gtk.SingleSelection({
-      model: this.filterModel,
+      model: new Gtk.FilterListModel({
+        filter: this.titleFilter,
+        model: new Gtk.SortListModel({
+          model: this.dataModel,
+          sorter: this._columnView.sorter,
+        })
+      })
     })
   }
 
@@ -396,45 +357,12 @@ export class GamesView extends Gtk.Stack {
     })
   }
 
-  loadItems() {
-    const allGames = GamesRepository.instance.list()
-
-    this.dataModel.splice(0, this.dataModel.nItems, allGames)
-    this.changeVisibleChild()
+  search(terms: string) {
+    this.titleFilter.search = terms
   }
 
-  showFavorites() {
-    this.selectPlatform(null)
-    this.favoriteFilter.expression = Gtk.ClosureExpression.new(
-      GObject.TYPE_BOOLEAN,
-      (g: Game) => g.favorite,
-      null
-    )
-
-    this.changeVisibleChild()
-  }
-
-  showWishlist() {
-    this.selectPlatform(null)
-    this.wishlistFilter.expression = this.isWishlist
-    this._favoriteColumn.visible = false
-
-    this.changeVisibleChild()
-  }
-
-  selectPlatform(platform: Game['platform'] | null) {
-    this.favoriteFilter.expression = Gtk.ConstantExpression.new_for_value(true)
-    this.wishlistFilter.expression = this.isNotWishlist
-    this.platformFilter.search = platform ?? ''
-    this._platformColumn.visible = platform === null
-    this._favoriteColumn.visible = true
-
-    this.changeVisibleChild()
-  }
-
-  search(query: string) {
-    this.titleFilter.search = query ?? ''
-    this.changeVisibleChild()
+  clearSearch() {
+    this.titleFilter.search = ''
   }
 
   showGrid() {
@@ -453,7 +381,23 @@ export class GamesView extends Gtk.Stack {
     }
   }
 
-  selectGame(game: Game) {
+  hideColumn(columnId: ColumnId) {
+    if (columnId === 'platform') {
+      this._platformColumn.visible = false
+    } else if (columnId === 'developer') {
+      this._developerColumn.visible = false
+    }
+  }
+
+  showColumn(columnId: ColumnId) {
+    if (columnId === 'platform') {
+      this._platformColumn.visible = true
+    } else if (columnId === 'developer') {
+      this._developerColumn.visible = true
+    }
+  }
+
+  select(game: Game) {
     // Doing the search manually as find_with_equal_func is not working.
     let position = -1
 
@@ -475,7 +419,16 @@ export class GamesView extends Gtk.Stack {
     }
   }
 
-  sortBy(sortProperty: SortProperty) {
+  unselect() {
+    this.selectionModel.unselect_all()
+  }
+
+  sortBy(sortProperty: SortProperty | null) {
+    if (!sortProperty) {
+      this._columnView.sort_by_column(null, Gtk.SortType.ASCENDING)
+      return
+    }
+
     const [property, direction] = sortProperty.split('_')
     const sortType = direction === 'asc' ? Gtk.SortType.ASCENDING : Gtk.SortType.DESCENDING
 
@@ -491,46 +444,24 @@ export class GamesView extends Gtk.Stack {
     this._columnView.sort_by_column(map[property] ?? null, sortType)
   }
 
-  private changeVisibleChild() {
-    const query = this.titleFilter.search ?? ''
-    const nItems = this.filterModel.get_n_items()
-    const platform = this.platformFilter.search ?? ''
-    const favorite = this.favoriteFilter.expression instanceof Gtk.ClosureExpression
-    const wishlist = this.wishlistFilter.expression === this.isWishlist
-
-    if (nItems === 0 && wishlist && query.length === 0) {
-      this.visibleChild = this._noWishlist
-    } else if (nItems === 0 && favorite && query.length === 0) {
-      this.visibleChild = this._noFavorites
-    } else if (nItems === 0 && platform.length === 0 && query.length === 0) {
-      this.visibleChild = this._noGames
-    } else if (nItems === 0 && platform.length > 0 && query.length === 0) {
-      this.visibleChild = this._noGamesForPlatform
-      this._noGamesForPlatform.iconName = getPlatform(platform as PlatformId).iconName
-    } else if (nItems === 0) {
-      this.visibleChild = this._noResultsFound
-    } else {
-      this.visibleChild = this.viewGrid ? this._grid : this._items
-    }
-  }
-
   private onFavoriteClicked(game: Game) {
-    GamesRepository.instance.toggleFavorite(game)
-    const updatedGame = GamesRepository.instance.get(game.id)
+    this.emit(game.favorite ? 'game-unfavorited' : 'game-favorited', game)
+    // GamesRepository.instance.toggleFavorite(game)
+    // const updatedGame = GamesRepository.instance.get(game.id)
 
-    const [found, position] = this.dataModel.find(game)
+    // const [found, position] = this.dataModel.find(game)
 
-    if (found && updatedGame) {
-      this.dataModel.splice(position, 1, [updatedGame])
+    // if (found && updatedGame) {
+    //   this.dataModel.splice(position, 1, [updatedGame])
 
-      this.changeVisibleChild()
+    //   this.changeVisibleChild()
 
-      if (game.favorite) {
-        this.emit('game-unfavorited', updatedGame)
-      } else {
-        this.emit('game-favorited', updatedGame)
-      }
-    }
+    //   if (game.favorite) {
+    //     this.emit('game-unfavorited', updatedGame)
+    //   } else {
+    //     this.emit('game-favorited', updatedGame)
+    //   }
+    // }
   }
 
   private onColumnViewSortChanged(sorter: Gtk.ColumnViewSorter) {
@@ -556,7 +487,8 @@ export class GamesView extends Gtk.Stack {
 
   private onSetupMenu(listItem: Gtk.ListItem) {
     const item = listItem.get_item<Game>()
-    this.selectGame(item)
+    this.emit('context-menu', item)
+    this.select(item)
   }
 
   private onDetailsAction() {
@@ -572,5 +504,13 @@ export class GamesView extends Gtk.Stack {
   private onDeleteAction() {
     const game = this.selectionModel.get_selected_item<Game>()
     this.emit('game-delete', game)
+  }
+
+  get model() {
+    return this.dataModel
+  }
+
+  get filterModel() {
+    return this.selectionModel
   }
 }

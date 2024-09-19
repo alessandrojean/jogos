@@ -71,7 +71,7 @@ export class ContextMenuBin extends Adw.Bin {
       this.popover.bind_property('menu-model', this, 'menu-model', GObject.BindingFlags.DEFAULT)
 
       this.popover.connect('closed', () => {
-        GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
+        GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
           this.popover?.unparent()
           this.popover = undefined
 

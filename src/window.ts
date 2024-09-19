@@ -10,12 +10,32 @@ import { EditGameDialog } from './games/editGameDialog.js'
 import { GameDetailsDialog } from './games/gameDetailsDialog.js'
 import { GamesView, SortProperty } from './games/gamesView.js'
 import Game from './model/game.js'
-import { PlatformId } from './model/platform.js'
+import { getPlatform, PlatformId } from './model/platform.js'
 import GamesRepository from './repositories/games.js'
 import type { SidebarItemProps } from './widgets/sidebarItem.js'
 import { SidebarItem } from './widgets/sidebarItem.js'
 
 const CONFIGURE_ID_TIMEOUT = 100
+
+enum WindowState {
+  ALL_GAMES,
+  RECENTS,
+  WISHLIST,
+  FAVORITES,
+  PLATFORM,
+}
+
+enum Stack {
+  GAMES_VIEW = 'games-view',
+  NO_RESULTS = 'no-results',
+  NO_FAVORITES = 'no-favorites',
+  NO_WISHLIST = 'no-wishlist',
+  NO_GAMES_IN_PLATFORM = 'no-games-platform',
+  NO_GAMES = 'no-games',
+  LOADING = 'loading'
+}
+
+
 
 export class Window extends Adw.ApplicationWindow {
   private configureId: number = 0
@@ -28,6 +48,8 @@ export class Window extends Adw.ApplicationWindow {
   private _searchEntry!: Gtk.SearchEntry
   private _viewAndSort!: Adw.SplitButton
   private _toastOverlay!: Adw.ToastOverlay
+  private _stack!: Gtk.Stack
+  private _noGamesForPlatform!: Adw.StatusPage
 
   private changeSortAction!: Gio.SimpleAction
 
@@ -39,14 +61,18 @@ export class Window extends Adw.ApplicationWindow {
   ]
 
   private sidebarItems: SidebarItemProps[] = []
+  private state: WindowState = WindowState.ALL_GAMES
+  private selectedPlatform: PlatformId | null = null
+  private isSearching: boolean = false
 
   static {
     GObject.registerClass({
       GTypeName: 'JogosWindow',
       Template: 'resource:///io/github/alessandrojean/jogos/ui/window.ui',
       InternalChildren: [
-        'splitView', 'sidebarList', 'content', 'gamesView',
-        'searchBar', 'searchEntry', 'viewAndSort', 'toastOverlay'
+        'splitView', 'sidebarList', 'content', 'gamesView', 'stack',
+        'searchBar', 'searchEntry', 'viewAndSort', 'toastOverlay',
+        'noGamesForPlatform'
       ],
     }, this)
 
@@ -65,9 +91,11 @@ export class Window extends Adw.ApplicationWindow {
     this.restoreWindowGeometry()
     this.initActions()
     this.initSignals()
-    this.initSearchBar()
     this.initSidebar()
     this.initViewOptions()
+
+    // Load the games again as the user might have changed the date format.
+    Application.settings.connect('changed', () => this.loadGames())
   }
 
   private initActions() {
@@ -105,7 +133,7 @@ export class Window extends Adw.ApplicationWindow {
       this.changeSortAction.state = sort
 
       const [sortOption] = sort.get_string()
-      this.onChangeSortAction(sortOption)
+      this.onChangeSortAction(sortOption as SortProperty)
     })
     jogosGroup.add_action(this.changeSortAction)
 
@@ -149,13 +177,14 @@ export class Window extends Adw.ApplicationWindow {
       }
     })
 
-    this._content.set_title(this.sidebarItems[0].label)
+    this._content.title = this.sidebarItems[0]?.label ?? ''
 
     const lastItemId = Application.settings.get<string>('last-sidebar-item')
     const lastItemIndex = this.sidebarItems.findIndex(p => p.id === lastItemId)
     const lastItem = this.sidebarItems[Math.max(lastItemIndex, 0)]
     const itemRow = this._sidebarList.get_row_at_index(Math.max(0, lastItemIndex))
 
+    this.selectedPlatform = getPlatform(lastItemId as PlatformId)?.id ?? null
     this._sidebarList.select_row(itemRow)
     this.onSidebarRowSelected(lastItem.id ?? this.sidebarItems[0].id)
 
@@ -163,12 +192,6 @@ export class Window extends Adw.ApplicationWindow {
       if (row) {
         this.onSidebarRowSelected((row as SidebarItem).id)
       }
-    })
-  }
-
-  private initSearchBar() {
-    this._searchEntry.connect('search-changed', () => {
-      this._gamesView.search(this._searchEntry.text)
     })
   }
 
@@ -210,10 +233,10 @@ export class Window extends Adw.ApplicationWindow {
   }
 
   private updateSidebarItems() {
-    this.sidebarItems = []
-    this._sidebarList.remove_all()
+    const previous = this._sidebarList.get_selected_row() as SidebarItem | null
+    const previousId = previous?.id
 
-    this.sidebarItems.push(...this.pinnedSidebarItems)
+    this.sidebarItems = [...this.pinnedSidebarItems]
 
     const existingPlatforms = GamesRepository.instance.listPlatforms()
 
@@ -226,8 +249,17 @@ export class Window extends Adw.ApplicationWindow {
       })
     }
 
+    this._sidebarList.remove_all()
+
     for (const item of this.sidebarItems) {
       this._sidebarList.append(new SidebarItem(item))
+    }
+
+    if (previousId) {
+      const previousSelectionIdx = this.sidebarItems.findIndex(s => s.id === previousId)
+      const rowToSelect = this._sidebarList.get_row_at_index(Math.max(previousSelectionIdx, 0))
+
+      this._sidebarList.select_row(rowToSelect)
     }
   }
 
@@ -276,6 +308,25 @@ export class Window extends Adw.ApplicationWindow {
     Application.settings.set_boolean('window-maximized', this.maximized)
   }
 
+  private onSearchChanged() {
+    this._stack.visibleChildName = Stack.LOADING
+
+    const terms = this._searchEntry.text
+    this.isSearching = terms.length > 0
+
+    GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+      this._gamesView.search(terms)
+
+      if (this.isSearching && this._gamesView.filterModel.nItems === 0) {
+        this._stack.visibleChildName = Stack.NO_RESULTS
+      } else {
+        this._stack.visibleChildName = Stack.GAMES_VIEW
+      }
+
+      return GLib.SOURCE_REMOVE
+    })
+  }
+
   private saveWindowGeometry() {
     if (this.maximized) {
       return
@@ -298,11 +349,127 @@ export class Window extends Adw.ApplicationWindow {
 
   }
 
-  private selectSidebarRow(id: string) {
-    const index = this.sidebarItems.findIndex(s => s.id === id)
-    const row = this._sidebarList.get_row_at_index(Math.max(index, 0))
+  private changeState(
+    newState: WindowState,
+    options: { platform?: PlatformId | null, selectRow?: boolean } = { platform: null, selectRow: false }
+  ) {
+    this.state = newState
+    this.selectedPlatform = newState === WindowState.PLATFORM ? (options.platform ?? null) : null
 
-    this._sidebarList.select_row(row)
+    const stateMap: Partial<Record<WindowState, string>> = {
+      [WindowState.ALL_GAMES]: 'ALL_GAMES',
+      [WindowState.FAVORITES]: 'FAVORITES',
+      [WindowState.RECENTS]: 'RECENTS',
+      [WindowState.WISHLIST]: 'WISHLIST'
+    }
+
+    if (this.state === WindowState.PLATFORM) {
+      this._gamesView.hideColumn('platform')
+      this._gamesView.showColumn('developer')
+    } else {
+      this._gamesView.showColumn('platform')
+      this._gamesView.hideColumn('developer')
+    }
+
+    if (options.selectRow) {
+      const lookingId = stateMap[newState] ?? options.platform
+      const index = this.sidebarItems.findIndex(s => s.id === lookingId)
+      const row = this._sidebarList.get_row_at_index(Math.max(index, 0))
+
+      this._sidebarList.select_row(row)
+    }
+
+    if (this.state === WindowState.RECENTS) {
+      this._gamesView.sortBy('modification_date_desc')
+    } else {
+      this._gamesView.sortBy('title_asc')
+    }
+  }
+
+  private loadGames() {
+    this._stack.visibleChildName = Stack.LOADING
+
+    GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+      if (this.state === WindowState.ALL_GAMES) {
+        this.showAllGames()
+      } else if (this.state === WindowState.FAVORITES) {
+        this.showFavorites()
+      } else if (this.state === WindowState.RECENTS) {
+        this.showRecents()
+      } else if (this.state === WindowState.WISHLIST) {
+        this.showWishlist()
+      } else if (this.state === WindowState.PLATFORM) {
+        this.showPlatform()
+      }
+
+      return GLib.SOURCE_REMOVE
+    })
+
+  }
+
+  private async showAllGames() {
+    const games = await GamesRepository.instance.list()
+    this._gamesView.model.splice(0, this._gamesView.model.nItems, games)
+    this._gamesView.unselect()
+
+    if (this.isSearching && this._gamesView.filterModel.nItems === 0) {
+      this._stack.visibleChildName = Stack.NO_RESULTS
+    } else {
+      this._stack.visibleChildName = games.length === 0 ? Stack.NO_GAMES : Stack.GAMES_VIEW
+    }
+  }
+
+  private async showFavorites() {
+    const games = await GamesRepository.instance.listFavorites()
+    this._gamesView.model.splice(0, this._gamesView.model.nItems, games)
+    this._gamesView.unselect()
+
+    if (this.isSearching && this._gamesView.filterModel.nItems === 0) {
+      this._stack.visibleChildName = Stack.NO_RESULTS
+    } else {
+      this._stack.visibleChildName = games.length === 0 ? Stack.NO_FAVORITES : Stack.GAMES_VIEW
+    }
+  }
+
+  private async showRecents() {
+    const games = await GamesRepository.instance.listRecents()
+    this._gamesView.model.splice(0, this._gamesView.model.nItems, games)
+    this._gamesView.unselect()
+
+    if (this.isSearching && this._gamesView.filterModel.nItems === 0) {
+      this._stack.visibleChildName = Stack.NO_RESULTS
+    } else {
+      this._stack.visibleChildName = games.length === 0 ? Stack.NO_GAMES : Stack.GAMES_VIEW
+    }
+  }
+
+  private async showWishlist() {
+    const games = await GamesRepository.instance.listWishlist()
+    this._gamesView.model.splice(0, this._gamesView.model.nItems, games)
+    this._gamesView.unselect()
+
+    if (this.isSearching && this._gamesView.filterModel.nItems === 0) {
+      this._stack.visibleChildName = Stack.NO_RESULTS
+    } else {
+      this._stack.visibleChildName = games.length === 0 ? Stack.NO_WISHLIST : Stack.GAMES_VIEW
+    }
+  }
+
+  private async showPlatform() {
+    if (!this.selectedPlatform) {
+      return
+    }
+
+    const games = await GamesRepository.instance.listByPlatform(this.selectedPlatform)
+    this._gamesView.model.splice(0, this._gamesView.model.nItems, games)
+    this._gamesView.unselect()
+    this._noGamesForPlatform.iconName = getPlatform(this.selectedPlatform).iconName
+
+    if (this.isSearching && this._gamesView.filterModel.nItems === 0) {
+      this._stack.visibleChildName = Stack.NO_RESULTS
+    } else {
+      this._stack.visibleChildName = games.length === 0 ? Stack.NO_GAMES_IN_PLATFORM : Stack.GAMES_VIEW
+    }
   }
 
   private onSidebarRowSelected(itemId: string) {
@@ -317,30 +484,18 @@ export class Window extends Adw.ApplicationWindow {
     this._content.set_title(item.label)
 
     if (itemId === 'ALL_GAMES') {
-      this._gamesView.selectPlatform(null)
-      this._gamesView.sortBy('title_asc')
-      return
+      this.changeState(WindowState.ALL_GAMES)
+    } else if (itemId === 'FAVORITES') {
+      this.changeState(WindowState.FAVORITES)
+    } else if (itemId === 'WISHLIST') {
+      this.changeState(WindowState.WISHLIST)
+    } else if (itemId === 'RECENTS') {
+      this.changeState(WindowState.RECENTS)
+    } else {
+      this.changeState(WindowState.PLATFORM, { platform: itemId as PlatformId })
     }
 
-    if (itemId === 'FAVORITES') {
-      this._gamesView.showFavorites()
-      return
-    }
-
-    if (itemId === 'WISHLIST') {
-      this._gamesView.showWishlist()
-      return
-    }
-
-    if (itemId === 'RECENTS') {
-      this._gamesView.selectPlatform(null)
-      this._gamesView.sortBy('modification_date_desc')
-      return
-    }
-
-    // It's a platform
-
-    this._gamesView.selectPlatform(itemId as PlatformId)
+    this.loadGames()
 
     if (this._splitView.collapsed) {
       this._splitView.showContent = true
@@ -348,8 +503,8 @@ export class Window extends Adw.ApplicationWindow {
 
   }
 
-  private onChangeSortAction(sort: string) {
-    this._gamesView.sortBy(sort as SortProperty)
+  private onChangeSortAction(sort: SortProperty) {
+    this._gamesView.sortBy(sort)
   }
 
   private onCreateNewGameAction() {
@@ -364,12 +519,16 @@ export class Window extends Adw.ApplicationWindow {
     })
 
     createGameDialog.connect('game-created', (_self, game: Game) => {
+      // TODO: optimize the UI blocking
       this.updateSidebarItems()
-      this.selectSidebarRow(game.wishlist ? 'WISHLIST' : game.platform)
+      this.changeState(game.wishlist ? WindowState.WISHLIST : WindowState.PLATFORM, {
+        platform: game.platform ,
+        selectRow: true,
+      })
 
-      this._gamesView.loadItems()
-      this._gamesView.search('')
-      this._gamesView.selectGame(game)
+      this.loadGames()
+      // this._gamesView.clearSearch()
+      this._gamesView.select(game)
 
       const toast = new Adw.Toast({
         title: _!('"%s" was created').format(game.title),
@@ -385,13 +544,17 @@ export class Window extends Adw.ApplicationWindow {
   private onGameEditAction(game: Game) {
     const editGameDialog = new EditGameDialog(game)
 
-    editGameDialog.connect('game-updated', (_self, updatedGame) => {
+    editGameDialog.connect('game-updated', (_self, updatedGame: Game) => {
+      // TODO: optimize the UI blocking
       this.updateSidebarItems()
-      this.selectSidebarRow(updatedGame.wishlist ? 'WISHLIST' : updatedGame.platform)
+      this.changeState(updatedGame.wishlist ? WindowState.WISHLIST : WindowState.PLATFORM, {
+        platform: updatedGame.platform,
+        selectRow: true,
+      })
 
-      this._gamesView.loadItems()
-      this._gamesView.search('')
-      this._gamesView.selectGame(updatedGame)
+      this.loadGames()
+      // this._gamesView.clearSearch()
+      this._gamesView.select(updatedGame)
 
       const toast = new Adw.Toast({
         title: _!('"%s" was updated').format(updatedGame.title),
@@ -432,10 +595,10 @@ export class Window extends Adw.ApplicationWindow {
       this.updateSidebarItems()
 
       if (!platformHasGames && selectedRow.id === game.platform) {
-        this.selectSidebarRow('ALL_GAMES')
+        this.changeState(WindowState.ALL_GAMES, { selectRow: true })
       }
 
-      this._gamesView.loadItems()
+      this.loadGames()
 
       const toast = new Adw.Toast({
         title: _!('"%s" was deleted').format(game.title),
@@ -448,6 +611,15 @@ export class Window extends Adw.ApplicationWindow {
   }
 
   private onGameFavorited(game: Game) {
+    GamesRepository.instance.toggleFavorite(game)
+    const updatedGame = GamesRepository.instance.get(game.id)
+
+    const [found, position] = this._gamesView.model.find(game)
+
+    if (found && updatedGame) {
+      this._gamesView.model.splice(position, 1, [updatedGame])
+    }
+
     const toast = new Adw.Toast({
       title: _!('"%s" was added to the favorites').format(game.title),
       timeout: 3,
@@ -457,6 +629,26 @@ export class Window extends Adw.ApplicationWindow {
   }
 
   private onGameUnfavorited(game: Game) {
+    GamesRepository.instance.toggleFavorite(game)
+    const updatedGame = GamesRepository.instance.get(game.id)
+
+    const [found, position] = this._gamesView.model.find(game)
+
+    if (found && updatedGame) {
+      if (this.state === WindowState.FAVORITES) {
+        this._gamesView.model.remove(position)
+      } else {
+        this._gamesView.model.splice(position, 1, [updatedGame])
+      }
+    }
+
+    // Handle the case where the game might be the last one in favorites.
+    if (this.isSearching && this._gamesView.filterModel.nItems === 0) {
+      this._stack.visibleChildName = Stack.NO_RESULTS
+    } else if (this._gamesView.model.nItems === 0) {
+      this._stack.visibleChildName = Stack.NO_FAVORITES
+    }
+
     const toast = new Adw.Toast({
       title: _!('"%s" was removed from favorites').format(game.title),
       timeout: 3,

@@ -1,5 +1,4 @@
 using Gtk 4.0;
-using Adw 1;
 
 template $GamesView : Stack {
   transition-type: crossfade;
@@ -28,36 +27,42 @@ template $GamesView : Stack {
         reorderable: false;
 
         ColumnViewColumn titleColumn {
+          id: "title";
           title: _("Title");
           expand: true;
           factory: SignalListItemFactory {};
         }
 
         ColumnViewColumn yearColumn {
+          id: "year";
           title: _("Release year");
           resizable: true;
           factory: SignalListItemFactory {};
         }
 
         ColumnViewColumn platformColumn {
+          id: "platform";
           title: _("Platform");
           resizable: true;
           factory: SignalListItemFactory {};
         }
 
         ColumnViewColumn developerColumn {
+          id: "developer";
           title: _("Developer");
           resizable: true;
           factory: SignalListItemFactory {};
         }
 
         ColumnViewColumn modificationColumn {
+          id: "modification";
           title: _("Modification");
           resizable: true;
           factory: SignalListItemFactory {};
         }
 
         ColumnViewColumn favoriteColumn {
+          id: "favorite";
           factory: SignalListItemFactory {};
         }
       }
@@ -80,101 +85,6 @@ template $GamesView : Stack {
         factory: SignalListItemFactory {};
       }
     // }
-  }
-
-  Adw.StatusPage noResultsFound {
-    title: _("No results found");
-    description: _("Try a different search");
-    icon-name: "lucide-search-symbolic";
-    vexpand: true;
-  }
-
-  Adw.StatusPage noFavorites {
-    title: _("No favorites");
-    description: _("You haven't marked any game as favorite");
-    icon-name: "lucide-star-symbolic";
-    vexpand: true;
-  }
-
-  Adw.StatusPage noWishlist {
-    title: _("No games in wishlist");
-    description: _("You haven't created any game in the wishlist");
-    icon-name: "lucide-folder-heart-symbolic";
-    vexpand: true;
-
-    Box {
-      margin-top: 18;
-      orientation: vertical;
-      halign: center;
-
-      Button {
-        action-name: "win.create-new-game";
-
-        Adw.ButtonContent {
-          icon-name: "lucide-plus-symbolic";
-          label: _("New game");
-        }
-
-        styles [
-          "suggested-action",
-          "pill"
-        ]
-      }
-    }
-  }
-
-  Adw.StatusPage noGamesForPlatform {
-    title: _("No games found");
-    description: _("You haven't created any game for this platform");
-    icon-name: "lucide-gamepad-2-symbolic";
-    vexpand: true;
-
-    Box {
-      margin-top: 18;
-      orientation: vertical;
-      halign: center;
-
-      Button {
-        action-name: "win.create-new-game";
-
-        Adw.ButtonContent {
-          icon-name: "lucide-plus-symbolic";
-          label: _("New game");
-        }
-
-        styles [
-          "suggested-action",
-          "pill"
-        ]
-      }
-    }
-  }
-
-  Adw.StatusPage noGames {
-    title: _("No games found");
-    description: _("You haven't created any game yet");
-    icon-name: "lucide-gamepad-2-symbolic";
-    vexpand: true;
-
-    Box {
-      margin-top: 18;
-      orientation: vertical;
-      halign: center;
-
-      Button {
-        action-name: "win.create-new-game";
-
-        Adw.ButtonContent {
-          icon-name: "lucide-plus-symbolic";
-          label: _("New game");
-        }
-
-        styles [
-          "suggested-action",
-          "pill"
-        ]
-      }
-    }
   }
 }
 
