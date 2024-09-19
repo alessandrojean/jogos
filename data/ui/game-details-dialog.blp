@@ -7,7 +7,15 @@ template $GameDetailsDialog : Adw.Dialog {
 
   Adw.ToolbarView {
     [top]
-    Adw.HeaderBar {}
+    Adw.HeaderBar {
+      [start]
+      Button openInIgdb {
+        visible: false;
+        icon-name: "lucide-globe-symbolic";
+        tooltip-text: _("Open in IGDB");
+        clicked => $onOpenInIgdbClicked();
+      }
+    }
 
     ScrolledWindow {
       Box {

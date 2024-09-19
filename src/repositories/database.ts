@@ -3,7 +3,7 @@ import { appDirectory, Application } from '../application.js'
 
 export class Database {
   private static _instance: Database
-  private EXPECTED_VERSION = 2 as const
+  private EXPECTED_VERSION = 3 as const
 
   connection!: Gda.Connection
 
@@ -22,6 +22,8 @@ export class Database {
       provider: Gda.Config.get_provider('SQLite'),
       cncString: `DB_DIR=${appDirectory};DB_NAME=jogos`,
     })
+
+    console.log(`Using database from ${appDirectory}/jogos.db`)
 
     this.connection.open()
 
@@ -69,6 +71,16 @@ export class Database {
     if (databaseVersion === 1) {
       this.connection.execute_non_select_command(/* sql */`
         ALTER TABLE game ADD COLUMN igdb_id INTEGER DEFAULT NULL;
+      `)
+    }
+
+    if (databaseVersion === 2) {
+      this.connection.execute_non_select_command(/* sql */`
+        ALTER TABLE game DROP COLUMN igdb_id;
+      `)
+
+      this.connection.execute_non_select_command(/* sql */`
+        ALTER TABLE game ADD COLUMN igdb_slug TEXT DEFAULT NULL;
       `)
     }
 

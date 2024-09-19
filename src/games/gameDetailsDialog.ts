@@ -2,6 +2,7 @@ import Adw from 'gi://Adw'
 import GObject from 'gi://GObject'
 import Gtk from 'gi://Gtk?version=4.0'
 
+import { Application } from '../application.js'
 import { getCertification } from '../model/certification.js'
 import { getCurrency } from '../model/currency.js'
 import Game from '../model/game.js'
@@ -30,6 +31,7 @@ export class GameDetailsDialog extends Adw.Dialog {
   private _store!: Adw.ActionRow
   private _paidPrice!: Adw.ActionRow
   private _placeholderImage!: Gtk.Image
+  private _openInIgdb!: Gtk.Button
 
   private locale!: LocaleOptions
 
@@ -54,7 +56,7 @@ export class GameDetailsDialog extends Adw.Dialog {
         'certification', 'developer', 'publisher', 'storageMedia',
         'creationDate', 'modificationDate', 'certificationImage',
         'condition', 'boughtDate', 'store', 'paidPrice', 'coverStack',
-        'placeholderImage'
+        'placeholderImage', 'openInIgdb'
       ]
     }, this)
   }
@@ -64,6 +66,10 @@ export class GameDetailsDialog extends Adw.Dialog {
 
     this.game = game
     this.locale = localeOptions()
+
+    if (this.game.igdbSlug) {
+      this._openInIgdb.visible = true
+    }
 
     this.fillGameInformation()
   }
@@ -112,5 +118,16 @@ export class GameDetailsDialog extends Adw.Dialog {
       this._barcode.add_css_class('monospace')
       this._barcode.subtitleSelectable = true
     }
+  }
+
+  private async onOpenInIgdbClicked() {
+    const application = Gtk.Application.get_default() as Application
+
+    const igdbLink = `https://igdb.com/games/${this.game.igdbSlug}`
+    const launcher = new Gtk.UriLauncher({ uri: igdbLink })
+
+    // TODO: Remove the Promise cast when ts-for-gir fixes this.
+    // https://github.com/gjsify/ts-for-gir/issues/171
+    await (launcher.launch(application.window, null) as any as Promise<boolean>)
   }
 }

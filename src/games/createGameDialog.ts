@@ -385,7 +385,7 @@ export class CreateGameDialog extends Adw.Dialog {
       wishlist: this._wishlist.active,
       paidPriceAmount: Number.isNaN(amount) ? 0.0 : amount,
       paidPriceCurrency: (this._currency.selectedItem as Currency).iso,
-      igdbId: this.onlineGame?.id ?? null,
+      igdbSlug: this.onlineGame?.slug ?? null,
     })
 
     const id = GamesRepository.instance.create(game)

@@ -41,9 +41,6 @@ export default class GamesRepository {
       SELECT * FROM game WHERE wishlist = 0 ORDER BY title ASC;
     `)
 
-    const a = Gda.SqlBuilder.new(Gda.SqlStatementType.SELECT)
-
-
     const iterator = request.create_iter()
     const games: Game[] = []
 
@@ -184,7 +181,7 @@ export default class GamesRepository {
     builder.add_field_value_as_gvalue('store', game.store ?? Gda.value_new_null() as any)
     builder.add_field_value_as_gvalue('paid_price_currency', game.paidPriceCurrency as any)
     builder.add_field_value_as_gvalue('paid_price_amount', game.paidPriceAmount as any)
-    builder.add_field_value_as_gvalue('igdb_id', game.igdbId as any)
+    builder.add_field_value_as_gvalue('igdb_slug', game.igdbSlug as any)
     builder.add_field_value_as_gvalue('created_at', now as any)
     builder.add_field_value_as_gvalue('updated_at', now as any)
 
@@ -242,7 +239,7 @@ export default class GamesRepository {
     builder.add_field_value_as_gvalue('store', game.store ?? Gda.value_new_null() as any)
     builder.add_field_value_as_gvalue('paid_price_currency', game.paidPriceCurrency as any)
     builder.add_field_value_as_gvalue('paid_price_amount', game.paidPriceAmount as any)
-    builder.add_field_value_as_gvalue('igdb_id', game.igdbId as any)
+    builder.add_field_value_as_gvalue('igdb_id', game.igdbSlug as any)
     builder.add_field_value_as_gvalue('updated_at', now as any)
 
     builder.set_where(

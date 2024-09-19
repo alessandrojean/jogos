@@ -19,6 +19,7 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-chevron-right-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-folder-heart-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-gamepad-2-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-globe-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-grid-2x2-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-history-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lucide-image-symbolic.svg</file>

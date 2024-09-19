@@ -21,7 +21,7 @@ export const appDirectory = GLib.build_filenamev([GLib.get_user_data_dir(), 'jog
 export const coversDirectory = GLib.build_filenamev([appDirectory, 'covers'])
 
 export class Application extends Adw.Application {
-  private window?: Window
+  window?: Window
 
   static settings: Settings
   static igdb: IgdbApi
@@ -40,11 +40,11 @@ export class Application extends Adw.Application {
     this.initActions()
     this.initAboutDialog()
 
-    Gio._promisify(Gtk.UriLauncher.prototype, 'launch', 'launch_finish')
     Gio._promisify(Adw.AlertDialog.prototype, 'choose', 'choose_finish')
-    Gio._promisify(Gtk.FileDialog.prototype, 'open', 'open_finish')
     Gio._promisify(Gio.Subprocess.prototype, 'communicate_utf8_async')
     Gio._promisify(Gio.Subprocess.prototype, 'wait_async')
+    Gio._promisify(Gtk.FileDialog.prototype, 'open', 'open_finish')
+    Gio._promisify(Gtk.UriLauncher.prototype, 'launch', 'launch_finish')
     Gio._promisify(Soup.Session.prototype, 'send_and_read_async', 'send_and_read_finish')
 
     Application.settings = new Settings({ schema: pkg.name })
