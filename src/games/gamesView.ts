@@ -446,22 +446,6 @@ export class GamesView extends Gtk.Stack {
 
   private onFavoriteClicked(game: Game) {
     this.emit(game.favorite ? 'game-unfavorited' : 'game-favorited', game)
-    // GamesRepository.instance.toggleFavorite(game)
-    // const updatedGame = GamesRepository.instance.get(game.id)
-
-    // const [found, position] = this.dataModel.find(game)
-
-    // if (found && updatedGame) {
-    //   this.dataModel.splice(position, 1, [updatedGame])
-
-    //   this.changeVisibleChild()
-
-    //   if (game.favorite) {
-    //     this.emit('game-unfavorited', updatedGame)
-    //   } else {
-    //     this.emit('game-favorited', updatedGame)
-    //   }
-    // }
   }
 
   private onColumnViewSortChanged(sorter: Gtk.ColumnViewSorter) {
